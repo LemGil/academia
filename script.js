@@ -37,16 +37,17 @@ async function addStudent(studentData) {
     try {
         if (!window.electronAPI || !window.electronAPI.addStudent) throw new Error("window.electronAPI.addStudent no está disponible.");
         
-        // Convertir la fecha YYYY-MM-DD a timestamp UTC antes de enviar
+        // Convertir la fecha YYYY-MM-DD a timestamp tratando la fecha como local
         let fechaIngresoTimestamp = null;
         if (studentData.fecha_ingreso) {
-            const date = new Date(studentData.fecha_ingreso); // Crea Date localmente
+            // Parsear YYYY-MM-DD como fecha local para evitar problemas de zona horaria
+            const [year, month, day] = studentData.fecha_ingreso.split('-').map(Number);
+            // Mes es 0-indexado en JavaScript (0 = Enero, 11 = Diciembre)
+            const date = new Date(year, month - 1, day);
             if (!isNaN(date.getTime())) {
-                // Convierte la fecha local a timestamp UTC
                 fechaIngresoTimestamp = date.getTime(); 
             } else {
                 console.warn("Fecha inválida proporcionada para agregar:", studentData.fecha_ingreso);
-                // Aquí podrías lanzar un error o usar null si la fecha es inválida
             }
         }
 
@@ -70,11 +71,14 @@ async function updateStudent(studentData) {
     try {
         if (!window.electronAPI || !window.electronAPI.updateStudent) throw new Error("window.electronAPI.updateStudent no está disponible.");
         
-        // Convertir la fecha YYYY-MM-DD a timestamp UTC antes de enviar
+        // Convertir la fecha YYYY-MM-DD a timestamp tratando la fecha como local
         let fechaIngresoTimestamp = null;
         if (studentData.fecha_ingreso) {
-            const date = new Date(studentData.fecha_ingreso);
-             if (!isNaN(date.getTime())) {
+            // Parsear YYYY-MM-DD como fecha local para evitar problemas de zona horaria
+            const [year, month, day] = studentData.fecha_ingreso.split('-').map(Number);
+            // Mes es 0-indexado en JavaScript (0 = Enero, 11 = Diciembre)
+            const date = new Date(year, month - 1, day);
+            if (!isNaN(date.getTime())) {
                 fechaIngresoTimestamp = date.getTime();
             } else {
                 console.warn("Fecha inválida proporcionada para actualizar:", studentData.fecha_ingreso);
