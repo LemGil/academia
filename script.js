@@ -1,48 +1,57 @@
-// script.js
+// script.js - Versión Web Pura (sin Electron, sin SQLite)
+// Usa localStorage para almacenar los datos
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Academia del Espíritu - Iniciando interfaz de usuario...');
-    waitForElectronAPI(() => {
-        loadStudents(); 
-        setupEventListeners();
-    });
+    loadStudents(); 
+    setupEventListeners();
 });
 
 // --- Utilidades ---
-function waitForElectronAPI(callback) { /* ... (igual que antes) ... */ 
-    if (window.electronAPI) { callback(); } else { setTimeout(() => waitForElectronAPI(callback), 100); }
-}
-function displayErrorMessage(message) { alert(message); }
 
-// --- Interacción con la Base de Datos (vía preload.js) ---
+// Generar ID único
+function generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+// Guardar estudiantes en localStorage
+function saveStudentsToStorage(students) {
+    localStorage.setItem('academia_estudiantes', JSON.stringify(students));
+}
+
+// Obtener estudiantes de localStorage
+function getStudentsFromStorage() {
+    const stored = localStorage.getItem('academia_estudiantes');
+    return stored ? JSON.parse(stored) : [];
+}
+
+function displayErrorMessage(message) { 
+    alert(message); 
+}
+
+// --- Funciones de Base de Datos (usando localStorage) ---
 
 async function loadStudents() {
     console.log('Cargando estudiantes...');
     try {
-        if (!window.electronAPI || !window.electronAPI.getAllStudents) throw new Error("window.electronAPI.getAllStudents no está disponible.");
-        const students = await window.electronAPI.getAllStudents();
-        if (students === undefined) {
-            displayErrorMessage("Error al obtener estudiantes: La respuesta fue indefinida.");
-            return;
-        }
+        const students = getStudentsFromStorage();
         displayStudents(students);
         console.log(`Cargados ${students.length} estudiantes.`);
     } catch (error) {
-        console.error('Error en loadStudents (catch):', error);
-        displayErrorMessage("No se pudieron cargar los estudiantes. Revisa la consola de Electron.");
+        console.error('Error en loadStudents:', error);
+        displayErrorMessage("No se pudieron cargar los estudiantes.");
     }
 }
 
 async function addStudent(studentData) {
-    console.log('Intentando agregar estudiante via API:', studentData);
+    console.log('Agregando estudiante:', studentData);
     try {
-        if (!window.electronAPI || !window.electronAPI.addStudent) throw new Error("window.electronAPI.addStudent no está disponible.");
+        const students = getStudentsFromStorage();
         
         // Convertir la fecha YYYY-MM-DD a timestamp tratando la fecha como local
         let fechaIngresoTimestamp = null;
         if (studentData.fecha_ingreso) {
-            // Parsear YYYY-MM-DD como fecha local para evitar problemas de zona horaria
             const [year, month, day] = studentData.fecha_ingreso.split('-').map(Number);
-            // Mes es 0-indexado en JavaScript (0 = Enero, 11 = Diciembre)
             const date = new Date(year, month - 1, day);
             if (!isNaN(date.getTime())) {
                 fechaIngresoTimestamp = date.getTime(); 
@@ -51,32 +60,42 @@ async function addStudent(studentData) {
             }
         }
 
-        const newStudent = await window.electronAPI.addStudent({ 
+        const newStudent = { 
+            id: generateId(),
             nombre: studentData.nombre, 
             contacto: studentData.contacto, 
-            fecha_ingreso: fechaIngresoTimestamp // Enviamos el timestamp
-        });
-        console.log('Respuesta de addStudent:', newStudent);
+            fecha_ingreso: fechaIngresoTimestamp
+        };
+        
+        students.push(newStudent);
+        saveStudentsToStorage(students);
+        
+        console.log('Estudiante agregado:', newStudent);
         loadStudents();
         return newStudent;
     } catch (error) {
-        console.error('Error al agregar estudiante (catch):', error);
+        console.error('Error al agregar estudiante:', error);
         displayErrorMessage("No se pudo agregar el estudiante. Verifica los datos.");
         return null;
     }
 }
 
 async function updateStudent(studentData) {
-    console.log('Intentando actualizar estudiante (llamada API):', studentData);
+    console.log('Actualizando estudiante:', studentData);
     try {
-        if (!window.electronAPI || !window.electronAPI.updateStudent) throw new Error("window.electronAPI.updateStudent no está disponible.");
+        const students = getStudentsFromStorage();
+        const index = students.findIndex(s => s.id === studentData.id);
+        
+        if (index === -1) {
+            console.warn('Estudiante no encontrado para actualizar:', studentData.id);
+            displayErrorMessage(`Estudiante con ID ${studentData.id} no encontrado.`);
+            return null;
+        }
         
         // Convertir la fecha YYYY-MM-DD a timestamp tratando la fecha como local
         let fechaIngresoTimestamp = null;
         if (studentData.fecha_ingreso) {
-            // Parsear YYYY-MM-DD como fecha local para evitar problemas de zona horaria
             const [year, month, day] = studentData.fecha_ingreso.split('-').map(Number);
-            // Mes es 0-indexado en JavaScript (0 = Enero, 11 = Diciembre)
             const date = new Date(year, month - 1, day);
             if (!isNaN(date.getTime())) {
                 fechaIngresoTimestamp = date.getTime();
@@ -85,48 +104,51 @@ async function updateStudent(studentData) {
             }
         }
 
-        const updatedStudent = await window.electronAPI.updateStudent({ 
+        students[index] = { 
             id: studentData.id,
             nombre: studentData.nombre, 
             contacto: studentData.contacto, 
             fecha_ingreso: fechaIngresoTimestamp 
-        });
+        };
         
-        if (updatedStudent) {
-            console.log('Respuesta de actualización exitosa:', updatedStudent);
-            loadStudents();
-            return updatedStudent;
-        } else {
-            console.warn('Estudiante no encontrado para actualizar (respuesta nula):', studentData.id);
-            displayErrorMessage(`Estudiante con ID ${studentData.id} no encontrado.`);
-            return null;
-        }
+        saveStudentsToStorage(students);
+        console.log('Estudiante actualizado:', students[index]);
+        loadStudents();
+        return students[index];
     } catch (error) {
-        console.error('Error en la llamada API updateStudent:', error);
+        console.error('Error al actualizar estudiante:', error);
         displayErrorMessage("No se pudo actualizar el estudiante. Verifica los datos.");
         return null;
     }
 }
 
-async function deleteStudent(studentId) { /* ... (igual que antes) ... */ 
-    console.log(`Intentando eliminar estudiante con ID: ${studentId}`);
+async function deleteStudent(studentId) {
+    console.log(`Eliminando estudiante con ID: ${studentId}`);
     try {
-        if (!window.electronAPI || !window.electronAPI.deleteStudent) throw new Error("window.electronAPI.deleteStudent no está disponible.");
-        const result = await window.electronAPI.deleteStudent(studentId);
-        if (result && result.deleted) {
+        let students = getStudentsFromStorage();
+        const initialLength = students.length;
+        students = students.filter(s => s.id !== studentId);
+        
+        if (students.length < initialLength) {
+            saveStudentsToStorage(students);
             console.log(`Estudiante con ID ${studentId} eliminado correctamente.`);
             loadStudents();
             return true;
         } else {
-            console.warn(`Estudiante con ID ${studentId} no encontrado o no se pudo eliminar (resultado: ${JSON.stringify(result)})`);
-            displayErrorMessage(`Estudiante con ID ${studentId} no encontrado o no se pudo eliminar.`);
+            console.warn(`Estudiante con ID ${studentId} no encontrado.`);
+            displayErrorMessage(`Estudiante con ID ${studentId} no encontrado.`);
             return false;
         }
     } catch (error) {
-        console.error('Error en la llamada API deleteStudent:', error);
-        displayErrorMessage("No se pudo eliminar el estudiante. Ocurrió un error.");
+        console.error('Error al eliminar estudiante:', error);
+        displayErrorMessage("No se pudo eliminar el estudiante.");
         return false;
     }
+}
+
+async function getStudentById(studentId) {
+    const students = getStudentsFromStorage();
+    return students.find(s => s.id === studentId) || null;
 }
 
 
@@ -261,9 +283,7 @@ function handleAddStudentForm(event) {
 async function fetchStudentDataAndOpenEditModal(studentId) {
     console.log(`Buscando datos para editar estudiante ID: ${studentId}`);
     try {
-        if (!window.electronAPI || !window.electronAPI.getStudentById) throw new Error("window.electronAPI.getStudentById no está disponible.");
-        
-        const student = await window.electronAPI.getStudentById(studentId);
+        const student = await getStudentById(studentId);
         
         if (!student) {
             displayErrorMessage(`Estudiante con ID ${studentId} no encontrado.`);
