@@ -4,7 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academia del Espíritu</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        header { background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        header h1 { color: #667eea; text-align: center; margin-bottom: 15px; }
+        nav ul { list-style: none; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        nav a { text-decoration: none; color: #333; font-weight: 600; padding: 8px 16px; border-radius: 5px; transition: all 0.3s; }
+        nav a:hover { background: #667eea; color: white; }
+        main { max-width: 1200px; margin: 0 auto; }
+        section { background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 10px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        h2 { color: #667eea; margin-bottom: 20px; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+        h3 { color: #764ba2; margin-bottom: 15px; }
+        .form-container { margin-bottom: 25px; }
+        form { display: grid; gap: 15px; }
+        label { font-weight: 600; color: #333; }
+        input, select { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 14px; transition: border-color 0.3s; }
+        input:focus, select:focus { outline: none; border-color: #667eea; }
+        .professional-button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s; }
+        .professional-button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); }
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #667eea; color: white; font-weight: 600; }
+        tr:hover { background: #f5f5f5; }
+        .actions { display: flex; gap: 8px; }
+        .edit-btn, .delete-btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; }
+        .edit-btn { background: #4CAF50; color: white; }
+        .edit-btn:hover { background: #45a049; }
+        .delete-btn { background: #f44336; color: white; }
+        .delete-btn:hover { background: #da190b; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-content { background: white; margin: 10% auto; padding: 30px; border-radius: 10px; width: 90%; max-width: 500px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); animation: slideDown 0.3s; }
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .close { float: right; font-size: 28px; font-weight: bold; color: #aaa; cursor: pointer; transition: color 0.2s; }
+        .close:hover { color: #333; }
+        .empty-state { text-align: center; padding: 40px; color: #999; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+        .stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; }
+        .stat-number { font-size: 36px; font-weight: bold; margin-bottom: 5px; }
+        .stat-label { font-size: 14px; opacity: 0.9; }
+        @media (max-width: 768px) { nav ul { flex-direction: column; align-items: center; } .stats-grid { grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
     <header>
@@ -18,83 +60,119 @@
             </ul>
         </nav>
     </header>
-
     <main>
-        <!-- Sección de Estudiantes -->
         <section id="estudiantes">
             <h2>Gestión de Estudiantes</h2>
-
-            <!-- Formulario para agregar nuevo estudiante -->
             <div class="form-container">
                 <h3>Agregar Nuevo Estudiante</h3>
                 <form id="student-form">
-                    <div>
-                        <label for="student-nombre">Nombre Completo:</label>
-                        <input type="text" id="student-nombre" required>
-                    </div>
-                    <div>
-                        <label for="student-contacto">Contacto (Teléfono/Email):</label>
-                        <input type="text" id="student-contacto">
-                    </div>
-                    <div>
-                        <label for="student-fecha-ingreso">Fecha de Ingreso:</label>
-                        <input type="date" id="student-fecha-ingreso" required>
-                    </div>
+                    <div><label for="student-nombre">Nombre Completo:</label><input type="text" id="student-nombre" required></div>
+                    <div><label for="student-contacto">Contacto (Teléfono/Email):</label><input type="text" id="student-contacto"></div>
+                    <div><label for="student-fecha-ingreso">Fecha de Ingreso:</label><input type="date" id="student-fecha-ingreso" required></div>
                     <button type="submit" class="professional-button">Agregar Estudiante</button>
                 </form>
             </div>
-
-            <!-- Div donde se mostrará la lista de estudiantes -->
-            <div id="student-list" class="table-container">
-                <p>Cargando estudiantes...</p>
+            <div id="student-list" class="table-container"><p>Cargando estudiantes...</p></div>
+        </section>
+        <section id="clases"><h2>Clases</h2><p>Próximamente: Gestión de clases y horarios.</p></section>
+        <section id="progreso"><h2>Progreso</h2><p>Próximamente: Seguimiento del progreso individual.</p></section>
+        <section id="resumen">
+            <h2>Resumen</h2>
+            <div id="stats-container" class="stats-grid">
+                <div class="stat-card"><div class="stat-number" id="total-students">0</div><div class="stat-label">Total Estudiantes</div></div>
             </div>
         </section>
-
-        <!-- Otras Secciones (ocultas por defecto) -->
-        <section id="clases" style="display: none;"> 
-            <h2>Módulo de Clases</h2>
-            <p>Funcionalidad de Clases pendiente.</p>
-        </section>
-        <section id="progreso" style="display: none;"> 
-            <h2>Seguimiento de Progreso</h2>
-            <p>Funcionalidad de Seguimiento pendiente.</p>
-        </section>
-        <section id="resumen" style="display: none;"> 
-            <h2>Panel de Resumen</h2>
-            <p>Funcionalidad del Panel de Resumen pendiente.</p>
-        </section>
     </main>
-
-    <footer>
-        <p>&copy; 2023 LemGil Ministerio Apostólico</p>
-    </footer>
-
-        <!-- Modal para Editar Estudiante -->
-    <div id="editStudentModal" class="modal">
+    <div id="edit-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2>Editar Estudiante</h2>
-            <form id="editStudentForm">
-                <input type="hidden" id="edit-student-id"> <!-- Campo oculto para el ID -->
-                <div>
-                    <label for="edit-student-nombre">Nombre Completo:</label>
-                    <input type="text" id="edit-student-nombre" required>
-                </div>
-                <div>
-                    <label for="edit-student-contacto">Contacto (Teléfono/Email):</label>
-                    <input type="text" id="edit-student-contacto">
-                </div>
-                <div>
-                    <label for="edit-student-fecha-ingreso">Fecha de Ingreso:</label>
-                    <input type="date" id="edit-student-fecha-ingreso" required>
-                </div>
+            <span class="close">&times;</span>
+            <h3>Editar Estudiante</h3>
+            <form id="edit-form">
+                <input type="hidden" id="edit-id">
+                <div><label for="edit-nombre">Nombre Completo:</label><input type="text" id="edit-nombre" required></div>
+                <div><label for="edit-contacto">Contacto (Teléfono/Email):</label><input type="text" id="edit-contacto"></div>
+                <div><label for="edit-fecha-ingreso">Fecha de Ingreso:</label><input type="date" id="edit-fecha-ingreso" required></div>
                 <button type="submit" class="professional-button">Guardar Cambios</button>
-                <button type="button" class="professional-button" id="cancelEditButton">Cancelar</button>
             </form>
         </div>
     </div>
-
-    <!-- Enlace al script principal -->
-    <script src="script.js" defer></script>
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Confirmar Eliminación</h3>
+            <p>¿Estás seguro de que deseas eliminar este estudiante?</p>
+            <p><strong id="delete-name"></strong></p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="confirm-delete" class="professional-button" style="background: #f44336;">Eliminar</button>
+                <button id="cancel-delete" class="professional-button" style="background: #999;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
+        function getStudents() { const s = localStorage.getItem('estudiantes'); return s ? JSON.parse(s) : []; }
+        function saveStudents(s) { localStorage.setItem('estudiantes', JSON.stringify(s)); }
+        function getStudentById(id) { return getStudents().find(s => String(s.id) === String(id)); }
+        function addStudent(nombre, contacto, fechaIngreso) {
+            const students = getStudents();
+            const [year, month, day] = fechaIngreso.split('-').map(Number);
+            students.push({ id: generateId(), nombre: nombre.trim(), contacto: contacto.trim(), fecha_ingreso: new Date(year, month - 1, day).getTime() });
+            saveStudents(students); displayStudents(); updateStats();
+        }
+        function updateStudent(id, nombre, contacto, fechaIngreso) {
+            const students = getStudents();
+            const index = students.findIndex(s => String(s.id) === String(id));
+            if (index === -1) return false;
+            const [year, month, day] = fechaIngreso.split('-').map(Number);
+            students[index] = { ...students[index], nombre: nombre.trim(), contacto: contacto.trim(), fecha_ingreso: new Date(year, month - 1, day).getTime() };
+            saveStudents(students); displayStudents(); updateStats(); return true;
+        }
+        function deleteStudent(id) {
+            const students = getStudents();
+            const filtered = students.filter(s => String(s.id) !== String(id));
+            if (filtered.length === students.length) return false;
+            saveStudents(filtered); displayStudents(); updateStats(); return true;
+        }
+        function formatDate(ts) { const d = new Date(ts); return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`; }
+        function formatDateForInput(ts) { const d = new Date(ts); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+        function displayStudents() {
+            const students = getStudents();
+            const container = document.getElementById('student-list');
+            if (students.length === 0) { container.innerHTML = '<div class="empty-state"><p>No hay estudiantes registrados.</p></div>'; return; }
+            let html = '<table><thead><tr><th>Nombre</th><th>Contacto</th><th>Fecha de Ingreso</th><th>Acciones</th></tr></thead><tbody>';
+            students.forEach(s => { html += `<tr><td>${s.nombre}</td><td>${s.contacto||'N/A'}</td><td>${formatDate(s.fecha_ingreso)}</td><td class="actions"><button class="edit-btn" data-id="${String(s.id)}">Editar</button><button class="delete-btn" data-id="${String(s.id)}">Eliminar</button></td></tr>`; });
+            html += '</tbody></table>'; container.innerHTML = html;
+        }
+        function updateStats() { document.getElementById('total-students').textContent = getStudents().length; }
+        function openEditModal() { document.getElementById('edit-modal').style.display = 'block'; }
+        function closeEditModal() { document.getElementById('edit-modal').style.display = 'none'; document.getElementById('edit-form').reset(); }
+        function openDeleteModal(nombre) { document.getElementById('delete-name').textContent = nombre; document.getElementById('delete-modal').style.display = 'block'; }
+        function closeDeleteModal() { document.getElementById('delete-modal').style.display = 'none'; }
+        function fetchStudentDataAndOpenEditModal(studentId) {
+            const student = getStudentById(studentId);
+            if (!student) { alert('Error: No se encontró el estudiante.'); return; }
+            document.getElementById('edit-id').value = student.id;
+            document.getElementById('edit-nombre').value = student.nombre;
+            document.getElementById('edit-contacto').value = student.contacto || '';
+            document.getElementById('edit-fecha-ingreso').value = formatDateForInput(student.fecha_ingreso);
+            openEditModal();
+        }
+        let studentToDelete = null;
+        function setupEventListeners() {
+            document.getElementById('student-form').addEventListener('submit', function(e) { e.preventDefault(); addStudent(document.getElementById('student-nombre').value, document.getElementById('student-contacto').value, document.getElementById('student-fecha-ingreso').value); this.reset(); });
+            document.getElementById('edit-form').addEventListener('submit', function(e) { e.preventDefault(); if (updateStudent(document.getElementById('edit-id').value, document.getElementById('edit-nombre').value, document.getElementById('edit-contacto').value, document.getElementById('edit-fecha-ingreso').value)) { closeEditModal(); alert('Estudiante actualizado correctamente.'); } else { alert('Error al actualizar el estudiante.'); } });
+            document.getElementById('student-list').addEventListener('click', function(e) {
+                const button = e.target.closest('button'); if (!button) return;
+                const studentId = button.getAttribute('data-id');
+                if (button.classList.contains('edit-btn')) { fetchStudentDataAndOpenEditModal(studentId); }
+                else if (button.classList.contains('delete-btn')) { const student = getStudentById(studentId); if (student) { studentToDelete = studentId; openDeleteModal(student.nombre); } }
+            });
+            document.getElementById('confirm-delete').addEventListener('click', function() { if (studentToDelete) { if (deleteStudent(studentToDelete)) { closeDeleteModal(); alert('Estudiante eliminado correctamente.'); } else { alert('Error al eliminar el estudiante.'); } studentToDelete = null; } });
+            document.getElementById('cancel-delete').addEventListener('click', function() { closeDeleteModal(); studentToDelete = null; });
+            document.querySelectorAll('.modal .close').forEach(btn => { btn.addEventListener('click', function() { closeEditModal(); closeDeleteModal(); }); });
+            window.addEventListener('click', function(e) { if (e.target.classList.contains('modal')) { closeEditModal(); closeDeleteModal(); } });
+        }
+        document.addEventListener('DOMContentLoaded', function() { setupEventListeners(); displayStudents(); updateStats(); });
+    </script>
 </body>
 </html>
