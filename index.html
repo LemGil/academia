@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academia del Espíritu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Academia del Espíritu</h1>
+        <nav>
+            <ul>
+                <li><a href="#estudiantes">Estudiantes</a></li>
+                <li><a href="#clases">Clases</a></li>
+                <li><a href="#progreso">Progreso</a></li>
+                <li><a href="#resumen">Resumen</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Sección de Estudiantes -->
+        <section id="estudiantes">
+            <h2>Gestión de Estudiantes</h2>
+
+            <!-- Formulario para agregar nuevo estudiante -->
+            <div class="form-container">
+                <h3>Agregar Nuevo Estudiante</h3>
+                <form id="student-form">
+                    <div>
+                        <label for="student-nombre">Nombre Completo:</label>
+                        <input type="text" id="student-nombre" required>
+                    </div>
+                    <div>
+                        <label for="student-contacto">Contacto (Teléfono/Email):</label>
+                        <input type="text" id="student-contacto">
+                    </div>
+                    <div>
+                        <label for="student-fecha-ingreso">Fecha de Ingreso:</label>
+                        <input type="date" id="student-fecha-ingreso" required>
+                    </div>
+                    <button type="submit" class="professional-button">Agregar Estudiante</button>
+                </form>
+            </div>
+
+            <!-- Div donde se mostrará la lista de estudiantes -->
+            <div id="student-list" class="table-container">
+                <p>Cargando estudiantes...</p>
+            </div>
+        </section>
+
+        <!-- Otras Secciones (ocultas por defecto) -->
+        <section id="clases" style="display: none;"> 
+            <h2>Módulo de Clases</h2>
+            <p>Funcionalidad de Clases pendiente.</p>
+        </section>
+        <section id="progreso" style="display: none;"> 
+            <h2>Seguimiento de Progreso</h2>
+            <p>Funcionalidad de Seguimiento pendiente.</p>
+        </section>
+        <section id="resumen" style="display: none;"> 
+            <h2>Panel de Resumen</h2>
+            <p>Funcionalidad del Panel de Resumen pendiente.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 LemGil Ministerio Apostólico</p>
+    </footer>
+
+        <!-- Modal para Editar Estudiante -->
+    <div id="editStudentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Editar Estudiante</h2>
+            <form id="editStudentForm">
+                <input type="hidden" id="edit-student-id"> <!-- Campo oculto para el ID -->
+                <div>
+                    <label for="edit-student-nombre">Nombre Completo:</label>
+                    <input type="text" id="edit-student-nombre" required>
+                </div>
+                <div>
+                    <label for="edit-student-contacto">Contacto (Teléfono/Email):</label>
+                    <input type="text" id="edit-student-contacto">
+                </div>
+                <div>
+                    <label for="edit-student-fecha-ingreso">Fecha de Ingreso:</label>
+                    <input type="date" id="edit-student-fecha-ingreso" required>
+                </div>
+                <button type="submit" class="professional-button">Guardar Cambios</button>
+                <button type="button" class="professional-button" id="cancelEditButton">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Enlace al script principal -->
+    <script src="script.js"></script>
+</body>
+</html>
