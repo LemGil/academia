@@ -223,12 +223,15 @@ function setupEventListeners() {
             const studentId = target.getAttribute('data-id');
             if (!studentId) return;
 
+            // Convertir el ID a número para buscar en localStorage
+            const numericId = parseInt(studentId, 10);
+            
             if (target.classList.contains('edit-btn')) {
-                console.log(`Clic en Editar para ID: ${studentId}`);
-                fetchStudentDataAndOpenEditModal(studentId); 
+                console.log(`Clic en Editar para ID: ${numericId}`);
+                fetchStudentDataAndOpenEditModal(numericId); 
             } else if (target.classList.contains('delete-btn')) {
-                console.log(`Clic en Eliminar para ID: ${studentId}`);
-                confirmDeleteStudent(studentId);
+                console.log(`Clic en Eliminar para ID: ${numericId}`);
+                confirmDeleteStudent(numericId);
             }
         });
     } else { console.warn('Div "student-list" no encontrado para delegación de eventos.'); }
@@ -360,7 +363,7 @@ function handleEditStudentFormSubmit(event) {
     }
 
     const updatedStudentData = {
-        id: parseInt(studentId),
+        id: studentId,
         nombre: nombre,
         contacto: contacto || null,
         fecha_ingreso: fechaIngresoValue // Enviamos la cadena YYYY-MM-DD
