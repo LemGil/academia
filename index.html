@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academia del Espíritu | Formación Teológica</title>
+    <title>Academia del Espíritu - Gestión de Estudiantes</title>
     
     <!-- Tipografías Oficiales -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -35,36 +35,54 @@
 
         body {
             background-color: var(--ivory-bg);
+            /* Textura sutil de papel/pergamino */
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
             color: var(--charcoal-text);
             font-family: var(--font-body);
-            line-height: 1.7;
-            background-image: 
-                linear-gradient(rgba(245, 241, 232, 0.9), rgba(245, 241, 232, 0.9)),
-                url("image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A24A' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            line-height: 1.6;
+            padding: 2rem;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
         }
 
-        /* Header Solemne */
+        /* Encabezado Institucional */
         header {
             text-align: center;
             margin-bottom: 3rem;
+            position: relative;
             padding-bottom: 2rem;
             border-bottom: 2px solid var(--sacred-gold);
-            position: relative;
         }
 
         header::after {
-            content: '✝';
-            display: block;
-            font-size: 1.5rem;
-            color: var(--sacred-gold);
-            margin-top: 1rem;
-            opacity: 0.8;
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-highlight), transparent);
+        }
+
+        .logo-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-img {
+            max-height: 120px;
+            width: auto;
+            /* Sombra dorada sutil y borde elegante */
+            filter: drop-shadow(0 4px 6px rgba(26, 58, 74, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.02);
         }
 
         h1 {
@@ -73,53 +91,41 @@
             font-size: 2.5rem;
             font-weight: 700;
             letter-spacing: 0.05em;
-            text-transform: uppercase;
             margin-bottom: 0.5rem;
-            text-shadow: 1px 1px 2px rgba(26, 58, 74, 0.1);
+            text-transform: uppercase;
         }
 
         .subtitle {
             font-family: var(--font-ui);
             color: var(--deep-gold-shadow);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
+            font-size: 1.1rem;
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         /* Tarjetas de Estadísticas */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
         }
 
         .stat-card {
             background: #fff;
             padding: 2rem;
-            border-radius: 4px;
+            border-radius: 4px; /* Bordes menos redondeados para seriedad */
             border: 1px solid var(--parchment-gray);
+            border-top: 4px solid var(--sacred-gold);
+            box-shadow: 0 4px 12px rgba(26, 58, 74, 0.08);
             text-align: center;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(26, 58, 74, 0.05);
-            transition: transform 0.3s ease;
+            transition: transform 0.2s;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--sacred-gold);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: var(--sacred-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(26, 58, 74, 0.12);
         }
 
         .stat-number {
@@ -134,34 +140,35 @@
         .stat-label {
             font-family: var(--font-ui);
             color: var(--deep-gold-shadow);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.05em;
+            font-weight: 600;
         }
 
         /* Barra de Herramientas */
         .toolbar {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
             margin-bottom: 2rem;
-            justify-content: center;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn {
-            padding: 0.9rem 2rem;
+            padding: 0.875rem 1.75rem;
             border: none;
+            border-radius: 2px; /* Bordes más rectos */
             cursor: pointer;
             font-family: var(--font-ui);
-            font-weight: 500;
-            font-size: 0.9rem;
-            letter-spacing: 0.05em;
+            font-weight: 600;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            border-radius: 2px;
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             position: relative;
             overflow: hidden;
         }
@@ -173,29 +180,49 @@
         }
 
         .btn-primary:hover {
-            background-color: var(--deep-gold-shadow);
-            border-color: var(--deep-gold-shadow);
+            background-color: #132b36;
             color: #fff;
+            box-shadow: 0 4px 12px rgba(26, 58, 74, 0.3);
         }
 
         .btn-secondary {
             background-color: transparent;
             color: var(--primary-teal);
-            border: 1px solid var(--primary-teal);
+            border: 1px solid var(--sacred-gold);
         }
 
         .btn-secondary:hover {
-            background-color: var(--primary-teal);
-            color: var(--ivory-bg);
+            background-color: var(--sacred-gold);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(201, 162, 74, 0.3);
         }
 
         /* Tabla Académica */
         .table-container {
             background: #fff;
             border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(26, 58, 74, 0.08);
-            overflow: hidden;
             border: 1px solid var(--parchment-gray);
+            box-shadow: 0 4px 20px rgba(26, 58, 74, 0.06);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Detalle ornamental en esquinas de la tabla */
+        .table-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 20px; height: 20px;
+            border-top: 2px solid var(--sacred-gold);
+            border-left: 2px solid var(--sacred-gold);
+        }
+        .table-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 20px; height: 20px;
+            border-bottom: 2px solid var(--sacred-gold);
+            border-right: 2px solid var(--sacred-gold);
         }
 
         table {
@@ -209,15 +236,15 @@
             font-family: var(--font-title);
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 0.85rem;
-            padding: 1.25rem 1rem;
-            text-align: left;
+            letter-spacing: 0.05em;
+            padding: 1.25rem;
+            font-size: 0.9rem;
             border-bottom: 3px solid var(--sacred-gold);
         }
 
         td {
-            padding: 1.25rem 1rem;
+            padding: 1.25rem;
+            text-align: left;
             border-bottom: 1px solid var(--parchment-gray);
             color: var(--charcoal-text);
             font-size: 1rem;
@@ -228,7 +255,7 @@
         }
 
         tr:hover {
-            background-color: rgba(245, 241, 232, 0.6);
+            background-color: rgba(245, 215, 122, 0.1); /* Tinte dorado muy sutil al hover */
         }
 
         .actions {
@@ -238,20 +265,7 @@
 
         .btn-sm {
             padding: 0.5rem 1rem;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .btn-danger {
-            background-color: transparent;
-            color: #8B3A3A; /* Rojo teológico suave */
-            border: 1px solid #8B3A3A;
-        }
-
-        .btn-danger:hover {
-            background-color: #8B3A3A;
-            color: #fff;
+            font-size: 0.8rem;
         }
 
         /* Modal */
@@ -262,11 +276,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(26, 58, 74, 0.85);
+            background-color: rgba(26, 58, 74, 0.85); /* Fondo oscuro azulado */
+            backdrop-filter: blur(4px);
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            backdrop-filter: blur(4px);
         }
 
         .modal.active {
@@ -275,33 +289,32 @@
 
         .modal-content {
             background: var(--ivory-bg);
-            padding: 3rem;
+            padding: 2.5rem;
             border-radius: 4px;
             width: 100%;
             max-width: 550px;
             border: 2px solid var(--sacred-gold);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
             position: relative;
         }
 
+        /* Detalle dorado en esquinas del modal */
         .modal-content::before {
             content: '';
             position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
             border: 1px solid rgba(201, 162, 74, 0.3);
             pointer-events: none;
         }
 
-        h2 {
+        .modal-content h2 {
             font-family: var(--font-title);
             color: var(--primary-teal);
             text-align: center;
             margin-bottom: 2rem;
             font-size: 1.8rem;
-            text-transform: uppercase;
+            border-bottom: 1px solid var(--parchment-gray);
+            padding-bottom: 1rem;
         }
 
         .form-group {
@@ -312,29 +325,29 @@
             display: block;
             margin-bottom: 0.5rem;
             font-family: var(--font-ui);
-            font-weight: 500;
+            font-weight: 600;
             color: var(--primary-teal);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
         input {
             width: 100%;
-            padding: 0.9rem;
+            padding: 0.875rem;
             border: 1px solid var(--parchment-gray);
             background: #fff;
+            border-radius: 2px;
             font-family: var(--font-body);
             font-size: 1rem;
             color: var(--charcoal-text);
-            border-radius: 2px;
             transition: border-color 0.3s;
         }
 
         input:focus {
             outline: none;
             border-color: var(--sacred-gold);
-            box-shadow: 0 0 0 2px rgba(201, 162, 74, 0.2);
+            box-shadow: 0 0 0 3px rgba(201, 162, 74, 0.2);
         }
 
         .modal-actions {
@@ -342,8 +355,6 @@
             justify-content: center;
             gap: 1.5rem;
             margin-top: 2.5rem;
-            border-top: 1px solid var(--parchment-gray);
-            padding-top: 1.5rem;
         }
 
         .loading {
@@ -355,22 +366,31 @@
         }
 
         @media (max-width: 768px) {
-            .container { padding: 1rem; }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
             h1 { font-size: 1.8rem; }
-            .stats-container { gap: 1rem; }
-            .toolbar { flex-direction: column; }
-            .btn { width: 100%; justify-content: center; }
+            
             table { font-size: 0.9rem; }
             th, td { padding: 0.75rem 0.5rem; }
-            .modal-content { padding: 1.5rem; margin: 1rem; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="Escudo Academia del Espíritu" class="logo-img">
+            </div>
             <h1>Academia del Espíritu</h1>
-            <p class="subtitle">Gestión de Estudiantes & Formación Apostólica</p>
+            <p class="subtitle">Formación Teológica Apostólica</p>
         </header>
 
         <div class="stats-container">
@@ -386,10 +406,10 @@
 
         <div class="toolbar">
             <button class="btn btn-primary" onclick="openModal()">
-                <span>+</span> Nuevo Estudiante
+                <span>+</span> Registrar Estudiante
             </button>
             <button class="btn btn-secondary" onclick="exportToCSV()">
-                <span>📥</span> Exportar Registro
+                <span>📥</span> Exportar Registro (CSV)
             </button>
         </div>
 
@@ -402,7 +422,7 @@
                         <th>Epístola (Email)</th>
                         <th>Voz (Teléfono)</th>
                         <th>Fecha Ingreso</th>
-                        <th>Administración</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="studentsTableBody">
@@ -421,23 +441,23 @@
             <form id="studentForm">
                 <input type="hidden" id="studentId">
                 <div class="form-group">
-                    <label for="nombre">Nombre de Pila</label>
+                    <label for="nombre">Nombre</label>
                     <input type="text" id="nombre" required placeholder="Ej: Juan">
                 </div>
                 <div class="form-group">
-                    <label for="apellido">Apellido Paterno</label>
-                    <input type="text" id="apellido" required placeholder="Ej: Pablo">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" id="apellido" required placeholder="Ej: Pérez">
                 </div>
                 <div class="form-group">
-                    <label for="email">Correo Electrónico</label>
-                    <input type="email" id="email" required placeholder="ejemplo@correo.com">
+                    <label for="email">Epístola (Email)</label>
+                    <input type="email" id="email" required placeholder="juan@ejemplo.com">
                 </div>
                 <div class="form-group">
-                    <label for="telefono">Teléfono de Contacto</label>
+                    <label for="telefono">Voz (Teléfono)</label>
                     <input type="tel" id="telefono" required placeholder="+54 9 11...">
                 </div>
                 <div class="form-group">
-                    <label for="fecha_ingreso">Fecha de Matriculación</label>
+                    <label for="fecha_ingreso">Fecha de Ingreso</label>
                     <input type="date" id="fecha_ingreso" required>
                 </div>
                 <div class="modal-actions">
@@ -453,6 +473,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // Configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAG1apqQS-dkCCTob3lmv0BGjph3vb-EkE",
             authDomain: "academia-del-espiritu.firebaseapp.com",
@@ -462,12 +483,14 @@
             appId: "1:1010285474661:web:2ff92a4091d631b54be78c"
         };
 
+        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const studentsCollection = collection(db, "estudiantes");
 
         let studentsData = [];
 
+        // Escuchar cambios en tiempo real
         onSnapshot(studentsCollection, (snapshot) => {
             studentsData = [];
             snapshot.forEach((doc) => {
@@ -480,6 +503,7 @@
             updateStats();
         });
 
+        // Renderizar tabla
         function renderTable() {
             const tbody = document.getElementById('studentsTableBody');
             if (studentsData.length === 0) {
@@ -495,14 +519,14 @@
 
                 return `
                     <tr>
-                        <td style="font-weight: 600; color: var(--primary-teal);">${student.nombre}</td>
+                        <td style="font-weight:600">${student.nombre}</td>
                         <td>${student.apellido}</td>
-                        <td style="font-style: italic;">${student.email}</td>
-                        <td>${student.telefono}</td>
-                        <td style="font-family: var(--font-ui); font-size: 0.9rem;">${fechaStr}</td>
+                        <td style="font-family:var(--font-ui); font-size:0.9em">${student.email}</td>
+                        <td style="font-family:var(--font-ui); font-size:0.9em">${student.telefono}</td>
+                        <td>${fechaStr}</td>
                         <td class="actions">
                             <button class="btn btn-sm btn-secondary edit-btn" data-id="${student.id}">Editar</button>
-                            <button class="btn btn-sm btn-danger delete-btn" data-id="${student.id}">Eliminar</button>
+                            <button class="btn btn-sm" style="background:transparent; color:#ef4444; border:1px solid #ef4444" data-id="${student.id}" onclick="confirmDeleteStudent('${student.id}')">Eliminar</button>
                         </td>
                     </tr>
                 `;
@@ -511,6 +535,7 @@
             assignButtonEvents();
         }
 
+        // Actualizar estadísticas
         function updateStats() {
             document.getElementById('totalStudents').textContent = studentsData.length;
             
@@ -526,6 +551,7 @@
             document.getElementById('newStudentsMonth').textContent = newThisMonth;
         }
 
+        // Asignar eventos a botones dinámicos
         function assignButtonEvents() {
             document.querySelectorAll('.edit-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -534,20 +560,13 @@
                     openEditModal(studentId);
                 });
             });
-
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const button = e.target.closest('button');
-                    const studentId = button.getAttribute('data-id');
-                    confirmDeleteStudent(studentId);
-                });
-            });
         }
 
+        // Abrir modal para editar
         async function openEditModal(id) {
             const student = studentsData.find(s => s.id === id);
             if (!student) {
-                alert('Registro no encontrado en el archivo');
+                alert('Registro no encontrado');
                 return;
             }
 
@@ -566,17 +585,19 @@
             document.getElementById('studentModal').classList.add('active');
         }
 
-        async function confirmDeleteStudent(id) {
-            if (confirm('¿Está seguro de desechar este registro? Esta acción es permanente.')) {
+        // Confirmar eliminación (Global)
+        window.confirmDeleteStudent = async (id) => {
+            if (confirm('¿Estás seguro de que deseas eliminar este registro del libro? Esta acción no se puede deshacer.')) {
                 try {
                     await deleteDoc(doc(db, "estudiantes", id));
                 } catch (error) {
                     console.error("Error al eliminar:", error);
-                    alert('Error administrativo al eliminar el registro');
+                    alert('Error al eliminar el registro');
                 }
             }
-        }
+        };
 
+        // Manejar envío del formulario
         document.getElementById('studentForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -607,10 +628,11 @@
                 closeModal();
             } catch (error) {
                 console.error("Error al guardar:", error);
-                alert('Error al guardar los datos en el archivo');
+                alert('Error al guardar los datos');
             }
         });
 
+        // Funciones globales
         window.openModal = () => {
             document.getElementById('modalTitle').textContent = 'Nuevo Registro';
             document.getElementById('studentForm').reset();
@@ -622,9 +644,10 @@
             document.getElementById('studentModal').classList.remove('active');
         };
 
+        // Exportar a CSV
         window.exportToCSV = () => {
             if (studentsData.length === 0) {
-                alert('El archivo está vacío');
+                alert('No hay registros para exportar');
                 return;
             }
 
@@ -658,6 +681,7 @@
             document.body.removeChild(link);
         };
 
+        // Cerrar modal al hacer clic fuera
         document.getElementById('studentModal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('studentModal')) {
                 closeModal();
@@ -666,3 +690,4 @@
     </script>
 </body>
 </html>
+
