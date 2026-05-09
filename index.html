@@ -396,12 +396,15 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import {
+            getFirestore, collection, addDoc, doc, updateDoc, deleteDoc,
+            onSnapshot, getDocs
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
  
         // ── Configuración Firebase ──────────────────────────────────────────
         const firebaseConfig = {
-            apiKey: "AIzaSyAG1apqQS-dGjph3vb-EkE",
-            authDomain: "lemgil.github.io",  // ← CAMBIAR ESTO
+            apiKey: "AIzaSyAG1apqQS-dkCCTob3lmv0BGjph3vb-EkE",
+            authDomain: "academia-del-espiritu.firebaseapp.com",
             projectId: "academia-del-espiritu",
             storageBucket: "academia-del-espiritu.firebasestorage.app",
             messagingSenderId: "1010285474661",
@@ -413,31 +416,36 @@
         const studentsCollection = collection(db, "estudiantes");
  
         let studentsData = [];
-        let firstLoad = true; // ✅ FIX: controla el estado de carga inicial
+        let firstLoad = true;
  
-        // ── Escucha en tiempo real ──────────────────────────────────────────
-        // ✅ FIX: onSnapshot con callback de error como segundo argumento (no .catch)
+        // ── PASO 1: Carga inicial forzada directo del servidor ──────────────
+        // Garantiza que el móvil lea los datos reales ignorando el caché
+        getDocs(studentsCollection)
+            .then((snapshot) => {
+                studentsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                firstLoad = false;
+                renderTable();
+                updateStats();
+            })
+            .catch((error) => {
+                console.error("Error carga inicial:", error);
+                firstLoad = false;
+                const tbody = document.getElementById('studentsTableBody');
+                tbody.innerHTML = `<tr><td colspan="6" class="loading">⚠️ Error al cargar: ${error.message}</td></tr>`;
+            });
+ 
+        // ── PASO 2: Escucha cambios en tiempo real ──────────────────────────
+        // Mantiene la tabla actualizada cuando se agregan/editan/eliminan datos
         onSnapshot(
             studentsCollection,
             (snapshot) => {
-                 // ✅ Agrega esto para ver qué llega en móvil
-        console.log("Snapshot size:", snapshot.size, "Empty:", snapshot.empty);
-        snapshot.docs.forEach(d => console.log("Doc:", d.id, d.data()));
-
-        studentsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-        firstLoad = false;
-        renderTable();
-        updateStats();
-            },
-
-
-            
-            (error) => {
-                // ✅ FIX: manejo correcto de errores en onSnapshot
-                console.error("Error al escuchar Firebase:", error);
+                studentsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
                 firstLoad = false;
-                const tbody = document.getElementById('studentsTableBody');
-                tbody.innerHTML = `<tr><td colspan="6" class="loading">⚠️ Error de conexión: ${error.message}</td></tr>`;
+                renderTable();
+                updateStats();
+            },
+            (error) => {
+                console.error("Error onSnapshot:", error);
             }
         );
  
@@ -445,7 +453,6 @@
         function renderTable() {
             const tbody = document.getElementById('studentsTableBody');
  
-            // ✅ FIX: "Cargando..." solo durante la carga inicial, nunca dentro de renderTable
             if (firstLoad) return;
  
             if (studentsData.length === 0) {
@@ -553,7 +560,7 @@
             }
         });
  
-        // ── Funciones globales (accesibles desde HTML) ──────────────────────
+        // ── Funciones globales ──────────────────────────────────────────────
         window.openModal = () => {
             document.getElementById('studentForm').reset();
             document.getElementById('studentId').value = '';
@@ -585,4 +592,3 @@
     </script>
 </body>
 </html>
-
