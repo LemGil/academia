@@ -2,8 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academia del Espíritu - Gestión de Estudiantes</title>
+    <title>Academia del Espíritu v2</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -419,7 +422,6 @@
         let firstLoad = true;
  
         // ── PASO 1: Carga inicial forzada directo del servidor ──────────────
-        // Garantiza que el móvil lea los datos reales ignorando el caché
         getDocs(studentsCollection)
             .then((snapshot) => {
                 studentsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -435,7 +437,6 @@
             });
  
         // ── PASO 2: Escucha cambios en tiempo real ──────────────────────────
-        // Mantiene la tabla actualizada cuando se agregan/editan/eliminan datos
         onSnapshot(
             studentsCollection,
             (snapshot) => {
