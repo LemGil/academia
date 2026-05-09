@@ -5,68 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academia del Espíritu - Gestión de Estudiantes</title>
     
-    <!-- Fuentes Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
+ 
     <style>
         :root {
-            /* Paleta Oficial */
-            --primary: #1A3A4A;       /* Deep Teal */
+            --primary: #1A3A4A;
             --primary-light: #2C525F;
-            --gold: #C9A24A;          /* Sacred Gold */
+            --gold: #C9A24A;
             --gold-highlight: #F5D77A;
             --gold-shadow: #8A6A2F;
-            --bg-parchment: #F5F1E8;  /* Ivory */
+            --bg-parchment: #F5F1E8;
             --text-charcoal: #1C1C1C;
             --surface: #FFFFFF;
-            --border: #D6D0C4;        /* Parchment Gray */
+            --border: #D6D0C4;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+ 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
         body {
             background-color: var(--bg-parchment);
             color: var(--text-charcoal);
-            font-family: 'Inter', sans-serif; /* UI Font */
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
             padding: 1rem;
             min-height: 100vh;
             background-image: radial-gradient(#D6D0C4 1px, transparent 1px);
-            background-size: 20px 20px; /* Textura sutil de papel */
+            background-size: 20px 20px;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Tipografía */
+ 
+        .container { max-width: 1200px; margin: 0 auto; }
+ 
         h1, h2, h3 {
             font-family: 'Cinzel', serif;
             color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-
+ 
         p, td, th, input, label {
-            font-family: 'Crimson Pro', serif; /* Editorial Font */
+            font-family: 'Crimson Pro', serif;
             font-size: 1.05rem;
         }
-
-        /* Encabezado con Logo */
+ 
         header {
             text-align: center;
             margin-bottom: 2.5rem;
             padding-top: 1rem;
-            position: relative;
         }
-
+ 
         .logo-container {
             margin-bottom: 1rem;
             display: inline-block;
@@ -76,13 +64,9 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(26, 58, 74, 0.15);
         }
-
-        .logo-img {
-            height: 80px; /* Tamaño base */
-            width: auto;
-            display: block;
-        }
-
+ 
+        .logo-img { height: 80px; width: auto; display: block; }
+ 
         header h1 {
             font-size: 2.2rem;
             margin-bottom: 0.5rem;
@@ -91,21 +75,16 @@
             display: inline-block;
             padding-bottom: 10px;
         }
-
-        header p {
-            color: var(--gold-shadow);
-            font-style: italic;
-            font-size: 1.2rem;
-        }
-
-        /* Estadísticas */
+ 
+        header p { color: var(--gold-shadow); font-style: italic; font-size: 1.2rem; }
+ 
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
-
+ 
         .stat-card {
             background: var(--surface);
             padding: 1.5rem;
@@ -116,7 +95,7 @@
             position: relative;
             overflow: hidden;
         }
-
+ 
         .stat-card::after {
             content: '';
             position: absolute;
@@ -125,22 +104,21 @@
             background: linear-gradient(135deg, transparent 50%, var(--gold-highlight) 50%);
             opacity: 0.3;
         }
-
+ 
         .stat-number {
             font-family: 'Cinzel', serif;
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--primary);
         }
-
+ 
         .stat-label {
             color: var(--gold-shadow);
             font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-
-        /* Barra de Herramientas */
+ 
         .toolbar {
             display: flex;
             gap: 1rem;
@@ -148,7 +126,7 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-
+ 
         .btn {
             padding: 0.8rem 1.6rem;
             border: none;
@@ -165,53 +143,56 @@
             font-size: 0.9rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
+ 
         .btn-primary {
             background-color: var(--primary);
             color: var(--gold-highlight);
             border: 1px solid var(--gold);
         }
-
+ 
         .btn-primary:hover {
             background-color: var(--primary-light);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(26, 58, 74, 0.2);
         }
-
+ 
         .btn-secondary {
             background-color: var(--surface);
             color: var(--primary);
             border: 1px solid var(--gold);
         }
-
+ 
         .btn-secondary:hover {
             background-color: var(--gold-highlight);
             color: var(--primary);
             transform: translateY(-2px);
         }
-
-        /* Tabla */
+ 
+        .btn-danger {
+            background-color: #fff;
+            color: #c0392b;
+            border: 1px solid #c0392b;
+        }
+ 
+        .btn-danger:hover {
+            background-color: #c0392b;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+ 
         .table-container {
             background: var(--surface);
             border-radius: 4px;
             box-shadow: 0 4px 12px rgba(26, 58, 74, 0.08);
             overflow: hidden;
             border: 1px solid var(--border);
-            overflow-x: auto; /* Scroll horizontal en móvil */
+            overflow-x: auto;
         }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 800px; /* Fuerza scroll en móviles pequeños */
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
+ 
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+ 
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+ 
         th {
             background-color: var(--primary);
             color: var(--gold-highlight);
@@ -220,42 +201,28 @@
             font-size: 0.9rem;
             text-transform: uppercase;
         }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover {
-            background-color: #FAF9F6;
-        }
-
-        .actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .btn-sm {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.8rem;
-        }
-
-        /* Modal */
+ 
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: #FAF9F6; }
+ 
+        .actions { display: flex; gap: 0.5rem; }
+ 
+        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+ 
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-color: rgba(26, 58, 74, 0.85); /* Fondo oscuro teal */
+            background-color: rgba(26, 58, 74, 0.85);
             justify-content: center;
             align-items: center;
             z-index: 1000;
             backdrop-filter: blur(2px);
         }
-
-        .modal.active {
-            display: flex;
-        }
-
+ 
+        .modal.active { display: flex; }
+ 
         .modal-content {
             background: var(--bg-parchment);
             padding: 2.5rem;
@@ -268,18 +235,16 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             position: relative;
         }
-
+ 
         .modal-content h2 {
             margin-bottom: 1.5rem;
             text-align: center;
             border-bottom: 1px solid var(--gold);
             padding-bottom: 1rem;
         }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
+ 
+        .form-group { margin-bottom: 1.2rem; }
+ 
         label {
             display: block;
             margin-bottom: 0.5rem;
@@ -289,7 +254,7 @@
             font-size: 0.9rem;
             text-transform: uppercase;
         }
-
+ 
         input {
             width: 100%;
             padding: 0.8rem;
@@ -299,13 +264,13 @@
             background: #fff;
             font-family: 'Crimson Pro', serif;
         }
-
+ 
         input:focus {
             outline: none;
             border-color: var(--gold);
             box-shadow: 0 0 0 3px rgba(201, 162, 74, 0.2);
         }
-
+ 
         .modal-actions {
             display: flex;
             justify-content: flex-end;
@@ -314,61 +279,32 @@
             border-top: 1px solid var(--border);
             padding-top: 1.5rem;
         }
-
+ 
         .loading {
             text-align: center;
             padding: 2rem;
             color: var(--gold-shadow);
             font-style: italic;
         }
-
-        /* RESPONSIVE MOBILE */
+ 
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gold-shadow);
+            font-style: italic;
+        }
+ 
         @media (max-width: 768px) {
-            body {
-                padding: 0.5rem;
-            }
-
-            .logo-img {
-                height: 60px; /* Logo más pequeño en móvil */
-            }
-
-            header h1 {
-                font-size: 1.6rem;
-            }
-
-            header p {
-                font-size: 1rem;
-            }
-
-            .stats-container {
-                grid-template-columns: 1fr; /* Una columna */
-                gap: 1rem;
-            }
-
-            .toolbar {
-                flex-direction: column; /* Botones uno debajo del otro */
-                width: 100%;
-            }
-
-            .btn {
-                width: 100%; /* Botones ancho completo */
-                justify-content: center;
-                padding: 1rem; /* Más grandes para tocar fácil */
-            }
-
-            .modal-content {
-                padding: 1.5rem;
-                margin: 1rem;
-                max-width: calc(100% - 2rem);
-            }
-
-            .modal-actions {
-                flex-direction: column-reverse; /* Botones apilados en móvil */
-            }
-            
-            .modal-actions .btn {
-                width: 100%;
-            }
+            body { padding: 0.5rem; }
+            .logo-img { height: 60px; }
+            header h1 { font-size: 1.6rem; }
+            header p { font-size: 1rem; }
+            .stats-container { grid-template-columns: 1fr; gap: 1rem; }
+            .toolbar { flex-direction: column; width: 100%; }
+            .btn { width: 100%; justify-content: center; padding: 1rem; }
+            .modal-content { padding: 1.5rem; margin: 1rem; max-width: calc(100% - 2rem); }
+            .modal-actions { flex-direction: column-reverse; }
+            .modal-actions .btn { width: 100%; }
         }
     </style>
 </head>
@@ -381,7 +317,7 @@
             <h1>Academia del Espíritu</h1>
             <p>Formación Teológica Apostólica</p>
         </header>
-
+ 
         <div class="stats-container">
             <div class="stat-card">
                 <div class="stat-number" id="totalStudents">0</div>
@@ -392,7 +328,7 @@
                 <div class="stat-label">Nuevos este Mes</div>
             </div>
         </div>
-
+ 
         <div class="toolbar">
             <button class="btn btn-primary" onclick="openModal()">
                 <span>✒️</span> Nuevo Estudiante
@@ -401,7 +337,7 @@
                 <span>📜</span> Exportar Registro
             </button>
         </div>
-
+ 
         <div class="table-container">
             <table>
                 <thead>
@@ -422,7 +358,7 @@
             </table>
         </div>
     </div>
-
+ 
     <!-- Modal Form -->
     <div class="modal" id="studentModal">
         <div class="modal-content">
@@ -456,173 +392,190 @@
             </form>
         </div>
     </div>
-
+ 
     <!-- Firebase SDKs -->
-   <!-- ANTES (probablemente tenías esto): -->
-<!-- <script type="module"> ... import ... from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"; ... </script> -->
-
-<!-- CAMBIA EL BLOQUE <script type="module"> POR ESTE NUEVO QUE FUERZA LA CACHÉ -->
-<script type="module">
-    // Forzamos la recarga agregando ?v=2 a las URLs de Firebase si fuera necesario, 
-    // pero lo más importante es que este archivo HTML tenga un cache-buster.
-    
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js?v=2";
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js?v=2";
-
-    // ... (El resto del código JS se mantiene igual, solo cambiamos los imports arriba) ...
-    
-    // CONFIGURACIÓN DE FIREBASE
-    const firebaseConfig = {
-        apiKey: "AIzaSyAG1apqQS-dkCCTob3lmv0BGjph3vb-EkE",
-        authDomain: "academia-del-espiritu.firebaseapp.com",
-        projectId: "academia-del-espiritu",
-        storageBucket: "academia-del-espiritu.firebasestorage.app",
-        messagingSenderId: "1010285474661",
-        appId: "1:1010285474661:web:2ff92a4091d631b54be78c"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const studentsCollection = collection(db, "estudiantes");
-    
-    let studentsData = [];
-
-    // ESCUCHA EN TIEMPO REAL
-    onSnapshot(studentsCollection, (snapshot) => {
-        console.log("Datos recibidos de Firebase:", snapshot.size); // Debug
-        studentsData = [];
-        snapshot.forEach((doc) => {
-            studentsData.push({ id: doc.id, ...doc.data() });
-        });
-        renderTable();
-        updateStats();
-    }).catch((error) => {
-        console.error("Error al escuchar Firebase:", error);
-        alert("Error de conexión con la base de datos. Revisa la consola.");
-    });
-
-    // RESTO DE FUNCIONES (renderTable, updateStats, etc.)...
-    // (Asegúrate de que todo el bloque de funciones esté aquí igual que antes)
-    
-    function renderTable() {
-        const tbody = document.getElementById('studentsTableBody');
-        if (studentsData.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="loading">Cargando datos de la nube...</td></tr>';
-            return;
-        }
-        tbody.innerHTML = studentsData.map(student => {
-            const fecha = new Date(student.fecha_ingreso);
-            const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
-            const adjustedDate = new Date(fecha.getTime() + userTimezoneOffset);
-            const fechaStr = adjustedDate.toLocaleDateString('es-ES');
-            return `
-                <tr>
-                    <td>${student.nombre}</td>
-                    <td>${student.apellido}</td>
-                    <td>${student.email}</td>
-                    <td>${student.telefono}</td>
-                    <td>${fechaStr}</td>
-                    <td class="actions">
-                        <button class="btn btn-sm btn-secondary edit-btn" data-id="${student.id}">Editar</button>
-                        <button class="btn btn-sm btn-danger delete-btn" data-id="${student.id}">Eliminar</button>
-                    </td>
-                </tr>
-            `;
-        }).join('');
-        assignButtonEvents();
-    }
-
-    function updateStats() {
-        document.getElementById('totalStudents').textContent = studentsData.length;
-        const now = new Date();
-        const newThisMonth = studentsData.filter(s => {
-            const date = new Date(s.fecha_ingreso);
-            return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
-        }).length;
-        document.getElementById('newStudentsMonth').textContent = newThisMonth;
-    }
-
-    function assignButtonEvents() {
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const button = e.target.closest('button');
-                openEditModal(button.getAttribute('data-id'));
-            });
-        });
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const button = e.target.closest('button');
-                confirmDeleteStudent(button.getAttribute('data-id'));
-            });
-        });
-    }
-
-    async function openEditModal(id) {
-        const student = studentsData.find(s => s.id === id);
-        if (!student) return alert('No encontrado');
-        document.getElementById('modalTitle').textContent = 'Editar Estudiante';
-        document.getElementById('studentId').value = student.id;
-        document.getElementById('nombre').value = student.nombre;
-        document.getElementById('apellido').value = student.apellido;
-        document.getElementById('email').value = student.email;
-        document.getElementById('telefono').value = student.telefono;
-        const fecha = new Date(student.fecha_ingreso);
-        const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
-        const adjustedDate = new Date(fecha.getTime() + userTimezoneOffset);
-        document.getElementById('fecha_ingreso').value = adjustedDate.toISOString().split('T')[0];
-        document.getElementById('studentModal').classList.add('active');
-    }
-
-    async function confirmDeleteStudent(id) {
-        if (confirm('¿Eliminar estudiante?')) {
-            try { await deleteDoc(doc(db, "estudiantes", id)); } 
-            catch (e) { alert('Error: ' + e.message); }
-        }
-    }
-
-    document.getElementById('studentForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const id = document.getElementById('studentId').value;
-        const studentData = {
-            nombre: document.getElementById('nombre').value,
-            apellido: document.getElementById('apellido').value,
-            email: document.getElementById('email').value,
-            telefono: document.getElementById('telefono').value,
-            fecha_ingreso: new Date(document.getElementById('fecha_ingreso').value).getTime()
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+ 
+        // ── Configuración Firebase ──────────────────────────────────────────
+        const firebaseConfig = {
+            apiKey: "AIzaSyAG1apqQS-dkCCTob3lmv0BGjph3vb-EkE",
+            authDomain: "academia-del-espiritu.firebaseapp.com",
+            projectId: "academia-del-espiritu",
+            storageBucket: "academia-del-espiritu.firebasestorage.app",
+            messagingSenderId: "1010285474661",
+            appId: "1:1010285474661:web:2ff92a4091d631b54be78c"
         };
-        try {
-            if (id) await updateDoc(doc(db, "estudiantes", id), studentData);
-            else await addDoc(studentsCollection, studentData);
-            closeModal();
-        } catch (e) { alert('Error al guardar: ' + e.message); }
-    });
-
-    window.openModal = () => {
-        document.getElementById('studentForm').reset();
-        document.getElementById('studentId').value = '';
-        document.getElementById('modalTitle').textContent = 'Nuevo Estudiante';
-        document.getElementById('studentModal').classList.add('active');
-    };
-    window.closeModal = () => document.getElementById('studentModal').classList.remove('active');
-    
-    window.exportToCSV = () => {
-        if (!studentsData.length) return alert('Sin datos');
-        let csv = "text/csv;charset=utf-8,ID,Nombre,Apellido,Email,Teléfono,Fecha\n";
-        studentsData.forEach(s => {
-            const f = new Date(s.fecha_ingreso);
-            csv += `${s.id},"${s.nombre}","${s.apellido}","${s.email}","${s.telefono}",${f.toLocaleDateString()}\n`;
+ 
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const studentsCollection = collection(db, "estudiantes");
+ 
+        let studentsData = [];
+        let firstLoad = true; // ✅ FIX: controla el estado de carga inicial
+ 
+        // ── Escucha en tiempo real ──────────────────────────────────────────
+        // ✅ FIX: onSnapshot con callback de error como segundo argumento (no .catch)
+        onSnapshot(
+            studentsCollection,
+            (snapshot) => {
+                studentsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                firstLoad = false; // ✅ Ya recibimos el primer snapshot
+                renderTable();
+                updateStats();
+            },
+            (error) => {
+                // ✅ FIX: manejo correcto de errores en onSnapshot
+                console.error("Error al escuchar Firebase:", error);
+                firstLoad = false;
+                const tbody = document.getElementById('studentsTableBody');
+                tbody.innerHTML = `<tr><td colspan="6" class="loading">⚠️ Error de conexión: ${error.message}</td></tr>`;
+            }
+        );
+ 
+        // ── Render de la tabla ──────────────────────────────────────────────
+        function renderTable() {
+            const tbody = document.getElementById('studentsTableBody');
+ 
+            // ✅ FIX: "Cargando..." solo durante la carga inicial, nunca dentro de renderTable
+            if (firstLoad) return;
+ 
+            if (studentsData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No hay estudiantes registrados aún.</td></tr>';
+                return;
+            }
+ 
+            tbody.innerHTML = studentsData.map(student => {
+                const fecha = new Date(student.fecha_ingreso);
+                const adjustedDate = new Date(fecha.getTime() + fecha.getTimezoneOffset() * 60000);
+                const fechaStr = adjustedDate.toLocaleDateString('es-ES');
+                return `
+                    <tr>
+                        <td>${student.nombre || ''}</td>
+                        <td>${student.apellido || ''}</td>
+                        <td>${student.email || ''}</td>
+                        <td>${student.telefono || ''}</td>
+                        <td>${fechaStr}</td>
+                        <td class="actions">
+                            <button class="btn btn-sm btn-secondary edit-btn" data-id="${student.id}">Editar</button>
+                            <button class="btn btn-sm btn-danger delete-btn" data-id="${student.id}">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+ 
+            assignButtonEvents();
+        }
+ 
+        // ── Estadísticas ────────────────────────────────────────────────────
+        function updateStats() {
+            document.getElementById('totalStudents').textContent = studentsData.length;
+            const now = new Date();
+            const newThisMonth = studentsData.filter(s => {
+                const date = new Date(s.fecha_ingreso);
+                return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+            }).length;
+            document.getElementById('newStudentsMonth').textContent = newThisMonth;
+        }
+ 
+        // ── Eventos de botones en tabla ─────────────────────────────────────
+        function assignButtonEvents() {
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    openEditModal(e.target.closest('button').getAttribute('data-id'));
+                });
+            });
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    confirmDeleteStudent(e.target.closest('button').getAttribute('data-id'));
+                });
+            });
+        }
+ 
+        // ── Editar estudiante ───────────────────────────────────────────────
+        function openEditModal(id) {
+            const student = studentsData.find(s => s.id === id);
+            if (!student) return alert('Estudiante no encontrado');
+ 
+            document.getElementById('modalTitle').textContent = 'Editar Estudiante';
+            document.getElementById('studentId').value = student.id;
+            document.getElementById('nombre').value = student.nombre || '';
+            document.getElementById('apellido').value = student.apellido || '';
+            document.getElementById('email').value = student.email || '';
+            document.getElementById('telefono').value = student.telefono || '';
+ 
+            const fecha = new Date(student.fecha_ingreso);
+            const adjustedDate = new Date(fecha.getTime() + fecha.getTimezoneOffset() * 60000);
+            document.getElementById('fecha_ingreso').value = adjustedDate.toISOString().split('T')[0];
+ 
+            document.getElementById('studentModal').classList.add('active');
+        }
+ 
+        // ── Eliminar estudiante ─────────────────────────────────────────────
+        async function confirmDeleteStudent(id) {
+            if (confirm('¿Deseas eliminar este estudiante? Esta acción no se puede deshacer.')) {
+                try {
+                    await deleteDoc(doc(db, "estudiantes", id));
+                } catch (e) {
+                    alert('Error al eliminar: ' + e.message);
+                }
+            }
+        }
+ 
+        // ── Guardar (crear o actualizar) ────────────────────────────────────
+        document.getElementById('studentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('studentId').value;
+            const studentData = {
+                nombre: document.getElementById('nombre').value,
+                apellido: document.getElementById('apellido').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                fecha_ingreso: new Date(document.getElementById('fecha_ingreso').value).getTime()
+            };
+            try {
+                if (id) {
+                    await updateDoc(doc(db, "estudiantes", id), studentData);
+                } else {
+                    await addDoc(studentsCollection, studentData);
+                }
+                closeModal();
+            } catch (e) {
+                alert('Error al guardar: ' + e.message);
+            }
         });
-        const link = document.createElement("a");
-        link.href = encodeURI(csv);
-        link.download = `alumnos_${new Date().toISOString().split('T')[0]}.csv`;
-        link.click();
-    };
-
-    document.getElementById('studentModal').addEventListener('click', (e) => {
-        if (e.target.id === 'studentModal') closeModal();
-    });
-</script>
+ 
+        // ── Funciones globales (accesibles desde HTML) ──────────────────────
+        window.openModal = () => {
+            document.getElementById('studentForm').reset();
+            document.getElementById('studentId').value = '';
+            document.getElementById('modalTitle').textContent = 'Nuevo Estudiante';
+            document.getElementById('studentModal').classList.add('active');
+        };
+ 
+        window.closeModal = () => {
+            document.getElementById('studentModal').classList.remove('active');
+        };
+ 
+        window.exportToCSV = () => {
+            if (!studentsData.length) return alert('No hay datos para exportar');
+            let csv = "data:text/csv;charset=utf-8,ID,Nombre,Apellido,Email,Teléfono,Fecha\n";
+            studentsData.forEach(s => {
+                const f = new Date(s.fecha_ingreso);
+                csv += `${s.id},"${s.nombre}","${s.apellido}","${s.email}","${s.telefono}",${f.toLocaleDateString()}\n`;
+            });
+            const link = document.createElement("a");
+            link.href = encodeURI(csv);
+            link.download = `alumnos_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        };
+ 
+        // Cierra modal al hacer clic fuera
+        document.getElementById('studentModal').addEventListener('click', (e) => {
+            if (e.target.id === 'studentModal') closeModal();
+        });
+    </script>
 </body>
 </html>
-
 
