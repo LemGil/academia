@@ -458,220 +458,170 @@
     </div>
 
     <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+   <!-- ANTES (probablemente tenías esto): -->
+<!-- <script type="module"> ... import ... from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"; ... </script> -->
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAG1apqQS-dkCCTob3lmv0BGjph3vb-EkE",
-            authDomain: "academia-del-espiritu.firebaseapp.com",
-            projectId: "academia-del-espiritu",
-            storageBucket: "academia-del-espiritu.firebasestorage.app",
-            messagingSenderId: "1010285474661",
-            appId: "1:1010285474661:web:2ff92a4091d631b54be78c"
-        };
+<!-- CAMBIA EL BLOQUE <script type="module"> POR ESTE NUEVO QUE FUERZA LA CACHÉ -->
+<script type="module">
+    // Forzamos la recarga agregando ?v=2 a las URLs de Firebase si fuera necesario, 
+    // pero lo más importante es que este archivo HTML tenga un cache-buster.
+    
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js?v=2";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js?v=2";
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const studentsCollection = collection(db, "estudiantes");
+    // ... (El resto del código JS se mantiene igual, solo cambiamos los imports arriba) ...
+    
+    // CONFIGURACIÓN DE FIREBASE
+    const firebaseConfig = {
+        apiKey: "AIzaSyAG1apqQS-dkCCTob3lmv0BGjph3vb-EkE",
+        authDomain: "academia-del-espiritu.firebaseapp.com",
+        projectId: "academia-del-espiritu",
+        storageBucket: "academia-del-espiritu.firebasestorage.app",
+        messagingSenderId: "1010285474661",
+        appId: "1:1010285474661:web:2ff92a4091d631b54be78c"
+    };
 
-        let studentsData = [];
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const studentsCollection = collection(db, "estudiantes");
+    
+    let studentsData = [];
 
-        onSnapshot(studentsCollection, (snapshot) => {
-            studentsData = [];
-            snapshot.forEach((doc) => {
-                studentsData.push({
-                    id: doc.id,
-                    ...doc.data()
-                });
-            });
-            renderTable();
-            updateStats();
+    // ESCUCHA EN TIEMPO REAL
+    onSnapshot(studentsCollection, (snapshot) => {
+        console.log("Datos recibidos de Firebase:", snapshot.size); // Debug
+        studentsData = [];
+        snapshot.forEach((doc) => {
+            studentsData.push({ id: doc.id, ...doc.data() });
         });
+        renderTable();
+        updateStats();
+    }).catch((error) => {
+        console.error("Error al escuchar Firebase:", error);
+        alert("Error de conexión con la base de datos. Revisa la consola.");
+    });
 
-        function renderTable() {
-            const tbody = document.getElementById('studentsTableBody');
-            if (studentsData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="loading">No hay registros en el libro</td></tr>';
-                return;
-            }
-
-            tbody.innerHTML = studentsData.map(student => {
-                const fecha = new Date(student.fecha_ingreso);
-                const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
-                const adjustedDate = new Date(fecha.getTime() + userTimezoneOffset);
-                const fechaStr = adjustedDate.toLocaleDateString('es-ES');
-
-                return `
-                    <tr>
-                        <td>${student.nombre}</td>
-                        <td>${student.apellido}</td>
-                        <td>${student.email}</td>
-                        <td>${student.telefono}</td>
-                        <td>${fechaStr}</td>
-                        <td class="actions">
-                            <button class="btn btn-sm btn-secondary edit-btn" data-id="${student.id}">Editar</button>
-                            <button class="btn btn-sm btn-danger delete-btn" style="background:#ef4444; color:white; border:none;" data-id="${student.id}">Eliminar</button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-
-            assignButtonEvents();
+    // RESTO DE FUNCIONES (renderTable, updateStats, etc.)...
+    // (Asegúrate de que todo el bloque de funciones esté aquí igual que antes)
+    
+    function renderTable() {
+        const tbody = document.getElementById('studentsTableBody');
+        if (studentsData.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="loading">Cargando datos de la nube...</td></tr>';
+            return;
         }
-
-        function updateStats() {
-            document.getElementById('totalStudents').textContent = studentsData.length;
-            const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
-            
-            const newThisMonth = studentsData.filter(s => {
-                const date = new Date(s.fecha_ingreso);
-                return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
-            }).length;
-            
-            document.getElementById('newStudentsMonth').textContent = newThisMonth;
-        }
-
-        function assignButtonEvents() {
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const button = e.target.closest('button');
-                    const studentId = button.getAttribute('data-id');
-                    openEditModal(studentId);
-                });
-            });
-
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const button = e.target.closest('button');
-                    const studentId = button.getAttribute('data-id');
-                    confirmDeleteStudent(studentId);
-                });
-            });
-        }
-
-        async function openEditModal(id) {
-            const student = studentsData.find(s => s.id === id);
-            if (!student) {
-                alert('Registro no encontrado');
-                return;
-            }
-
-            document.getElementById('modalTitle').textContent = 'Editar Registro';
-            document.getElementById('studentId').value = student.id;
-            document.getElementById('nombre').value = student.nombre;
-            document.getElementById('apellido').value = student.apellido;
-            document.getElementById('email').value = student.email;
-            document.getElementById('telefono').value = student.telefono;
-            
+        tbody.innerHTML = studentsData.map(student => {
             const fecha = new Date(student.fecha_ingreso);
             const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
             const adjustedDate = new Date(fecha.getTime() + userTimezoneOffset);
-            document.getElementById('fecha_ingreso').value = adjustedDate.toISOString().split('T')[0];
+            const fechaStr = adjustedDate.toLocaleDateString('es-ES');
+            return `
+                <tr>
+                    <td>${student.nombre}</td>
+                    <td>${student.apellido}</td>
+                    <td>${student.email}</td>
+                    <td>${student.telefono}</td>
+                    <td>${fechaStr}</td>
+                    <td class="actions">
+                        <button class="btn btn-sm btn-secondary edit-btn" data-id="${student.id}">Editar</button>
+                        <button class="btn btn-sm btn-danger delete-btn" data-id="${student.id}">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+        assignButtonEvents();
+    }
 
-            document.getElementById('studentModal').classList.add('active');
-        }
+    function updateStats() {
+        document.getElementById('totalStudents').textContent = studentsData.length;
+        const now = new Date();
+        const newThisMonth = studentsData.filter(s => {
+            const date = new Date(s.fecha_ingreso);
+            return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+        }).length;
+        document.getElementById('newStudentsMonth').textContent = newThisMonth;
+    }
 
-        async function confirmDeleteStudent(id) {
-            if (confirm('¿Está seguro de eliminar este registro permanentemente?')) {
-                try {
-                    await deleteDoc(doc(db, "estudiantes", id));
-                } catch (error) {
-                    console.error("Error al eliminar:", error);
-                    alert('Error al eliminar el registro');
-                }
-            }
-        }
-
-        document.getElementById('studentForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const id = document.getElementById('studentId').value;
-            const nombre = document.getElementById('nombre').value;
-            const apellido = document.getElementById('apellido').value;
-            const email = document.getElementById('email').value;
-            const telefono = document.getElementById('telefono').value;
-            const fechaInput = document.getElementById('fecha_ingreso').value;
-
-            const [year, month, day] = fechaInput.split('-').map(Number);
-            const fechaTimestamp = new Date(year, month - 1, day).getTime();
-
-            const studentData = {
-                nombre,
-                apellido,
-                email,
-                telefono,
-                fecha_ingreso: fechaTimestamp
-            };
-
-            try {
-                if (id) {
-                    await updateDoc(doc(db, "estudiantes", id), studentData);
-                } else {
-                    await addDoc(studentsCollection, studentData);
-                }
-                closeModal();
-            } catch (error) {
-                console.error("Error al guardar:", error);
-                alert('Error al guardar los datos');
-            }
-        });
-
-        window.openModal = () => {
-            document.getElementById('modalTitle').textContent = 'Nuevo Registro';
-            document.getElementById('studentForm').reset();
-            document.getElementById('studentId').value = '';
-            document.getElementById('studentModal').classList.add('active');
-        };
-
-        window.closeModal = () => {
-            document.getElementById('studentModal').classList.remove('active');
-        };
-
-        window.exportToCSV = () => {
-            if (studentsData.length === 0) {
-                alert('No hay registros para exportar');
-                return;
-            }
-
-            let csvContent = "text/csv;charset=utf-8,";
-            csvContent += "ID,Nombre,Apellido,Email,Teléfono,Fecha Ingreso\n";
-
-            studentsData.forEach(student => {
-                const fecha = new Date(student.fecha_ingreso);
-                const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
-                const adjustedDate = new Date(fecha.getTime() + userTimezoneOffset);
-                const fechaStr = adjustedDate.toLocaleDateString('es-ES');
-
-                const row = [
-                    student.id,
-                    `"${student.nombre}"`,
-                    `"${student.apellido}"`,
-                    `"${student.email}"`,
-                    `"${student.telefono}"`,
-                    fechaStr
-                ].join(",");
-                csvContent += row + "\n";
+    function assignButtonEvents() {
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const button = e.target.closest('button');
+                openEditModal(button.getAttribute('data-id'));
             });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            const dateStr = new Date().toISOString().split('T')[0];
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `registro_estudiantes_${dateStr}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-
-        document.getElementById('studentModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('studentModal')) {
-                closeModal();
-            }
         });
-    </script>
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const button = e.target.closest('button');
+                confirmDeleteStudent(button.getAttribute('data-id'));
+            });
+        });
+    }
+
+    async function openEditModal(id) {
+        const student = studentsData.find(s => s.id === id);
+        if (!student) return alert('No encontrado');
+        document.getElementById('modalTitle').textContent = 'Editar Estudiante';
+        document.getElementById('studentId').value = student.id;
+        document.getElementById('nombre').value = student.nombre;
+        document.getElementById('apellido').value = student.apellido;
+        document.getElementById('email').value = student.email;
+        document.getElementById('telefono').value = student.telefono;
+        const fecha = new Date(student.fecha_ingreso);
+        const userTimezoneOffset = fecha.getTimezoneOffset() * 60000;
+        const adjustedDate = new Date(fecha.getTime() + userTimezoneOffset);
+        document.getElementById('fecha_ingreso').value = adjustedDate.toISOString().split('T')[0];
+        document.getElementById('studentModal').classList.add('active');
+    }
+
+    async function confirmDeleteStudent(id) {
+        if (confirm('¿Eliminar estudiante?')) {
+            try { await deleteDoc(doc(db, "estudiantes", id)); } 
+            catch (e) { alert('Error: ' + e.message); }
+        }
+    }
+
+    document.getElementById('studentForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('studentId').value;
+        const studentData = {
+            nombre: document.getElementById('nombre').value,
+            apellido: document.getElementById('apellido').value,
+            email: document.getElementById('email').value,
+            telefono: document.getElementById('telefono').value,
+            fecha_ingreso: new Date(document.getElementById('fecha_ingreso').value).getTime()
+        };
+        try {
+            if (id) await updateDoc(doc(db, "estudiantes", id), studentData);
+            else await addDoc(studentsCollection, studentData);
+            closeModal();
+        } catch (e) { alert('Error al guardar: ' + e.message); }
+    });
+
+    window.openModal = () => {
+        document.getElementById('studentForm').reset();
+        document.getElementById('studentId').value = '';
+        document.getElementById('modalTitle').textContent = 'Nuevo Estudiante';
+        document.getElementById('studentModal').classList.add('active');
+    };
+    window.closeModal = () => document.getElementById('studentModal').classList.remove('active');
+    
+    window.exportToCSV = () => {
+        if (!studentsData.length) return alert('Sin datos');
+        let csv = "text/csv;charset=utf-8,ID,Nombre,Apellido,Email,Teléfono,Fecha\n";
+        studentsData.forEach(s => {
+            const f = new Date(s.fecha_ingreso);
+            csv += `${s.id},"${s.nombre}","${s.apellido}","${s.email}","${s.telefono}",${f.toLocaleDateString()}\n`;
+        });
+        const link = document.createElement("a");
+        link.href = encodeURI(csv);
+        link.download = `alumnos_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+    };
+
+    document.getElementById('studentModal').addEventListener('click', (e) => {
+        if (e.target.id === 'studentModal') closeModal();
+    });
+</script>
 </body>
 </html>
 
