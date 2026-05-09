@@ -420,11 +420,18 @@
         onSnapshot(
             studentsCollection,
             (snapshot) => {
-                studentsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-                firstLoad = false; // ✅ Ya recibimos el primer snapshot
-                renderTable();
-                updateStats();
+                 // ✅ Agrega esto para ver qué llega en móvil
+        console.log("Snapshot size:", snapshot.size, "Empty:", snapshot.empty);
+        snapshot.docs.forEach(d => console.log("Doc:", d.id, d.data()));
+
+        studentsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        firstLoad = false;
+        renderTable();
+        updateStats();
             },
+
+
+            
             (error) => {
                 // ✅ FIX: manejo correcto de errores en onSnapshot
                 console.error("Error al escuchar Firebase:", error);
