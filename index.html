@@ -6,8 +6,8 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academia del Espíritu v2</title>
-    
+    <title>Academia del Espíritu</title>
+ 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -209,7 +209,6 @@
         tr:hover { background-color: #FAF9F6; }
  
         .actions { display: flex; gap: 0.5rem; }
- 
         .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
  
         .modal {
@@ -236,7 +235,6 @@
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            position: relative;
         }
  
         .modal-content h2 {
@@ -354,15 +352,13 @@
                     </tr>
                 </thead>
                 <tbody id="studentsTableBody">
-                    <tr>
-                        <td colspan="6" class="loading">Cargando registros...</td>
-                    </tr>
+                    <tr><td colspan="6" class="loading">Cargando registros...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
  
-    <!-- Modal Form -->
+    <!-- Modal -->
     <div class="modal" id="studentModal">
         <div class="modal-content">
             <h2 id="modalTitle">Registro de Estudiante</h2>
@@ -396,172 +392,110 @@
         </div>
     </div>
  
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import {
-            getFirestore, collection, addDoc, doc, updateDoc, deleteDoc,
-            onSnapshot, getDocs
-        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
- 
-        // ── Configuración Firebase ──────────────────────────────────────────
-        const firebaseConfig = {
-            apiKey: "AIzaSyAG1apqQS-dkCCTob3lmv0BGjph3vb-EkE",
-            authDomain: "academia-del-espiritu.firebaseapp.com",
-            projectId: "academia-del-espiritu",
-            storageBucket: "academia-del-espiritu.firebasestorage.app",
-            messagingSenderId: "1010285474661",
-            appId: "1:1010285474661:web:2ff92a4091d631b54be78c"
+    <script>
+        // ── Configuración Supabase ──────────────────────────────────────────
+        const SUPABASE_URL = "https://cdabgazsrjkfcqzqeint.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_gbS0u_HxiWdEuCANkRbGeQ_gKChZZiN";
+        const HEADERS = {
+            "Content-Type":  "application/json",
+            "apikey":        SUPABASE_KEY,
+            "Authorization": `Bearer ${SUPABASE_KEY}`
         };
- 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const studentsCollection = collection(db, "estudiantes");
+        const TABLE_URL = `${SUPABASE_URL}/rest/v1/estudiantes`;
  
         let studentsData = [];
-        let firstLoad = true;
  
-        // ── PASO 1: Carga inicial forzada directo del servidor ──────────────
-        getDocs(studentsCollection)
-            .then((snapshot) => {
-                studentsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-                firstLoad = false;
+        // ── Cargar estudiantes ──────────────────────────────────────────────
+        async function loadStudents() {
+            try {
+                const res  = await fetch(`${TABLE_URL}?select=*&order=fecha_ingreso.asc`, { headers: HEADERS });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || JSON.stringify(data));
+                studentsData = data;
                 renderTable();
                 updateStats();
-            })
-            .catch((error) => {
-                console.error("Error carga inicial:", error);
-                firstLoad = false;
-                const tbody = document.getElementById('studentsTableBody');
-                tbody.innerHTML = `<tr><td colspan="6" class="loading">⚠️ Error al cargar: ${error.message}</td></tr>`;
-            });
- 
-        // ── PASO 2: Escucha cambios en tiempo real ──────────────────────────
-        onSnapshot(
-            studentsCollection,
-            (snapshot) => {
-                studentsData = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-                firstLoad = false;
-                renderTable();
-                updateStats();
-            },
-            (error) => {
-                console.error("Error onSnapshot:", error);
+            } catch (err) {
+                document.getElementById('studentsTableBody').innerHTML =
+                    `<tr><td colspan="6" class="loading">⚠️ Error: ${err.message}</td></tr>`;
             }
-        );
+        }
+ 
+        // ── Crear estudiante ────────────────────────────────────────────────
+        async function createStudent(data) {
+            const res = await fetch(TABLE_URL, {
+                method:  'POST',
+                headers: { ...HEADERS, "Prefer": "return=representation" },
+                body:    JSON.stringify(data)
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.message || JSON.stringify(err));
+            }
+        }
+ 
+        // ── Actualizar estudiante ───────────────────────────────────────────
+        async function updateStudent(id, data) {
+            const res = await fetch(`${TABLE_URL}?id=eq.${id}`, {
+                method:  'PATCH',
+                headers: { ...HEADERS, "Prefer": "return=representation" },
+                body:    JSON.stringify(data)
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.message || JSON.stringify(err));
+            }
+        }
+ 
+        // ── Eliminar estudiante ─────────────────────────────────────────────
+        async function deleteStudent(id) {
+            const res = await fetch(`${TABLE_URL}?id=eq.${id}`, {
+                method:  'DELETE',
+                headers: HEADERS
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.message || JSON.stringify(err));
+            }
+            await loadStudents();
+        }
  
         // ── Render de la tabla ──────────────────────────────────────────────
         function renderTable() {
             const tbody = document.getElementById('studentsTableBody');
- 
-            if (firstLoad) return;
- 
             if (studentsData.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No hay estudiantes registrados aún.</td></tr>';
                 return;
             }
- 
-            tbody.innerHTML = studentsData.map(student => {
-                const fecha = new Date(student.fecha_ingreso);
-                const adjustedDate = new Date(fecha.getTime() + fecha.getTimezoneOffset() * 60000);
-                const fechaStr = adjustedDate.toLocaleDateString('es-ES');
+            tbody.innerHTML = studentsData.map(s => {
+                const fecha = new Date(s.fecha_ingreso);
+                const adj   = new Date(fecha.getTime() + fecha.getTimezoneOffset() * 60000);
                 return `
                     <tr>
-                        <td>${student.nombre || ''}</td>
-                        <td>${student.apellido || ''}</td>
-                        <td>${student.email || ''}</td>
-                        <td>${student.telefono || ''}</td>
-                        <td>${fechaStr}</td>
+                        <td>${s.nombre || ''}</td>
+                        <td>${s.apellido || ''}</td>
+                        <td>${s.email || ''}</td>
+                        <td>${s.telefono || ''}</td>
+                        <td>${adj.toLocaleDateString('es-ES')}</td>
                         <td class="actions">
-                            <button class="btn btn-sm btn-secondary edit-btn" data-id="${student.id}">Editar</button>
-                            <button class="btn btn-sm btn-danger delete-btn" data-id="${student.id}">Eliminar</button>
+                            <button class="btn btn-sm btn-secondary" onclick="openEditModal(${s.id})">Editar</button>
+                            <button class="btn btn-sm btn-danger"    onclick="confirmDelete(${s.id})">Eliminar</button>
                         </td>
-                    </tr>
-                `;
+                    </tr>`;
             }).join('');
- 
-            assignButtonEvents();
         }
  
         // ── Estadísticas ────────────────────────────────────────────────────
         function updateStats() {
             document.getElementById('totalStudents').textContent = studentsData.length;
             const now = new Date();
-            const newThisMonth = studentsData.filter(s => {
-                const date = new Date(s.fecha_ingreso);
-                return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+            const mes = studentsData.filter(s => {
+                const d = new Date(s.fecha_ingreso);
+                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
             }).length;
-            document.getElementById('newStudentsMonth').textContent = newThisMonth;
+            document.getElementById('newStudentsMonth').textContent = mes;
         }
  
-        // ── Eventos de botones en tabla ─────────────────────────────────────
-        function assignButtonEvents() {
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    openEditModal(e.target.closest('button').getAttribute('data-id'));
-                });
-            });
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    confirmDeleteStudent(e.target.closest('button').getAttribute('data-id'));
-                });
-            });
-        }
- 
-        // ── Editar estudiante ───────────────────────────────────────────────
-        function openEditModal(id) {
-            const student = studentsData.find(s => s.id === id);
-            if (!student) return alert('Estudiante no encontrado');
- 
-            document.getElementById('modalTitle').textContent = 'Editar Estudiante';
-            document.getElementById('studentId').value = student.id;
-            document.getElementById('nombre').value = student.nombre || '';
-            document.getElementById('apellido').value = student.apellido || '';
-            document.getElementById('email').value = student.email || '';
-            document.getElementById('telefono').value = student.telefono || '';
- 
-            const fecha = new Date(student.fecha_ingreso);
-            const adjustedDate = new Date(fecha.getTime() + fecha.getTimezoneOffset() * 60000);
-            document.getElementById('fecha_ingreso').value = adjustedDate.toISOString().split('T')[0];
- 
-            document.getElementById('studentModal').classList.add('active');
-        }
- 
-        // ── Eliminar estudiante ─────────────────────────────────────────────
-        async function confirmDeleteStudent(id) {
-            if (confirm('¿Deseas eliminar este estudiante? Esta acción no se puede deshacer.')) {
-                try {
-                    await deleteDoc(doc(db, "estudiantes", id));
-                } catch (e) {
-                    alert('Error al eliminar: ' + e.message);
-                }
-            }
-        }
- 
-        // ── Guardar (crear o actualizar) ────────────────────────────────────
-        document.getElementById('studentForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('studentId').value;
-            const studentData = {
-                nombre: document.getElementById('nombre').value,
-                apellido: document.getElementById('apellido').value,
-                email: document.getElementById('email').value,
-                telefono: document.getElementById('telefono').value,
-                fecha_ingreso: new Date(document.getElementById('fecha_ingreso').value).getTime()
-            };
-            try {
-                if (id) {
-                    await updateDoc(doc(db, "estudiantes", id), studentData);
-                } else {
-                    await addDoc(studentsCollection, studentData);
-                }
-                closeModal();
-            } catch (e) {
-                alert('Error al guardar: ' + e.message);
-            }
-        });
- 
-        // ── Funciones globales ──────────────────────────────────────────────
+        // ── Modal ───────────────────────────────────────────────────────────
         window.openModal = () => {
             document.getElementById('studentForm').reset();
             document.getElementById('studentId').value = '';
@@ -569,10 +503,55 @@
             document.getElementById('studentModal').classList.add('active');
         };
  
-        window.closeModal = () => {
-            document.getElementById('studentModal').classList.remove('active');
+        window.openEditModal = (id) => {
+            const s = studentsData.find(x => x.id === id);
+            if (!s) return;
+            document.getElementById('modalTitle').textContent    = 'Editar Estudiante';
+            document.getElementById('studentId').value           = s.id;
+            document.getElementById('nombre').value              = s.nombre || '';
+            document.getElementById('apellido').value            = s.apellido || '';
+            document.getElementById('email').value               = s.email || '';
+            document.getElementById('telefono').value            = s.telefono || '';
+            const fecha = new Date(s.fecha_ingreso);
+            const adj   = new Date(fecha.getTime() + fecha.getTimezoneOffset() * 60000);
+            document.getElementById('fecha_ingreso').value = adj.toISOString().split('T')[0];
+            document.getElementById('studentModal').classList.add('active');
         };
  
+        window.closeModal = () => document.getElementById('studentModal').classList.remove('active');
+ 
+        window.confirmDelete = (id) => {
+            if (confirm('¿Eliminar este estudiante? Esta acción no se puede deshacer.')) deleteStudent(id);
+        };
+ 
+        document.getElementById('studentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('studentId').value;
+            const data = {
+                nombre:        document.getElementById('nombre').value,
+                apellido:      document.getElementById('apellido').value,
+                email:         document.getElementById('email').value,
+                telefono:      document.getElementById('telefono').value,
+                fecha_ingreso: new Date(document.getElementById('fecha_ingreso').value).getTime()
+            };
+            try {
+                if (id) {
+                    await updateStudent(id, data);
+                } else {
+                    await createStudent(data);
+                }
+                await loadStudents();
+                closeModal();
+            } catch (err) {
+                alert('Error al guardar: ' + err.message);
+            }
+        });
+ 
+        document.getElementById('studentModal').addEventListener('click', (e) => {
+            if (e.target.id === 'studentModal') closeModal();
+        });
+ 
+        // ── Exportar CSV ────────────────────────────────────────────────────
         window.exportToCSV = () => {
             if (!studentsData.length) return alert('No hay datos para exportar');
             let csv = "data:text/csv;charset=utf-8,ID,Nombre,Apellido,Email,Teléfono,Fecha\n";
@@ -586,10 +565,8 @@
             link.click();
         };
  
-        // Cierra modal al hacer clic fuera
-        document.getElementById('studentModal').addEventListener('click', (e) => {
-            if (e.target.id === 'studentModal') closeModal();
-        });
+        // ── Iniciar ─────────────────────────────────────────────────────────
+        loadStudents();
     </script>
 </body>
 </html>
