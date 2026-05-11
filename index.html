@@ -35,7 +35,7 @@
         .btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
         .btn-sm { padding:0.3rem 0.7rem; font-size:0.75rem; }
         .btn-xs { padding:0.2rem 0.5rem; font-size:0.7rem; }
-        .btn-icon { padding:0.4rem 0.6rem; font-size:1rem; }
+        .btn-icon { padding:0.35rem 0.5rem; font-size:0.9rem; min-width:32px; justify-content:center; }
         .btn-primary { background:var(--nivel2); color:var(--gold-light); }
         .btn-secondary { background:var(--surface); color:var(--nivel2); border:1px solid var(--gold); }
         .btn-danger { background:var(--surface); color:var(--danger); border:1px solid var(--danger); }
@@ -56,7 +56,6 @@
         .nivel-tab:hover { transform:translateY(-2px); }
         .nivel-numero { font-family:'Cinzel',serif; font-size:1.4rem; font-weight:700; display:block; }
         .nivel-nombre { font-family:'Crimson Pro',serif; font-size:0.9rem; font-style:italic; }
-        .nivel-progreso { font-size:0.8rem; margin-top:0.5rem; color:var(--text-light); }
         
         .cursos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.5rem; }
         .curso-card { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); transition:all 0.3s; overflow:hidden; }
@@ -84,21 +83,53 @@
         .tema-contenido h2 { font-family:'Cinzel',serif; color:var(--nivel2); margin-bottom:1.5rem; }
         .contenido-texto { font-family:'Crimson Pro',serif; font-size:var(--font-size-content); line-height:1.9; white-space:pre-wrap; transition:font-size 0.3s; }
         
+        /* ============================================ */
+        /* EDITOR MEJORADO */
+        /* ============================================ */
+        .editor-wrapper { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--surface); }
+        
+        .editor-toolbar { display:flex; gap:0.2rem; padding:0.5rem; background:#f8f6f0; border-bottom:1px solid var(--border); flex-wrap:wrap; align-items:center; }
+        .editor-toolbar .tool-group { display:flex; gap:0.15rem; padding:0 0.5rem; border-right:1px solid var(--border); }
+        .editor-toolbar .tool-group:last-child { border-right:none; }
+        .tool-btn { width:34px; height:34px; border:1px solid transparent; border-radius:4px; background:transparent; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center; transition:all 0.15s; color:var(--text); font-family:'Inter',sans-serif; }
+        .tool-btn:hover { background:#e8e4d8; border-color:var(--border); }
+        .tool-btn.active { background:var(--gold-light); border-color:var(--gold); color:var(--gold-dark); }
+        .tool-btn.tool-heading { font-family:'Cinzel',serif; font-weight:700; font-size:0.75rem; width:auto; padding:0 0.5rem; }
+        
+        .editor-textarea { width:100%; min-height:300px; padding:1.5rem; border:none; font-family:'Crimson Pro',serif; font-size:1.05rem; line-height:1.8; resize:vertical; background:var(--surface); color:var(--text); }
+        .editor-textarea:focus { outline:none; }
+        .editor-textarea.fullscreen { position:fixed; top:0; left:0; width:100%; height:100%; z-index:5000; min-height:100vh; padding:5rem 2rem 2rem; font-size:1.2rem; }
+        
+        .editor-preview { padding:1.5rem; min-height:150px; font-family:'Crimson Pro',serif; font-size:1.05rem; line-height:1.8; border-top:2px solid var(--border); background:#fdfcf8; }
+        .editor-preview h2, .editor-preview h3, .editor-preview h4 { font-family:'Cinzel',serif; color:var(--nivel2); margin:1.2rem 0 0.6rem; }
+        .editor-preview h2 { font-size:1.4rem; border-bottom:1px solid var(--gold); padding-bottom:0.3rem; }
+        .editor-preview h3 { font-size:1.2rem; }
+        .editor-preview h4 { font-size:1.05rem; }
+        .editor-preview blockquote { border-left:4px solid var(--gold); padding:0.8rem 1.2rem; margin:1rem 0; background:#fdf8ed; font-style:italic; color:var(--gold-dark); border-radius:0 4px 4px 0; }
+        .editor-preview ul, .editor-preview ol { margin-left:1.5rem; margin-bottom:0.8rem; }
+        .editor-preview li { margin-bottom:0.3rem; }
+        .editor-preview strong { color:var(--nivel2); }
+        .editor-preview em { color:var(--gold-dark); }
+        
+        .editor-tabs { display:flex; border-bottom:1px solid var(--border); }
+        .editor-tab { padding:0.6rem 1.2rem; cursor:pointer; font-weight:600; font-size:0.85rem; border:none; background:transparent; color:var(--text-light); transition:all 0.2s; }
+        .editor-tab.active { color:var(--nivel2); border-bottom:3px solid var(--gold); }
+        .editor-tab:hover { color:var(--nivel2); }
+        
+        .editor-statusbar { display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0.8rem; background:#f8f6f0; border-top:1px solid var(--border); font-size:0.75rem; color:var(--text-light); }
+        
         /* Controles de lectura */
         .reading-controls { display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; padding:0.8rem 1rem; background:var(--bg); border-radius:var(--radius); flex-wrap:wrap; }
         .reading-controls span { font-size:0.85rem; color:var(--text-light); font-weight:600; }
         .font-size-btn { width:36px; height:36px; border-radius:50%; border:2px solid var(--border); background:var(--surface); cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; font-weight:700; color:var(--nivel2); }
         .font-size-btn:hover { border-color:var(--gold); background:var(--gold-light); }
-        .font-size-btn:active { transform:scale(0.95); }
         .font-size-indicator { font-family:'Cinzel',serif; font-weight:700; color:var(--nivel2); min-width:40px; text-align:center; }
         
         .pasos-section { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); }
         .pasos-section h3 { font-family:'Cinzel',serif; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; }
-        
-        .paso-item { display:flex; align-items:flex-start; gap:1rem; padding:1rem; border-radius:var(--radius); background:var(--bg); margin-bottom:0.5rem; border:1px solid var(--border); transition:all 0.2s; position:relative; }
+        .paso-item { display:flex; align-items:flex-start; gap:1rem; padding:1rem; border-radius:var(--radius); background:var(--bg); margin-bottom:0.5rem; border:1px solid var(--border); transition:all 0.2s; }
         .paso-item.completado { background:#f0faf4; border-color:var(--success); }
         .paso-checkbox { width:26px; height:26px; border-radius:50%; border:2px solid #ccc; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:all 0.3s; font-size:0.8rem; background:#fff; }
-        .paso-checkbox:hover { border-color:var(--gold); }
         .paso-checkbox.checked { background:var(--success); border-color:var(--success); color:#fff; }
         .paso-texto { flex:1; font-family:'Crimson Pro',serif; font-size:1.05rem; }
         .paso-notas { width:100%; margin-top:0.5rem; padding:0.5rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:0.9rem; resize:vertical; min-height:40px; display:none; }
@@ -107,12 +138,12 @@
         
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:flex-start; padding:2rem; overflow-y:auto; backdrop-filter:blur(2px); }
         .modal.active { display:flex; }
-        .modal-content { background:var(--bg); padding:2rem; border-radius:var(--radius); border:2px solid var(--gold); width:100%; max-width:700px; margin:auto; box-shadow:0 20px 40px rgba(0,0,0,0.3); }
+        .modal-content { background:var(--bg); padding:2rem; border-radius:var(--radius); border:2px solid var(--gold); width:100%; max-width:900px; margin:auto; box-shadow:0 20px 40px rgba(0,0,0,0.3); }
+        .modal-content.modal-full { max-width:95vw; }
         .modal-content h2 { font-family:'Cinzel',serif; margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid var(--gold); text-align:center; }
         .form-group { margin-bottom:1rem; }
         .form-group label { display:block; margin-bottom:0.3rem; font-weight:600; font-size:0.85rem; text-transform:uppercase; color:var(--nivel2); }
-        .form-group input, .form-group select, .form-group textarea { width:100%; padding:0.7rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:1rem; }
-        .form-group textarea { min-height:120px; resize:vertical; }
+        .form-group input, .form-group select { width:100%; padding:0.7rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:1rem; }
         .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
         .modal-actions { display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border); flex-wrap:wrap; }
         
@@ -122,14 +153,12 @@
         
         .back-btn { margin-bottom:1.5rem; }
         .empty-state { text-align:center; padding:2rem; color:var(--text-light); font-style:italic; }
-        .loading { text-align:center; padding:2rem; color:var(--gold-dark); }
         
         .toast { position:fixed; bottom:2rem; right:2rem; padding:1rem 2rem; border-radius:var(--radius); box-shadow:0 8px 24px rgba(0,0,0,0.2); z-index:2000; animation:slideIn 0.3s ease; font-weight:600; }
         .toast-success { background:var(--success); color:#fff; }
         .toast-error { background:var(--danger); color:#fff; }
         @keyframes slideIn { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
         
-        /* Tema oscuro/claro para lectura */
         .modo-lectura { background:#1a1a1a; }
         .modo-lectura .tema-contenido { background:#2a2a2a; color:#e0e0e0; border:1px solid #444; }
         .modo-lectura .tema-contenido h2 { color:#F5D77A; }
@@ -137,7 +166,6 @@
         .modo-lectura .pasos-section { background:#2a2a2a; border:1px solid #444; }
         .modo-lectura .pasos-section h3 { color:#F5D77A; }
         .modo-lectura .paso-item { background:#333; border-color:#555; }
-        .modo-lectura .paso-texto { color:#d0d0d0; }
         
         @media(max-width:768px) {
             .niveles-nav { flex-direction:column; }
@@ -147,7 +175,8 @@
             .modal { padding:0.5rem; }
             .paso-actions { flex-direction:column; }
             .tema-contenido { padding:1rem; }
-            .reading-controls { justify-content:center; }
+            .editor-toolbar { justify-content:center; }
+            .editor-toolbar .tool-group { border-right:none; }
         }
     </style>
 </head>
@@ -208,13 +237,10 @@ let isAdmin = false;
 let nivelesData = [], cursosData = [], temasData = [], pasosData = [], progresoData = [], estudiantesData = [];
 let nivelActual = null, cursoActual = null, temaActual = null, estudianteActual = null;
 
-// Tamaño de fuente para el contenido
-let currentFontSize = 1.1; // rem
+let currentFontSize = 1.1;
 const FONT_SIZES = [0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6];
 let fontSizeIndex = FONT_SIZES.indexOf(currentFontSize);
-if (fontSizeIndex === -1) fontSizeIndex = 2; // default 1.1
-
-// Modo lectura (oscuro)
+if (fontSizeIndex === -1) fontSizeIndex = 2;
 let modoLecturaOscuro = false;
 
 // ============================================================
@@ -223,32 +249,20 @@ let modoLecturaOscuro = false;
 async function api(path, method, body, prefer) {
     const headers = {...H};
     if (prefer) headers["Prefer"] = prefer;
-    
-    const opts = { 
-        method: method || "GET", 
-        headers: headers 
-    };
-    
-    if (body) {
-        opts.body = JSON.stringify(body);
-    }
-    
+    const opts = { method: method || "GET", headers };
+    if (body) opts.body = JSON.stringify(body);
     try {
         const url = SUPABASE_URL + "/rest/v1/" + path;
         const res = await fetch(url, opts);
-        
         if (res.status === 204) return null;
         if (res.status === 200 && method === "DELETE") return null;
-        
         if (res.status === 200 || res.status === 201) {
             const text = await res.text();
             return text ? JSON.parse(text) : null;
         }
-        
         const errorText = await res.text();
         console.error("API Error:", res.status, errorText);
         throw new Error(errorText || `Error ${res.status}`);
-        
     } catch(err) {
         console.error("Fetch error:", err);
         throw err;
@@ -271,9 +285,6 @@ function showToast(msg, type = 'success') {
     }, 2500);
 }
 
-// ============================================================
-// DEBOUNCE
-// ============================================================
 function debounce(func, wait) {
     let timeout;
     return function(...args) {
@@ -292,7 +303,6 @@ function aumentarFuente() {
         aplicarTamanoFuente();
     }
 }
-
 function disminuirFuente() {
     if (fontSizeIndex > 0) {
         fontSizeIndex--;
@@ -300,38 +310,23 @@ function disminuirFuente() {
         aplicarTamanoFuente();
     }
 }
-
 function resetearFuente() {
-    fontSizeIndex = 2; // 1.1rem
+    fontSizeIndex = 2;
     currentFontSize = FONT_SIZES[fontSizeIndex];
     aplicarTamanoFuente();
 }
-
 function aplicarTamanoFuente() {
     document.documentElement.style.setProperty('--font-size-content', currentFontSize + 'rem');
-    
-    // Actualizar indicador si existe
     const indicator = document.getElementById("fontSizeIndicator");
-    if (indicator) {
-        indicator.textContent = currentFontSize.toFixed(1) + 'rem';
-    }
+    if (indicator) indicator.textContent = currentFontSize.toFixed(1) + 'rem';
 }
-
-// ============================================================
-// MODO LECTURA (OSCURO)
-// ============================================================
 function toggleModoLectura() {
     modoLecturaOscuro = !modoLecturaOscuro;
-    const temaContenido = document.querySelector('.tema-contenido');
-    const pasosSection = document.querySelector('.pasos-section');
-    
     if (modoLecturaOscuro) {
         document.body.classList.add('modo-lectura');
     } else {
         document.body.classList.remove('modo-lectura');
     }
-    
-    // Actualizar botón
     const btn = document.getElementById("btnModoLectura");
     if (btn) {
         btn.textContent = modoLecturaOscuro ? '☀️' : '🌙';
@@ -342,30 +337,14 @@ function toggleModoLectura() {
 // ============================================================
 // LOGIN
 // ============================================================
-function showLogin() { 
-    document.getElementById("loginOverlay").classList.add("active"); 
-    setTimeout(() => document.getElementById("adminPassword").focus(), 100); 
-}
-function hideLogin() { 
-    document.getElementById("loginOverlay").classList.remove("active"); 
-    document.getElementById("adminPassword").value = "";
-    document.getElementById("loginError").style.display = "none";
-}
+function showLogin() { document.getElementById("loginOverlay").classList.add("active"); setTimeout(() => document.getElementById("adminPassword").focus(), 100); }
+function hideLogin() { document.getElementById("loginOverlay").classList.remove("active"); document.getElementById("adminPassword").value = ""; document.getElementById("loginError").style.display = "none"; }
 function checkLogin() {
     if (document.getElementById("adminPassword").value === ADMIN_PASS) {
-        isAdmin = true; 
-        hideLogin(); 
-        updateAdminUI(); 
-        renderNiveles();
-    } else {
-        document.getElementById("loginError").style.display = "block";
-    }
+        isAdmin = true; hideLogin(); updateAdminUI(); renderNiveles();
+    } else { document.getElementById("loginError").style.display = "block"; }
 }
-function logout() { 
-    isAdmin = false; 
-    updateAdminUI(); 
-    renderNiveles(); 
-}
+function logout() { isAdmin = false; updateAdminUI(); renderNiveles(); }
 function updateAdminUI() {
     document.getElementById("adminBadge").style.display = isAdmin ? "" : "none";
     document.getElementById("btnLogin").style.display = isAdmin ? "none" : "";
@@ -384,43 +363,22 @@ async function loadAll() {
         ]);
         nivelesData = niveles || [];
         estudiantesData = estudiantes || [];
-        
-        if (!estudianteActual && estudiantesData.length > 0) {
-            estudianteActual = estudiantesData[0];
-        }
+        if (!estudianteActual && estudiantesData.length > 0) estudianteActual = estudiantesData[0];
         updateEstudianteSelect();
-    } catch(e) {
-        console.error("Error cargando:", e);
-    }
+    } catch(e) { console.error("Error cargando:", e); }
 }
-
-async function loadCursosData() {
-    const data = await api("cursos?select=*&order=orden");
-    cursosData = data || [];
-}
-
-async function loadTemasData() {
-    const data = await api("temas?select=*&order=orden");
-    temasData = data || [];
-}
-
-async function loadPasosData() {
-    const data = await api("pasos?select=*&order=orden");
-    pasosData = data || [];
-}
-
+async function loadCursosData() { cursosData = (await api("cursos?select=*&order=orden")) || []; }
+async function loadTemasData() { temasData = (await api("temas?select=*&order=orden")) || []; }
+async function loadPasosData() { pasosData = (await api("pasos?select=*&order=orden")) || []; }
 async function loadProgresoData() {
     if (!estudianteActual) { progresoData = []; return; }
-    const data = await api(`progreso?estudiante_id=eq.${estudianteActual.id}&select=*`);
-    progresoData = data || [];
+    progresoData = (await api(`progreso?estudiante_id=eq.${estudianteActual.id}&select=*`)) || [];
 }
-
 function updateEstudianteSelect() {
     const sel = document.getElementById("estudianteSelect");
     sel.innerHTML = '<option value="">Seleccionar estudiante...</option>' +
         estudiantesData.map(e => `<option value="${e.id}" ${estudianteActual && e.id === estudianteActual.id ? 'selected' : ''}>${e.nombre} ${e.apellido}</option>`).join('');
 }
-
 async function cambiarEstudiante(id) {
     estudianteActual = estudiantesData.find(e => e.id === parseInt(id)) || null;
     await loadProgresoData();
@@ -430,348 +388,382 @@ async function cambiarEstudiante(id) {
 }
 
 // ============================================================
+// EDITOR DE TEXTO ENRIQUECIDO
+// ============================================================
+function createEditor(textareaId, initialValue = '') {
+    const textarea = document.getElementById(textareaId);
+    if (!textarea) return;
+    
+    const wrapper = document.createElement('div');
+    wrapper.className = 'editor-wrapper';
+    textarea.parentNode.insertBefore(wrapper, textarea);
+    
+    // Toolbar
+    const toolbar = document.createElement('div');
+    toolbar.className = 'editor-toolbar';
+    toolbar.innerHTML = `
+        <div class="tool-group">
+            <button type="button" class="tool-btn" data-cmd="bold" title="Negrita (Ctrl+B)"><b>B</b></button>
+            <button type="button" class="tool-btn" data-cmd="italic" title="Cursiva (Ctrl+I)"><i>I</i></button>
+            <button type="button" class="tool-btn" data-cmd="underline" title="Subrayado (Ctrl+U)"><u>U</u></button>
+        </div>
+        <div class="tool-group">
+            <button type="button" class="tool-btn tool-heading" data-cmd="h2" title="Título grande">H2</button>
+            <button type="button" class="tool-btn tool-heading" data-cmd="h3" title="Título mediano">H3</button>
+            <button type="button" class="tool-btn tool-heading" data-cmd="h4" title="Título pequeño">H4</button>
+        </div>
+        <div class="tool-group">
+            <button type="button" class="tool-btn" data-cmd="ul" title="Lista con viñetas">•≡</button>
+            <button type="button" class="tool-btn" data-cmd="ol" title="Lista numerada">1≡</button>
+        </div>
+        <div class="tool-group">
+            <button type="button" class="tool-btn" data-cmd="quote" title="Cita bíblica">❝</button>
+            <button type="button" class="tool-btn" data-cmd="hr" title="Línea separadora">—</button>
+        </div>
+        <div class="tool-group">
+            <button type="button" class="tool-btn" data-cmd="preview" title="Vista previa">👁️</button>
+            <button type="button" class="tool-btn" data-cmd="fullscreen" title="Pantalla completa (F11)">⛶</button>
+            <button type="button" class="tool-btn" data-cmd="help" title="Ayuda de formato">❓</button>
+        </div>
+    `;
+    
+    // Área de texto
+    const editorArea = document.createElement('textarea');
+    editorArea.className = 'editor-textarea';
+    editorArea.id = textareaId + '_editor';
+    editorArea.value = initialValue;
+    editorArea.placeholder = textarea.placeholder || 'Escribe el contenido aquí...';
+    
+    // Panel de vista previa
+    const preview = document.createElement('div');
+    preview.className = 'editor-preview';
+    preview.id = textareaId + '_preview';
+    preview.style.display = 'none';
+    
+    // Tabs
+    const tabs = document.createElement('div');
+    tabs.className = 'editor-tabs';
+    tabs.innerHTML = `
+        <button type="button" class="editor-tab active" data-tab="edit">✏️ Editar</button>
+        <button type="button" class="editor-tab" data-tab="preview">👁️ Vista previa</button>
+    `;
+    
+    // Status bar
+    const statusBar = document.createElement('div');
+    statusBar.className = 'editor-statusbar';
+    statusBar.innerHTML = `<span>Markdown simple · <code>**negrita** *cursiva* ## Título</code></span><span id="${textareaId}_count">0 caracteres</span>`;
+    
+    // Ensamblar
+    wrapper.appendChild(toolbar);
+    wrapper.appendChild(tabs);
+    wrapper.appendChild(editorArea);
+    wrapper.appendChild(preview);
+    wrapper.appendChild(statusBar);
+    
+    // Ocultar textarea original
+    textarea.style.display = 'none';
+    
+    // Sincronizar valor
+    editorArea.addEventListener('input', function() {
+        textarea.value = editorArea.value;
+        updateStatusBar();
+        updatePreview();
+    });
+    
+    // Eventos de toolbar
+    toolbar.querySelectorAll('.tool-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const cmd = this.dataset.cmd;
+            handleEditorCommand(cmd, editorArea, textarea, preview, tabs, this);
+        });
+    });
+    
+    // Eventos de tabs
+    tabs.querySelectorAll('.editor-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabName = this.dataset.tab;
+            tabs.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            if (tabName === 'edit') {
+                editorArea.style.display = '';
+                preview.style.display = 'none';
+            } else {
+                editorArea.style.display = 'none';
+                preview.style.display = '';
+                updatePreview();
+            }
+        });
+    });
+    
+    // Atajos de teclado
+    editorArea.addEventListener('keydown', function(e) {
+        if (e.ctrlKey || e.metaKey) {
+            const cmdMap = { 'b': 'bold', 'i': 'italic', 'u': 'underline' };
+            if (cmdMap[e.key]) {
+                e.preventDefault();
+                handleEditorCommand(cmdMap[e.key], editorArea, textarea, preview, tabs);
+            }
+        }
+        if (e.key === 'Escape' && editorArea.classList.contains('fullscreen')) {
+            toggleFullscreen(editorArea);
+        }
+    });
+    
+    function updateStatusBar() {
+        const count = editorArea.value.length;
+        const words = editorArea.value.trim() ? editorArea.value.trim().split(/\s+/).length : 0;
+        document.getElementById(textareaId + '_count').textContent = `${count} caracteres · ${words} palabras`;
+    }
+    
+    function updatePreview() {
+        preview.innerHTML = parseMarkdown(editorArea.value);
+    }
+    
+    updateStatusBar();
+    updatePreview();
+    
+    return { editorArea, preview, wrapper };
+}
+
+function handleEditorCommand(cmd, editorArea, textarea, preview, tabs, btn) {
+    const ta = editorArea;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    const text = ta.value;
+    const selected = text.substring(start, end);
+    let replacement = '';
+    let cursorOffset = 0;
+    
+    switch(cmd) {
+        case 'bold':
+            replacement = `**${selected || 'texto en negrita'}**`;
+            cursorOffset = selected ? 0 : -2;
+            break;
+        case 'italic':
+            replacement = `*${selected || 'texto en cursiva'}*`;
+            cursorOffset = selected ? 0 : -1;
+            break;
+        case 'underline':
+            replacement = `_${selected || 'texto subrayado'}_`;
+            cursorOffset = selected ? 0 : -1;
+            break;
+        case 'h2':
+            replacement = `\n## ${selected || 'Título grande'}\n`;
+            break;
+        case 'h3':
+            replacement = `\n### ${selected || 'Título mediano'}\n`;
+            break;
+        case 'h4':
+            replacement = `\n#### ${selected || 'Título pequeño'}\n`;
+            break;
+        case 'ul':
+            replacement = selected ? selected.split('\n').map(l => `- ${l}`).join('\n') : '\n- Elemento de lista\n- Otro elemento\n';
+            break;
+        case 'ol':
+            replacement = selected ? selected.split('\n').map((l, i) => `${i+1}. ${l}`).join('\n') : '\n1. Primer elemento\n2. Segundo elemento\n';
+            break;
+        case 'quote':
+            replacement = `\n> ${selected || 'Cita bíblica o texto destacado'}\n`;
+            break;
+        case 'hr':
+            replacement = '\n---\n';
+            break;
+        case 'preview':
+            const previewTab = tabs.querySelector('[data-tab="preview"]');
+            if (previewTab) previewTab.click();
+            return;
+        case 'fullscreen':
+            toggleFullscreen(ta);
+            return;
+        case 'help':
+            alert('📝 Formato de texto:\n\n**negrita**\n*cursiva*\n_subrayado_\n## Título grande\n### Título mediano\n#### Título pequeño\n- Lista con viñetas\n1. Lista numerada\n> Cita bíblica\n--- Línea separadora\n\nTambién puedes usar Ctrl+B, Ctrl+I, Ctrl+U');
+            return;
+    }
+    
+    ta.value = text.substring(0, start) + replacement + text.substring(end);
+    ta.focus();
+    
+    if (selected) {
+        ta.selectionStart = start;
+        ta.selectionEnd = start + replacement.length;
+    } else {
+        const pos = start + replacement.length + cursorOffset;
+        ta.selectionStart = ta.selectionEnd = pos;
+    }
+    
+    textarea.value = ta.value;
+    ta.dispatchEvent(new Event('input'));
+}
+
+function toggleFullscreen(editorArea) {
+    editorArea.classList.toggle('fullscreen');
+    if (editorArea.classList.contains('fullscreen')) {
+        document.body.style.overflow = 'hidden';
+        editorArea.focus();
+    } else {
+        document.body.style.overflow = '';
+    }
+}
+
+function parseMarkdown(text) {
+    if (!text) return '<p style="color:#999;font-style:italic">Sin contenido</p>';
+    
+    let html = text
+        // Escapar HTML
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        // Citas
+        .replace(/^&gt; (.*$)/gm, '<blockquote>$1</blockquote>')
+        // Títulos
+        .replace(/^#### (.*$)/gm, '<h4>$1</h4>')
+        .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+        // Negrita, cursiva, subrayado
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/_(.*?)_/g, '<u>$1</u>')
+        // Línea horizontal
+        .replace(/^---$/gm, '<hr>')
+        // Listas
+        .replace(/^- (.*$)/gm, '<li>$1</li>')
+        .replace(/^\d+\. (.*$)/gm, '<li>$1</li>')
+        // Párrafos
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+    
+    // Envolver en párrafos
+    html = '<p>' + html + '</p>';
+    
+    // Agrupar listas
+    html = html.replace(/<li>.*?<\/li>(<br>)?/g, function(match) {
+        return match;
+    });
+    
+    return html;
+}
+
+// ============================================================
 // RENDERIZADO PRINCIPAL
 // ============================================================
 async function renderNiveles() {
     await loadAll();
-    
     const nav = document.getElementById("nivelesNav");
     if (!nivelesData.length) {
         nav.innerHTML = '<div class="empty-state">No hay niveles configurados. Ejecuta el SQL en Supabase.</div>';
         return;
     }
-    
     nav.innerHTML = nivelesData.map(n => {
         const activeClass = nivelActual && nivelActual.id === n.id ? ' active' : '';
-        return `
-            <button class="nivel-tab nivel-${n.orden}${activeClass}" onclick="selectNivel(${n.id})">
-                <span class="nivel-numero" style="color:${n.color}">${n.nombre}</span>
-                <span class="nivel-nombre">${n.descripcion || ''}</span>
-            </button>
-        `;
+        return `<button class="nivel-tab nivel-${n.orden}${activeClass}" onclick="selectNivel(${n.id})"><span class="nivel-numero" style="color:${n.color}">${n.nombre}</span><span class="nivel-nombre">${n.descripcion || ''}</span></button>`;
     }).join("");
-    
-    if (nivelActual) {
-        await loadCursosData();
-        renderCursos();
-    } else if (nivelesData.length > 0) {
-        selectNivel(nivelesData[0].id);
-    } else {
-        document.getElementById("mainContent").innerHTML = `
-            <div class="empty-state">
-                <p>🎓 Bienvenido a la Academia del Espíritu</p>
-                ${isAdmin ? '<p style="margin-top:1rem">Usa el panel de administración para crear cursos.</p>' : ''}
-            </div>
-        `;
-    }
+    if (nivelActual) { await loadCursosData(); renderCursos(); }
+    else if (nivelesData.length > 0) { selectNivel(nivelesData[0].id); }
+    else { document.getElementById("mainContent").innerHTML = '<div class="empty-state"><p>🎓 Bienvenido a la Academia del Espíritu</p></div>'; }
 }
-
 async function selectNivel(nivelId) {
     nivelActual = nivelesData.find(n => n.id === nivelId) || null;
-    cursoActual = null;
-    temaActual = null;
+    cursoActual = null; temaActual = null;
     await loadCursosData();
     renderNiveles();
 }
-
-// ============================================================
-// RENDERIZAR CURSOS
-// ============================================================
 async function renderCursos() {
     if (!nivelActual) return;
-    
     const cursosNivel = cursosData.filter(c => c.nivel_id === nivelActual.id);
     const main = document.getElementById("mainContent");
-    
-    let html = `
-        <div style="margin-bottom:1.5rem">
-            <h2 style="font-family:'Cinzel',serif;color:${nivelActual.color};font-size:1.4rem;margin-bottom:0.5rem">
-                📚 Cursos de ${nivelActual.nombre}
-            </h2>
-            <p style="color:var(--text-light);font-family:'Crimson Pro',serif">${nivelActual.descripcion || ''}</p>
-        </div>
-    `;
-    
-    if (isAdmin) {
-        html += `
-            <div style="margin-bottom:1.5rem;display:flex;gap:0.5rem;flex-wrap:wrap">
-                <button class="btn btn-primary btn-sm" onclick="openCursoModal()">+ Nuevo Curso</button>
-                <button class="btn btn-secondary btn-sm" onclick="showEstudiantes()">👥 Ver Estudiantes</button>
-            </div>
-        `;
-    }
-    
-    if (cursosNivel.length === 0) {
-        html += '<div class="empty-state">No hay cursos en este nivel aún.</div>';
-    } else {
+    let html = `<div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${nivelActual.color};font-size:1.4rem;margin-bottom:0.5rem">📚 Cursos de ${nivelActual.nombre}</h2><p style="color:var(--text-light);font-family:'Crimson Pro',serif">${nivelActual.descripcion || ''}</p></div>`;
+    if (isAdmin) html += `<div style="margin-bottom:1.5rem;display:flex;gap:0.5rem;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="openCursoModal()">+ Nuevo Curso</button><button class="btn btn-secondary btn-sm" onclick="showEstudiantes()">👥 Ver Estudiantes</button></div>`;
+    if (cursosNivel.length === 0) { html += '<div class="empty-state">No hay cursos en este nivel aún.</div>'; }
+    else {
         html += '<div class="cursos-grid">';
         for (const curso of cursosNivel) {
             const temasCurso = temasData.filter(t => t.curso_id === curso.id);
             const totalPasos = pasosData.filter(p => temasCurso.some(t => t.id === p.tema_id)).length;
-            const completados = estudianteActual ? 
-                progresoData.filter(pr => {
-                    if (!pr.completado) return false;
-                    return pasosData.some(p => p.id === pr.paso_id && temasCurso.some(t => t.id === p.tema_id));
-                }).length : 0;
+            const completados = estudianteActual ? progresoData.filter(pr => { if (!pr.completado) return false; return pasosData.some(p => p.id === pr.paso_id && temasCurso.some(t => t.id === p.tema_id)); }).length : 0;
             const pct = totalPasos > 0 ? Math.round((completados / totalPasos) * 100) : 0;
-            
-            html += `
-                <div class="curso-card">
-                    <div class="curso-card-header" style="background:${nivelActual.color}">
-                        <span style="font-family:'Cinzel',serif;font-size:0.85rem">${temasCurso.length} temas</span>
-                        <span>${totalPasos} pasos</span>
-                    </div>
-                    <div class="curso-card-body">
-                        <div class="curso-titulo">${curso.titulo}</div>
-                        <div class="curso-desc">${curso.descripcion || ''}</div>
-                        <div class="progreso-bar">
-                            <div class="progreso-fill" style="width:${pct}%;background:${nivelActual.color}"></div>
-                        </div>
-                        <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem">${completados}/${totalPasos} pasos (${pct}%)</div>
-                        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-                            <button class="btn btn-primary btn-sm" onclick="verCurso(${curso.id})">📖 Ver Temas</button>
-                            ${isAdmin ? `
-                                <button class="btn btn-warning btn-sm" onclick="editCurso(${curso.id})">✏️</button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteCurso(${curso.id})">🗑️</button>
-                            ` : ''}
-                        </div>
-                    </div>
-                </div>
-            `;
+            html += `<div class="curso-card"><div class="curso-card-header" style="background:${nivelActual.color}"><span style="font-family:'Cinzel',serif;font-size:0.85rem">${temasCurso.length} temas</span><span>${totalPasos} pasos</span></div><div class="curso-card-body"><div class="curso-titulo">${curso.titulo}</div><div class="curso-desc">${curso.descripcion || ''}</div><div class="progreso-bar"><div class="progreso-fill" style="width:${pct}%;background:${nivelActual.color}"></div></div><div style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem">${completados}/${totalPasos} pasos (${pct}%)</div><div style="display:flex;gap:0.5rem;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="verCurso(${curso.id})">📖 Ver Temas</button>${isAdmin ? `<button class="btn btn-warning btn-sm" onclick="editCurso(${curso.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteCurso(${curso.id})">🗑️</button>` : ''}</div></div></div>`;
         }
         html += '</div>';
     }
-    
     main.innerHTML = html;
 }
-
-// ============================================================
-// VER TEMAS DE UN CURSO
-// ============================================================
 async function verCurso(cursoId) {
     cursoActual = cursosData.find(c => c.id === cursoId);
     if (!cursoActual || !nivelActual) return;
-    
     await Promise.all([loadTemasData(), loadPasosData(), loadProgresoData()]);
-    
     const temasCurso = temasData.filter(t => t.curso_id === cursoId);
     const main = document.getElementById("mainContent");
-    
-    let html = `
-        <button class="btn btn-secondary back-btn" onclick="renderCursos()">← Volver a Cursos</button>
-        <div style="margin-bottom:1.5rem">
-            <h2 style="font-family:'Cinzel',serif;color:${nivelActual.color};font-size:1.4rem">📖 ${cursoActual.titulo}</h2>
-            <p style="color:var(--text-light);font-family:'Crimson Pro',serif">${cursoActual.descripcion || ''}</p>
-        </div>
-    `;
-    
-    if (isAdmin) {
-        html += `
-            <div style="margin-bottom:1rem;display:flex;gap:0.5rem;flex-wrap:wrap">
-                <button class="btn btn-primary btn-sm" onclick="openTemaModal(${cursoId})">+ Agregar Tema</button>
-            </div>
-        `;
-    }
-    
-    if (temasCurso.length === 0) {
-        html += '<div class="empty-state">No hay temas en este curso aún.</div>';
-    } else {
+    let html = `<button class="btn btn-secondary back-btn" onclick="renderCursos()">← Volver a Cursos</button><div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${nivelActual.color};font-size:1.4rem">📖 ${cursoActual.titulo}</h2><p style="color:var(--text-light);font-family:'Crimson Pro',serif">${cursoActual.descripcion || ''}</p></div>`;
+    if (isAdmin) html += `<div style="margin-bottom:1rem;display:flex;gap:0.5rem;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="openTemaModal(${cursoId})">+ Agregar Tema</button></div>`;
+    if (temasCurso.length === 0) { html += '<div class="empty-state">No hay temas en este curso aún.</div>'; }
+    else {
         html += '<div class="temas-lista">';
         temasCurso.forEach((tema, i) => {
             const pasosTema = pasosData.filter(p => p.tema_id === tema.id);
-            const completados = estudianteActual ?
-                progresoData.filter(pr => 
-                    pr.completado && pasosTema.some(p => p.id === pr.paso_id)
-                ).length : 0;
+            const completados = estudianteActual ? progresoData.filter(pr => pr.completado && pasosTema.some(p => p.id === pr.paso_id)).length : 0;
             const allDone = pasosTema.length > 0 && completados === pasosTema.length;
-            
-            html += `
-                <div class="tema-item">
-                    <div class="tema-numero ${allDone ? 'tema-completado' : 'tema-pendiente'}">${allDone ? '✓' : i+1}</div>
-                    <div class="tema-info" onclick="verTema(${tema.id})" style="cursor:pointer">
-                        <div class="tema-titulo">${tema.titulo}</div>
-                        <div class="tema-pasos">${pasosTema.length} pasos · ${completados} completados</div>
-                    </div>
-                    ${isAdmin ? `
-                        <div style="display:flex;gap:0.3rem">
-                            <button class="btn btn-warning btn-xs" onclick="event.stopPropagation();editTema(${tema.id})" title="Editar tema">✏️</button>
-                            <button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteTema(${tema.id})" title="Eliminar tema">🗑️</button>
-                        </div>
-                    ` : ''}
-                    <div class="tema-check" onclick="verTema(${tema.id})" style="cursor:pointer">${allDone ? '✅' : '▶️'}</div>
-                </div>
-            `;
+            html += `<div class="tema-item"><div class="tema-numero ${allDone ? 'tema-completado' : 'tema-pendiente'}">${allDone ? '✓' : i+1}</div><div class="tema-info" onclick="verTema(${tema.id})" style="cursor:pointer"><div class="tema-titulo">${tema.titulo}</div><div class="tema-pasos">${pasosTema.length} pasos · ${completados} completados</div></div>${isAdmin ? `<div style="display:flex;gap:0.3rem"><button class="btn btn-warning btn-xs" onclick="event.stopPropagation();editTema(${tema.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteTema(${tema.id})">🗑️</button></div>` : ''}<div class="tema-check" onclick="verTema(${tema.id})" style="cursor:pointer">${allDone ? '✅' : '▶️'}</div></div>`;
         });
         html += '</div>';
     }
-    
     main.innerHTML = html;
 }
-
-// ============================================================
-// VER TEMA Y SUS PASOS (CON CONTROLES DE LECTURA)
-// ============================================================
 async function verTema(temaId) {
     temaActual = temasData.find(t => t.id === temaId);
     if (!temaActual || !nivelActual) return;
-    
     await Promise.all([loadPasosData(), loadProgresoData()]);
-    
     const pasosTema = pasosData.filter(p => p.tema_id === temaId);
     const main = document.getElementById("mainContent");
-    
-    // Aplicar tamaño de fuente guardado
     aplicarTamanoFuente();
-    
-    let html = `
-        <button class="btn btn-secondary back-btn" onclick="verCurso(${temaActual.curso_id})">← Volver a Temas</button>
-        
-        <!-- Controles de lectura -->
-        <div class="reading-controls">
-            <span>🔤 Tamaño de letra:</span>
-            <button class="font-size-btn" onclick="disminuirFuente()" title="Disminuir">A-</button>
-            <span class="font-size-indicator" id="fontSizeIndicator">${currentFontSize.toFixed(1)}rem</span>
-            <button class="font-size-btn" onclick="aumentarFuente()" title="Aumentar">A+</button>
-            <button class="btn btn-sm btn-secondary" onclick="resetearFuente()" title="Tamaño normal" style="margin-left:0.3rem">Normal</button>
-            <span style="margin-left:1rem">🎨 Modo:</span>
-            <button class="btn btn-sm btn-secondary" id="btnModoLectura" onclick="toggleModoLectura()" title="Modo oscuro">🌙</button>
-        </div>
-        
-        <div class="tema-contenido">
-            <span style="display:inline-block;background:${nivelActual.color};color:#fff;padding:0.2rem 0.6rem;border-radius:3px;font-size:0.75rem;font-weight:700;margin-bottom:1rem">${nivelActual.nombre}</span>
-            <h2>${temaActual.titulo}</h2>
-            <div class="contenido-texto">${temaActual.contenido || 'Sin contenido aún.'}</div>
-        </div>
-        
-        <div class="pasos-section">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.5rem">
-                <h3>✋ Pasos Prácticos (${pasosTema.length})</h3>
-                ${isAdmin ? `<button class="btn btn-primary btn-sm" onclick="openPasoModal(${temaId})">+ Agregar Paso</button>` : ''}
-            </div>
-            <div id="pasosContainer">
-                ${pasosTema.length === 0 ? '<p class="empty-state">No hay pasos prácticos para este tema.</p>' : ''}
-            </div>
-        </div>
-    `;
-    
+    let html = `<button class="btn btn-secondary back-btn" onclick="verCurso(${temaActual.curso_id})">← Volver a Temas</button>
+    <div class="reading-controls"><span>🔤 Tamaño de letra:</span><button class="font-size-btn" onclick="disminuirFuente()" title="Disminuir">A-</button><span class="font-size-indicator" id="fontSizeIndicator">${currentFontSize.toFixed(1)}rem</span><button class="font-size-btn" onclick="aumentarFuente()" title="Aumentar">A+</button><button class="btn btn-sm btn-secondary" onclick="resetearFuente()" title="Tamaño normal" style="margin-left:0.3rem">Normal</button><span style="margin-left:1rem">🎨 Modo:</span><button class="btn btn-sm btn-secondary" id="btnModoLectura" onclick="toggleModoLectura()" title="Modo oscuro">🌙</button></div>
+    <div class="tema-contenido"><span style="display:inline-block;background:${nivelActual.color};color:#fff;padding:0.2rem 0.6rem;border-radius:3px;font-size:0.75rem;font-weight:700;margin-bottom:1rem">${nivelActual.nombre}</span><h2>${temaActual.titulo}</h2><div class="contenido-texto">${parseMarkdown(temaActual.contenido || 'Sin contenido aún.')}</div></div>
+    <div class="pasos-section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.5rem"><h3>✋ Pasos Prácticos (${pasosTema.length})</h3>${isAdmin ? `<button class="btn btn-primary btn-sm" onclick="openPasoModal(${temaId})">+ Agregar Paso</button>` : ''}</div><div id="pasosContainer">${pasosTema.length === 0 ? '<p class="empty-state">No hay pasos prácticos para este tema.</p>' : ''}</div></div>`;
     main.innerHTML = html;
-    
-    // Restaurar modo lectura si estaba activo
-    if (modoLecturaOscuro) {
-        document.body.classList.add('modo-lectura');
-        const btn = document.getElementById("btnModoLectura");
-        if (btn) btn.textContent = '☀️';
-    }
-    
-    if (pasosTema.length > 0) {
-        renderPasosEnContainer(pasosTema);
-    }
+    if (modoLecturaOscuro) { document.body.classList.add('modo-lectura'); const btn = document.getElementById("btnModoLectura"); if (btn) btn.textContent = '☀️'; }
+    if (pasosTema.length > 0) renderPasosEnContainer(pasosTema);
 }
-
 function renderPasosEnContainer(pasosTema) {
     const container = document.getElementById("pasosContainer");
     if (!container) return;
-    
     container.innerHTML = pasosTema.map(paso => {
         const prog = progresoData.find(pr => pr.paso_id === paso.id) || { completado: false, notas: '' };
-        
-        return `
-            <div class="paso-item ${prog.completado ? 'completado' : ''}" id="paso-${paso.id}">
-                <div class="paso-checkbox ${prog.completado ? 'checked' : ''}" 
-                     onclick="togglePaso(${paso.id}, this)" 
-                     title="${prog.completado ? 'Desmarcar' : 'Marcar como completado'}">
-                    ${prog.completado ? '✓' : ''}
-                </div>
-                <div style="flex:1">
-                    <div class="paso-texto">${paso.descripcion}</div>
-                    <textarea class="paso-notas" 
-                              placeholder="Tus notas personales sobre este paso..." 
-                              onchange="guardarNotas(${paso.id}, this.value)"
-                              style="${prog.completado ? 'display:block' : 'display:none'}">${prog.notas || ''}</textarea>
-                </div>
-                ${isAdmin ? `
-                    <div class="paso-actions">
-                        <button class="btn btn-warning btn-xs" onclick="editPaso(${paso.id})" title="Editar">✏️</button>
-                        <button class="btn btn-danger btn-xs" onclick="deletePaso(${paso.id})" title="Eliminar">🗑️</button>
-                    </div>
-                ` : ''}
-            </div>
-        `;
+        return `<div class="paso-item ${prog.completado ? 'completado' : ''}" id="paso-${paso.id}"><div class="paso-checkbox ${prog.completado ? 'checked' : ''}" onclick="togglePaso(${paso.id}, this)" title="${prog.completado ? 'Desmarcar' : 'Marcar como completado'}">${prog.completado ? '✓' : ''}</div><div style="flex:1"><div class="paso-texto">${paso.descripcion}</div><textarea class="paso-notas" placeholder="Tus notas personales sobre este paso..." onchange="guardarNotas(${paso.id}, this.value)" style="${prog.completado ? 'display:block' : 'display:none'}">${prog.notas || ''}</textarea></div>${isAdmin ? `<div class="paso-actions"><button class="btn btn-warning btn-xs" onclick="editPaso(${paso.id})" title="Editar">✏️</button><button class="btn btn-danger btn-xs" onclick="deletePaso(${paso.id})" title="Eliminar">🗑️</button></div>` : ''}</div>`;
     }).join("");
 }
-
-// ============================================================
-// TOGGLE PASO
-// ============================================================
 async function togglePaso(pasoId, checkboxEl) {
     if (!estudianteActual) {
         if (estudiantesData.length === 0) {
-            await api("estudiantes", "POST", {
-                nombre: "Estudiante",
-                apellido: "Demo",
-                email: "demo@academia.com",
-                telefono: "",
-                fecha_ingreso: new Date().toISOString()
-            });
+            await api("estudiantes", "POST", { nombre: "Estudiante", apellido: "Demo", email: "demo@academia.com", telefono: "", fecha_ingreso: new Date().toISOString() });
             await loadAll();
         }
         estudianteActual = estudiantesData[0];
         updateEstudianteSelect();
         await loadProgresoData();
     }
-    
     const existing = progresoData.find(pr => pr.paso_id === pasoId);
     const nuevoEstado = !(existing && existing.completado);
-    
     if (existing) {
-        await api(`progreso?id=eq.${existing.id}`, "PATCH", {
-            completado: nuevoEstado,
-            fecha_completado: nuevoEstado ? new Date().toISOString() : null
-        }, "return=minimal");
+        await api(`progreso?id=eq.${existing.id}`, "PATCH", { completado: nuevoEstado, fecha_completado: nuevoEstado ? new Date().toISOString() : null }, "return=minimal");
         existing.completado = nuevoEstado;
-        existing.fecha_completado = nuevoEstado ? new Date().toISOString() : null;
     } else {
-        const res = await api("progreso", "POST", {
-            estudiante_id: estudianteActual.id,
-            paso_id: pasoId,
-            completado: nuevoEstado,
-            fecha_completado: nuevoEstado ? new Date().toISOString() : null,
-            notas: ""
-        }, "return=representation");
-        if (res && res[0]) {
-            progresoData.push(res[0]);
-        } else {
-            await loadProgresoData();
-        }
+        const res = await api("progreso", "POST", { estudiante_id: estudianteActual.id, paso_id: pasoId, completado: nuevoEstado, fecha_completado: nuevoEstado ? new Date().toISOString() : null, notas: "" }, "return=representation");
+        if (res && res[0]) progresoData.push(res[0]); else await loadProgresoData();
     }
-    
     const pasoItem = document.getElementById(`paso-${pasoId}`);
     if (pasoItem) {
         pasoItem.classList.toggle("completado", nuevoEstado);
         const cb = pasoItem.querySelector(".paso-checkbox");
-        if (cb) {
-            cb.classList.toggle("checked", nuevoEstado);
-            cb.textContent = nuevoEstado ? '✓' : '';
-        }
+        if (cb) { cb.classList.toggle("checked", nuevoEstado); cb.textContent = nuevoEstado ? '✓' : ''; }
         const notasArea = pasoItem.querySelector(".paso-notas");
-        if (notasArea) {
-            notasArea.style.display = nuevoEstado ? "block" : "none";
-        }
+        if (notasArea) notasArea.style.display = nuevoEstado ? "block" : "none";
     }
-    
     showToast(nuevoEstado ? "✅ ¡Paso completado!" : "Paso desmarcado");
 }
-
-// ============================================================
-// GUARDAR NOTAS
-// ============================================================
 const guardarNotas = debounce(async function(pasoId, notas) {
     if (!estudianteActual) return;
     const existing = progresoData.find(pr => pr.paso_id === pasoId);
-    if (existing) {
-        await api(`progreso?id=eq.${existing.id}`, "PATCH", { notas }, "return=minimal");
-        existing.notas = notas;
-    }
+    if (existing) { await api(`progreso?id=eq.${existing.id}`, "PATCH", { notas }, "return=minimal"); existing.notas = notas; }
 }, 500);
 
 // ============================================================
@@ -780,214 +772,72 @@ const guardarNotas = debounce(async function(pasoId, notas) {
 function openCursoModal() {
     const modal = document.getElementById("adminModal");
     const content = document.getElementById("adminModalContent");
-    
-    content.innerHTML = `
-        <h2>Nuevo Curso</h2>
-        <form onsubmit="saveCurso(event, null)">
-            <div class="form-group">
-                <label>Nivel</label>
-                <select id="cursoNivelId" required>
-                    <option value="">Seleccionar nivel</option>
-                    ${nivelesData.map(n => `<option value="${n.id}" ${nivelActual && n.id === nivelActual.id ? 'selected' : ''}>${n.nombre}</option>`).join('')}
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Título del Curso</label>
-                <input type="text" id="cursoTitulo" required placeholder="Ej: Fundamentos de la Fe">
-            </div>
-            <div class="form-group">
-                <label>Descripción</label>
-                <input type="text" id="cursoDesc" placeholder="Breve descripción del curso">
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-        </form>
-    `;
+    content.innerHTML = `<h2>Nuevo Curso</h2><form onsubmit="saveCurso(event, null)"><div class="form-group"><label>Nivel</label><select id="cursoNivelId" required><option value="">Seleccionar nivel</option>${nivelesData.map(n => `<option value="${n.id}" ${nivelActual && n.id === nivelActual.id ? 'selected' : ''}>${n.nombre}</option>`).join('')}</select></div><div class="form-group"><label>Título del Curso</label><input type="text" id="cursoTitulo" required placeholder="Ej: Fundamentos de la Fe"></div><div class="form-group"><label>Descripción</label><input type="text" id="cursoDesc" placeholder="Breve descripción del curso"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
     modal.classList.add("active");
 }
-
 function editCurso(id) {
     const c = cursosData.find(x => x.id === id);
     if (!c) return;
-    
     const modal = document.getElementById("adminModal");
     const content = document.getElementById("adminModalContent");
-    
-    content.innerHTML = `
-        <h2>Editar Curso</h2>
-        <form onsubmit="saveCurso(event, ${id})">
-            <div class="form-group">
-                <label>Nivel</label>
-                <select id="cursoNivelId" required>
-                    ${nivelesData.map(n => `<option value="${n.id}" ${c.nivel_id === n.id ? 'selected' : ''}>${n.nombre}</option>`).join('')}
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Título del Curso</label>
-                <input type="text" id="cursoTitulo" required value="${c.titulo || ''}">
-            </div>
-            <div class="form-group">
-                <label>Descripción</label>
-                <input type="text" id="cursoDesc" value="${c.descripcion || ''}">
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Actualizar</button>
-            </div>
-        </form>
-    `;
+    content.innerHTML = `<h2>Editar Curso</h2><form onsubmit="saveCurso(event, ${id})"><div class="form-group"><label>Nivel</label><select id="cursoNivelId" required>${nivelesData.map(n => `<option value="${n.id}" ${c.nivel_id === n.id ? 'selected' : ''}>${n.nombre}</option>`).join('')}</select></div><div class="form-group"><label>Título del Curso</label><input type="text" id="cursoTitulo" required value="${c.titulo || ''}"></div><div class="form-group"><label>Descripción</label><input type="text" id="cursoDesc" value="${c.descripcion || ''}"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Actualizar</button></div></form>`;
     modal.classList.add("active");
 }
-
 async function saveCurso(e, editId) {
     e.preventDefault();
-    const data = {
-        nivel_id: parseInt(document.getElementById("cursoNivelId").value),
-        titulo: document.getElementById("cursoTitulo").value,
-        descripcion: document.getElementById("cursoDesc").value
-    };
-    
+    const data = { nivel_id: parseInt(document.getElementById("cursoNivelId").value), titulo: document.getElementById("cursoTitulo").value, descripcion: document.getElementById("cursoDesc").value };
     try {
-        if (editId) {
-            await api(`cursos?id=eq.${editId}`, "PATCH", data, "return=minimal");
-        } else {
-            await api("cursos", "POST", data, "return=minimal");
-        }
-        
-        closeAdminModal();
-        await loadCursosData();
-        renderCursos();
+        if (editId) { await api(`cursos?id=eq.${editId}`, "PATCH", data, "return=minimal"); }
+        else { await api("cursos", "POST", data, "return=minimal"); }
+        closeAdminModal(); await loadCursosData(); renderCursos();
         showToast(editId ? "✅ Curso actualizado" : "✅ Curso creado");
-    } catch(err) {
-        showToast("Error: " + err.message, "error");
-    }
+    } catch(err) { showToast("Error: " + err.message, "error"); }
 }
-
 async function deleteCurso(id) {
-    if (!confirm("¿Eliminar este curso y todos sus temas y pasos? Esta acción no se puede deshacer.")) return;
-    try {
-        await api(`cursos?id=eq.${id}`, "DELETE");
-        await loadCursosData();
-        renderCursos();
-        showToast("Curso eliminado", "error");
-    } catch(err) {
-        showToast("Error: " + err.message, "error");
-    }
+    if (!confirm("¿Eliminar este curso y todos sus temas y pasos?")) return;
+    try { await api(`cursos?id=eq.${id}`, "DELETE"); await loadCursosData(); renderCursos(); showToast("Curso eliminado", "error"); }
+    catch(err) { showToast("Error: " + err.message, "error"); }
 }
 
 // ============================================================
-// ADMIN: TEMAS
+// ADMIN: TEMAS (CON EDITOR MEJORADO)
 // ============================================================
 function openTemaModal(cursoIdParam = null) {
     const cid = cursoIdParam || (cursoActual ? cursoActual.id : null);
     const modal = document.getElementById("adminModal");
     const content = document.getElementById("adminModalContent");
-    
-    content.innerHTML = `
-        <h2>Nuevo Tema</h2>
-        <form onsubmit="saveTema(event, null)">
-            <div class="form-group">
-                <label>Curso</label>
-                <select id="temaCursoId" required>
-                    <option value="">Seleccionar curso</option>
-                    ${cursosData.map(c => {
-                        const niv = nivelesData.find(n => n.id === c.nivel_id);
-                        return `<option value="${c.id}" ${c.id === cid ? 'selected' : ''}>${niv?.nombre || ''} → ${c.titulo}</option>`;
-                    }).join('')}
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Título del Tema</label>
-                <input type="text" id="temaTitulo" required placeholder="Ej: La Oración">
-            </div>
-            <div class="form-group">
-                <label>Contenido</label>
-                <textarea id="temaContenido" placeholder="Escribe el contenido de la clase..."></textarea>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-        </form>
-    `;
+    content.innerHTML = `<h2>Nuevo Tema</h2><form onsubmit="saveTema(event, null)"><div class="form-group"><label>Curso</label><select id="temaCursoId" required><option value="">Seleccionar curso</option>${cursosData.map(c => { const niv = nivelesData.find(n => n.id === c.nivel_id); return `<option value="${c.id}" ${c.id === cid ? 'selected' : ''}>${niv?.nombre || ''} → ${c.titulo}</option>`; }).join('')}</select></div><div class="form-group"><label>Título del Tema</label><input type="text" id="temaTitulo" required placeholder="Ej: La Oración"></div><div class="form-group"><label>Contenido</label><textarea id="temaContenido" placeholder="Escribe el contenido de la clase..."></textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
     modal.classList.add("active");
+    setTimeout(() => createEditor('temaContenido', ''), 200);
 }
-
 function editTema(id) {
     const t = temasData.find(x => x.id === id);
     if (!t) return;
-    
     const modal = document.getElementById("adminModal");
     const content = document.getElementById("adminModalContent");
-    
-    content.innerHTML = `
-        <h2>Editar Tema</h2>
-        <form onsubmit="saveTema(event, ${id})">
-            <div class="form-group">
-                <label>Curso</label>
-                <select id="temaCursoId" required>
-                    ${cursosData.map(c => {
-                        const n = nivelesData.find(x => x.id === c.nivel_id);
-                        return `<option value="${c.id}" ${c.id === t.curso_id ? 'selected' : ''}>${n?.nombre || ''} → ${c.titulo}</option>`;
-                    }).join('')}
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Título del Tema</label>
-                <input type="text" id="temaTitulo" required value="${t.titulo || ''}">
-            </div>
-            <div class="form-group">
-                <label>Contenido</label>
-                <textarea id="temaContenido">${t.contenido || ''}</textarea>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Actualizar</button>
-            </div>
-        </form>
-    `;
+    content.innerHTML = `<h2>Editar Tema</h2><form onsubmit="saveTema(event, ${id})"><div class="form-group"><label>Curso</label><select id="temaCursoId" required>${cursosData.map(c => { const n = nivelesData.find(x => x.id === c.nivel_id); return `<option value="${c.id}" ${c.id === t.curso_id ? 'selected' : ''}>${n?.nombre || ''} → ${c.titulo}</option>`; }).join('')}</select></div><div class="form-group"><label>Título del Tema</label><input type="text" id="temaTitulo" required value="${t.titulo || ''}"></div><div class="form-group"><label>Contenido</label><textarea id="temaContenido" placeholder="Escribe el contenido de la clase...">${t.contenido || ''}</textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Actualizar</button></div></form>`;
     modal.classList.add("active");
+    setTimeout(() => createEditor('temaContenido', t.contenido || ''), 200);
 }
-
 async function saveTema(e, editId) {
     e.preventDefault();
-    const data = {
-        curso_id: parseInt(document.getElementById("temaCursoId").value),
-        titulo: document.getElementById("temaTitulo").value,
-        contenido: document.getElementById("temaContenido").value
-    };
-    
+    const textarea = document.getElementById("temaContenido");
+    const contenido = textarea ? textarea.value : '';
+    const data = { curso_id: parseInt(document.getElementById("temaCursoId").value), titulo: document.getElementById("temaTitulo").value, contenido: contenido };
     try {
-        if (editId) {
-            await api(`temas?id=eq.${editId}`, "PATCH", data, "return=minimal");
-        } else {
-            await api("temas", "POST", data, "return=minimal");
-        }
-        
-        closeAdminModal();
-        await loadTemasData();
+        if (editId) { await api(`temas?id=eq.${editId}`, "PATCH", data, "return=minimal"); }
+        else { await api("temas", "POST", data, "return=minimal"); }
+        closeAdminModal(); await loadTemasData();
         if (temaActual) verTema(temaActual.id);
         else if (cursoActual) verCurso(cursoActual.id);
         else renderCursos();
         showToast(editId ? "✅ Tema actualizado" : "✅ Tema creado");
-    } catch(err) {
-        showToast("Error: " + err.message, "error");
-    }
+    } catch(err) { showToast("Error: " + err.message, "error"); }
 }
-
 async function deleteTema(id) {
     if (!confirm("¿Eliminar este tema y todos sus pasos?")) return;
-    try {
-        await api(`temas?id=eq.${id}`, "DELETE");
-        await loadTemasData();
-        if (cursoActual) verCurso(cursoActual.id);
-        else renderCursos();
-        showToast("Tema eliminado", "error");
-    } catch(err) {
-        showToast("Error: " + err.message, "error");
-    }
+    try { await api(`temas?id=eq.${id}`, "DELETE"); await loadTemasData(); if (cursoActual) verCurso(cursoActual.id); else renderCursos(); showToast("Tema eliminado", "error"); }
+    catch(err) { showToast("Error: " + err.message, "error"); }
 }
 
 // ============================================================
@@ -997,125 +847,38 @@ function openPasoModal(temaIdParam = null) {
     const tid = temaIdParam || (temaActual ? temaActual.id : null);
     const modal = document.getElementById("adminModal");
     const content = document.getElementById("adminModalContent");
-    
-    content.innerHTML = `
-        <h2>Nuevo Paso Práctico</h2>
-        <form onsubmit="savePaso(event, null)">
-            <div class="form-group">
-                <label>Tema</label>
-                <select id="pasoTemaId" required>
-                    <option value="">Seleccionar tema</option>
-                    ${temasData.map(t => {
-                        const curso = cursosData.find(c => c.id === t.curso_id);
-                        return `<option value="${t.id}" ${t.id === tid ? 'selected' : ''}>${curso?.titulo || ''} → ${t.titulo}</option>`;
-                    }).join('')}
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Descripción del Paso Práctico</label>
-                <textarea id="pasoDesc" required placeholder="Describe la acción práctica que el estudiante debe realizar..."></textarea>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-        </form>
-    `;
+    content.innerHTML = `<h2>Nuevo Paso Práctico</h2><form onsubmit="savePaso(event, null)"><div class="form-group"><label>Tema</label><select id="pasoTemaId" required><option value="">Seleccionar tema</option>${temasData.map(t => { const curso = cursosData.find(c => c.id === t.curso_id); return `<option value="${t.id}" ${t.id === tid ? 'selected' : ''}>${curso?.titulo || ''} → ${t.titulo}</option>`; }).join('')}</select></div><div class="form-group"><label>Descripción del Paso Práctico</label><textarea id="pasoDesc" required placeholder="Describe la acción práctica..."></textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
     modal.classList.add("active");
 }
-
 function editPaso(id) {
     const p = pasosData.find(x => x.id === id);
     if (!p) return;
-    
     const modal = document.getElementById("adminModal");
     const content = document.getElementById("adminModalContent");
-    
-    content.innerHTML = `
-        <h2>Editar Paso Práctico</h2>
-        <form onsubmit="savePaso(event, ${id})">
-            <div class="form-group">
-                <label>Tema</label>
-                <select id="pasoTemaId" required>
-                    ${temasData.map(t => {
-                        const c = cursosData.find(x => x.id === t.curso_id);
-                        return `<option value="${t.id}" ${t.id === p.tema_id ? 'selected' : ''}>${c?.titulo || ''} → ${t.titulo}</option>`;
-                    }).join('')}
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Descripción del Paso Práctico</label>
-                <textarea id="pasoDesc" required>${p.descripcion || ''}</textarea>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Actualizar</button>
-            </div>
-        </form>
-    `;
+    content.innerHTML = `<h2>Editar Paso Práctico</h2><form onsubmit="savePaso(event, ${id})"><div class="form-group"><label>Tema</label><select id="pasoTemaId" required>${temasData.map(t => { const c = cursosData.find(x => x.id === t.curso_id); return `<option value="${t.id}" ${t.id === p.tema_id ? 'selected' : ''}>${c?.titulo || ''} → ${t.titulo}</option>`; }).join('')}</select></div><div class="form-group"><label>Descripción del Paso Práctico</label><textarea id="pasoDesc" required>${p.descripcion || ''}</textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Actualizar</button></div></form>`;
     modal.classList.add("active");
 }
-
 async function savePaso(e, editId) {
     e.preventDefault();
-    
     const temaId = parseInt(document.getElementById("pasoTemaId").value);
     const descripcion = document.getElementById("pasoDesc").value.trim();
-    
-    if (!temaId) {
-        showToast("Selecciona un tema", "error");
-        return;
-    }
-    if (!descripcion) {
-        showToast("Escribe la descripción del paso", "error");
-        return;
-    }
-    
-    const data = {
-        tema_id: temaId,
-        descripcion: descripcion,
-        orden: 0
-    };
-    
+    if (!temaId) { showToast("Selecciona un tema", "error"); return; }
+    if (!descripcion) { showToast("Escribe la descripción del paso", "error"); return; }
+    const data = { tema_id: temaId, descripcion: descripcion, orden: 0 };
     try {
-        if (editId) {
-            await api(`pasos?id=eq.${editId}`, "PATCH", data, "return=minimal");
-        } else {
-            const res = await api("pasos", "POST", data, "return=representation");
-            if (!res || !res[0]) {
-                throw new Error("No se recibió confirmación del servidor");
-            }
-        }
-        
-        closeAdminModal();
-        await loadPasosData();
-        
-        if (temaActual) {
-            await verTema(temaActual.id);
-        } else if (cursoActual) {
-            await verCurso(cursoActual.id);
-        } else {
-            await renderCursos();
-        }
-        
+        if (editId) { await api(`pasos?id=eq.${editId}`, "PATCH", data, "return=minimal"); }
+        else { const res = await api("pasos", "POST", data, "return=representation"); if (!res || !res[0]) throw new Error("No se recibió confirmación"); }
+        closeAdminModal(); await loadPasosData();
+        if (temaActual) await verTema(temaActual.id);
+        else if (cursoActual) await verCurso(cursoActual.id);
+        else await renderCursos();
         showToast(editId ? "✅ Paso actualizado" : "✅ Paso práctico creado");
-        
-    } catch(err) {
-        console.error("Error guardando paso:", err);
-        showToast("Error al guardar: " + err.message, "error");
-    }
+    } catch(err) { showToast("Error: " + err.message, "error"); }
 }
-
 async function deletePaso(id) {
     if (!confirm("¿Eliminar este paso práctico?")) return;
-    try {
-        await api(`pasos?id=eq.${id}`, "DELETE");
-        await loadPasosData();
-        if (temaActual) verTema(temaActual.id);
-        showToast("Paso eliminado", "error");
-    } catch(err) {
-        showToast("Error: " + err.message, "error");
-    }
+    try { await api(`pasos?id=eq.${id}`, "DELETE"); await loadPasosData(); if (temaActual) verTema(temaActual.id); showToast("Paso eliminado", "error"); }
+    catch(err) { showToast("Error: " + err.message, "error"); }
 }
 
 // ============================================================
@@ -1124,148 +887,47 @@ async function deletePaso(id) {
 function showEstudiantes() {
     const modal = document.getElementById("adminModal");
     const content = document.getElementById("adminModalContent");
-    
-    content.innerHTML = `
-        <h2>👥 Estudiantes</h2>
-        <div style="margin-bottom:1rem">
-            <button class="btn btn-primary btn-sm" onclick="openEstudianteModal()">+ Nuevo Estudiante</button>
-        </div>
-        <div style="max-height:400px;overflow-y:auto">
-            ${estudiantesData.length === 0 ? '<p class="empty-state">No hay estudiantes registrados.</p>' : `
-                <table style="width:100%;border-collapse:collapse">
-                    <thead><tr style="background:var(--nivel2);color:var(--gold-light)">
-                        <th style="padding:0.5rem">Nombre</th><th style="padding:0.5rem">Email</th><th style="padding:0.5rem">Progreso</th><th style="padding:0.5rem">Acciones</th>
-                    </tr></thead>
-                    <tbody>
-                        ${estudiantesData.map(e => {
-                            const total = pasosData.length;
-                            const comp = progresoData.filter(p => p.estudiante_id === e.id && p.completado).length;
-                            const pct = total > 0 ? Math.round((comp/total)*100) : 0;
-                            return `
-                                <tr>
-                                    <td style="padding:0.5rem">${e.nombre} ${e.apellido}</td>
-                                    <td style="padding:0.5rem">${e.email || '-'}</td>
-                                    <td style="padding:0.5rem">${comp}/${total} (${pct}%)</td>
-                                    <td style="padding:0.5rem">
-                                        <button class="btn btn-warning btn-xs" onclick="editEstudiante(${e.id})">✏️</button>
-                                        <button class="btn btn-danger btn-xs" onclick="deleteEstudiante(${e.id})">🗑️</button>
-                                    </td>
-                                </tr>
-                            `;
-                        }).join('')}
-                    </tbody>
-                </table>
-            `}
-        </div>
-        <div class="modal-actions">
-            <button class="btn btn-secondary" onclick="closeAdminModal()">Cerrar</button>
-        </div>
-    `;
+    content.innerHTML = `<h2>👥 Estudiantes</h2><div style="margin-bottom:1rem"><button class="btn btn-primary btn-sm" onclick="openEstudianteModal()">+ Nuevo Estudiante</button></div><div style="max-height:400px;overflow-y:auto">${estudiantesData.length === 0 ? '<p class="empty-state">No hay estudiantes registrados.</p>' : `<table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--nivel2);color:var(--gold-light)"><th style="padding:0.5rem">Nombre</th><th style="padding:0.5rem">Email</th><th style="padding:0.5rem">Progreso</th><th style="padding:0.5rem">Acciones</th></tr></thead><tbody>${estudiantesData.map(e => { const total = pasosData.length; const comp = progresoData.filter(p => p.estudiante_id === e.id && p.completado).length; const pct = total > 0 ? Math.round((comp/total)*100) : 0; return `<tr><td style="padding:0.5rem">${e.nombre} ${e.apellido}</td><td style="padding:0.5rem">${e.email || '-'}</td><td style="padding:0.5rem">${comp}/${total} (${pct}%)</td><td style="padding:0.5rem"><button class="btn btn-warning btn-xs" onclick="editEstudiante(${e.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="deleteEstudiante(${e.id})">🗑️</button></td></tr>`; }).join('')}</tbody></table>`}</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeAdminModal()">Cerrar</button></div>`;
     modal.classList.add("active");
 }
-
 function openEstudianteModal(editId = null) {
     const e = editId ? estudiantesData.find(x => x.id === editId) : null;
     const modal = document.getElementById("adminModal");
     const content = document.getElementById("adminModalContent");
-    
-    content.innerHTML = `
-        <h2>${e ? 'Editar' : 'Nuevo'} Estudiante</h2>
-        <form onsubmit="saveEstudiante(event, ${editId || 'null'})">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nombre</label>
-                    <input type="text" id="estNombre" required value="${e ? e.nombre || '' : ''}">
-                </div>
-                <div class="form-group">
-                    <label>Apellido</label>
-                    <input type="text" id="estApellido" required value="${e ? e.apellido || '' : ''}">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="estEmail" value="${e ? e.email || '' : ''}">
-            </div>
-            <div class="form-group">
-                <label>Teléfono</label>
-                <input type="text" id="estTelefono" value="${e ? e.telefono || '' : ''}">
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-        </form>
-    `;
+    content.innerHTML = `<h2>${e ? 'Editar' : 'Nuevo'} Estudiante</h2><form onsubmit="saveEstudiante(event, ${editId || 'null'})"><div class="form-row"><div class="form-group"><label>Nombre</label><input type="text" id="estNombre" required value="${e ? e.nombre || '' : ''}"></div><div class="form-group"><label>Apellido</label><input type="text" id="estApellido" required value="${e ? e.apellido || '' : ''}"></div></div><div class="form-group"><label>Email</label><input type="email" id="estEmail" value="${e ? e.email || '' : ''}"></div><div class="form-group"><label>Teléfono</label><input type="text" id="estTelefono" value="${e ? e.telefono || '' : ''}"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
     modal.classList.add("active");
 }
-
 function editEstudiante(id) { openEstudianteModal(id); }
-
 async function saveEstudiante(e, editId) {
     e.preventDefault();
-    const data = {
-        nombre: document.getElementById("estNombre").value,
-        apellido: document.getElementById("estApellido").value,
-        email: document.getElementById("estEmail").value,
-        telefono: document.getElementById("estTelefono").value
-    };
-    
+    const data = { nombre: document.getElementById("estNombre").value, apellido: document.getElementById("estApellido").value, email: document.getElementById("estEmail").value, telefono: document.getElementById("estTelefono").value };
     try {
-        if (editId) {
-            await api(`estudiantes?id=eq.${editId}`, "PATCH", data, "return=minimal");
-        } else {
-            await api("estudiantes", "POST", data, "return=minimal");
-        }
-        
-        await loadAll();
-        showEstudiantes();
+        if (editId) { await api(`estudiantes?id=eq.${editId}`, "PATCH", data, "return=minimal"); }
+        else { await api("estudiantes", "POST", data, "return=minimal"); }
+        await loadAll(); showEstudiantes();
         showToast(editId ? "✅ Estudiante actualizado" : "✅ Estudiante creado");
-    } catch(err) {
-        showToast("Error: " + err.message, "error");
-    }
+    } catch(err) { showToast("Error: " + err.message, "error"); }
 }
-
 async function deleteEstudiante(id) {
     if (!confirm("¿Eliminar este estudiante y todo su progreso?")) return;
-    try {
-        await api(`estudiantes?id=eq.${id}`, "DELETE");
-        await loadAll();
-        showEstudiantes();
-        showToast("Estudiante eliminado", "error");
-    } catch(err) {
-        showToast("Error: " + err.message, "error");
-    }
+    try { await api(`estudiantes?id=eq.${id}`, "DELETE"); await loadAll(); showEstudiantes(); showToast("Estudiante eliminado", "error"); }
+    catch(err) { showToast("Error: " + err.message, "error"); }
 }
 
 // ============================================================
 // MODAL
 // ============================================================
-function closeAdminModal() {
-    document.getElementById("adminModal").classList.remove("active");
-}
-
-document.getElementById("adminModal").addEventListener("click", function(e) {
-    if (e.target === this) closeAdminModal();
-});
+function closeAdminModal() { document.getElementById("adminModal").classList.remove("active"); }
+document.getElementById("adminModal").addEventListener("click", function(e) { if (e.target === this) closeAdminModal(); });
 
 // ============================================================
 // INICIO
 // ============================================================
 async function init() {
-    await loadAll();
-    updateAdminUI();
-    aplicarTamanoFuente();
-    
-    if (nivelesData.length > 0) {
-        nivelActual = nivelesData[0];
-        await loadCursosData();
-        await loadTemasData();
-        await loadPasosData();
-    }
-    
+    await loadAll(); updateAdminUI(); aplicarTamanoFuente();
+    if (nivelesData.length > 0) { nivelActual = nivelesData[0]; await loadCursosData(); await loadTemasData(); await loadPasosData(); }
     renderNiveles();
 }
-
 init();
 </script>
 </body>
