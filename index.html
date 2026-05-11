@@ -228,7 +228,7 @@
 <div class="modal" id="cursoModal">
     <div class="modal-content" style="max-width:800px">
         <h2 id="cursoModalTitle">Nuevo Curso</h2>
-        <form id="cursoForm">
+        <form id="cursoForm" onsubmit="guardarCurso(event)">
             <input type="hidden" id="cursoId">
             <div class="form-group"><label>Titulo del Curso</label><input type="text" id="cursoTitulo" required placeholder="Ej: Fundamentos de la Fe"></div>
             <div class="form-row">
@@ -584,7 +584,7 @@ function updateTipoUI(sel, n) {
     cont.innerHTML = sel.value === "verdadero_falso" ? renderVFUI() : renderMultipleUI(null);
 }
 
-document.getElementById("cursoForm").addEventListener("submit", async function(e) {
+window.guardarCurso = async function(e) {
     e.preventDefault();
     var id = document.getElementById("cursoId").value;
     var cursoData = {
@@ -597,13 +597,17 @@ document.getElementById("cursoForm").addEventListener("submit", async function(e
     try {
         var cursoId = id;
         if (id) {
+            // EDITAR curso existente
             await api("cursos?id=eq." + id, "PATCH", cursoData, "return=minimal");
             await api("preguntas?curso_id=eq." + id, "DELETE");
         } else {
-            var res = await api("cursos?select=id", "POST", cursoData, "return=representation");
+            // CREAR curso nuevo - CORREGIDO
+            var res = await api("cursos", "POST", cursoData, "return=representation");
             cursoId = res && res[0] ? res[0].id : null;
         }
         if (!cursoId) throw new Error("No se obtuvo el ID del curso");
+        
+        // Guardar las preguntas
         var forms = document.querySelectorAll(".pregunta-admin");
         for (var i = 0; i < forms.length; i++) {
             var f        = forms[i];
@@ -616,12 +620,20 @@ document.getElementById("cursoForm").addEventListener("submit", async function(e
             } else {
                 opciones = ["Verdadero","Falso"];
             }
-            await api("preguntas", "POST", { curso_id: cursoId, pregunta: pregunta, tipo: tipo, opciones: opciones, respuesta_correcta: correcta }, "return=minimal");
+            await api("preguntas", "POST", { 
+                curso_id: cursoId, 
+                pregunta: pregunta, 
+                tipo: tipo, 
+                opciones: opciones, 
+                respuesta_correcta: correcta 
+            }, "return=minimal");
         }
         await loadCursos();
         closeModal("cursoModal");
-    } catch(err) { alert("Error al guardar: " + err.message); }
-});
+    } catch(err) { 
+        alert("Error al guardar: " + err.message); 
+    }
+};
 
 async function deleteCurso(id) {
     if (!confirm("Eliminar este curso y sus preguntas?")) return;
