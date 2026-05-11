@@ -331,7 +331,10 @@ function showSection(name, btn) {
     if (name === "resultados") loadResultados();
 }
 
-function closeModal(id) { document.getElementById(id).classList.remove("active"); }
+function closeModal(id) { 
+    document.getElementById(id).classList.remove("active"); 
+}
+
 document.querySelectorAll(".modal").forEach(function(m){
     m.addEventListener("click", function(e){ if (e.target === m) m.classList.remove("active"); });
 });
@@ -401,7 +404,8 @@ document.getElementById("studentForm").addEventListener("submit", async function
     try {
         if (id) await api("estudiantes?id=eq." + id, "PATCH", data, "return=minimal");
         else    await api("estudiantes", "POST", data, "return=minimal");
-        await loadStudents(); closeModal("studentModal");
+        await loadStudents(); 
+        closeModal("studentModal");
     } catch(err) { alert("Error: " + err.message); }
 });
 
@@ -584,8 +588,13 @@ function updateTipoUI(sel, n) {
     cont.innerHTML = sel.value === "verdadero_falso" ? renderVFUI() : renderMultipleUI(null);
 }
 
+// ============================================================
+// FUNCIÓN guardarCurso CORREGIDA
+// ============================================================
 window.guardarCurso = async function(e) {
     e.preventDefault();
+    e.stopPropagation();
+    
     var id = document.getElementById("cursoId").value;
     var cursoData = {
         titulo:      document.getElementById("cursoTitulo").value,
@@ -594,8 +603,10 @@ window.guardarCurso = async function(e) {
         descripcion: document.getElementById("cursoDesc").value,
         contenido:   document.getElementById("cursoContenido").value
     };
+    
     try {
         var cursoId = id;
+        
         if (id) {
             // EDITAR curso existente
             await api("cursos?id=eq." + id, "PATCH", cursoData, "return=minimal");
@@ -603,9 +614,10 @@ window.guardarCurso = async function(e) {
         } else {
             // CREAR curso nuevo - CORREGIDO
             var res = await api("cursos", "POST", cursoData, "return=representation");
-            cursoId = res && res[0] ? res[0].id : null;
+            if (!res || !res[0]) throw new Error("No se obtuvo respuesta del servidor");
+            cursoId = res[0].id;
+            if (!cursoId) throw new Error("No se obtuvo el ID del curso");
         }
-        if (!cursoId) throw new Error("No se obtuvo el ID del curso");
         
         // Guardar las preguntas
         var forms = document.querySelectorAll(".pregunta-admin");
@@ -628,8 +640,13 @@ window.guardarCurso = async function(e) {
                 respuesta_correcta: correcta 
             }, "return=minimal");
         }
+        
+        // CERRAR EL MODAL INMEDIATAMENTE
+        document.getElementById("cursoModal").classList.remove("active");
+        
+        // Recargar cursos en segundo plano
         await loadCursos();
-        closeModal("cursoModal");
+        
     } catch(err) { 
         alert("Error al guardar: " + err.message); 
     }
