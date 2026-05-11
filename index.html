@@ -189,31 +189,65 @@ let nivelesData = [], cursosData = [], temasData = [], pasosData = [], progresoD
 let nivelActual = null, cursoActual = null, temaActual = null, estudianteActual = null;
 
 // ============================================================
-// UTILIDADES
+// API (CORREGIDA)
 // ============================================================
 async function api(path, method, body, prefer) {
     const headers = {...H};
     if (prefer) headers["Prefer"] = prefer;
-    const opts = { method: method || "GET", headers };
-    if (body) opts.body = JSON.stringify(body);
-    const res = await fetch(SUPABASE_URL + "/rest/v1/" + path, opts);
-    if (res.status === 204 || (res.status === 200 && method === "DELETE")) return null;
-    if (res.status === 200 || res.status === 201) {
-        const text = await res.text();
-        return text ? JSON.parse(text) : null;
+    
+    const opts = { 
+        method: method || "GET", 
+        headers: headers 
+    };
+    
+    if (body) {
+        opts.body = JSON.stringify(body);
     }
-    throw new Error(await res.text());
+    
+    try {
+        const url = SUPABASE_URL + "/rest/v1/" + path;
+        const res = await fetch(url, opts);
+        
+        // Para DELETE o PATCH con return=minimal (respuesta vacía)
+        if (res.status === 204) return null;
+        if (res.status === 200 && method === "DELETE") return null;
+        
+        // Para POST con return=representation o GET
+        if (res.status === 200 || res.status === 201) {
+            const text = await res.text();
+            return text ? JSON.parse(text) : null;
+        }
+        
+        // Si hay error
+        const errorText = await res.text();
+        console.error("API Error:", res.status, errorText);
+        throw new Error(errorText || `Error ${res.status}`);
+        
+    } catch(err) {
+        console.error("Fetch error:", err);
+        throw err;
+    }
 }
 
+// ============================================================
+// TOAST
+// ============================================================
 function showToast(msg, type = 'success') {
     const container = document.getElementById("toastContainer");
     const toast = document.createElement("div");
     toast.className = `toast toast-${type}`;
     toast.textContent = msg;
     container.appendChild(toast);
-    setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2500);
+    setTimeout(() => { 
+        toast.style.opacity = '0'; 
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(() => toast.remove(), 300); 
+    }, 2500);
 }
 
+// ============================================================
+// DEBOUNCE (para notas)
+// ============================================================
 function debounce(func, wait) {
     let timeout;
     return function(...args) {
@@ -225,7 +259,10 @@ function debounce(func, wait) {
 // ============================================================
 // LOGIN
 // ============================================================
-function showLogin() { document.getElementById("loginOverlay").classList.add("active"); setTimeout(() => document.getElementById("adminPassword").focus(), 100); }
+function showLogin() { 
+    document.getElementById("loginOverlay").classList.add("active"); 
+    setTimeout(() => document.getElementById("adminPassword").focus(), 100); 
+}
 function hideLogin() { 
     document.getElementById("loginOverlay").classList.remove("active"); 
     document.getElementById("adminPassword").value = "";
@@ -233,12 +270,19 @@ function hideLogin() {
 }
 function checkLogin() {
     if (document.getElementById("adminPassword").value === ADMIN_PASS) {
-        isAdmin = true; hideLogin(); updateAdminUI(); renderNiveles();
+        isAdmin = true; 
+        hideLogin(); 
+        updateAdminUI(); 
+        renderNiveles();
     } else {
         document.getElementById("loginError").style.display = "block";
     }
 }
-function logout() { isAdmin = false; updateAdminUI(); renderNiveles(); }
+function logout() { 
+    isAdmin = false; 
+    updateAdminUI(); 
+    renderNiveles(); 
+}
 function updateAdminUI() {
     document.getElementById("adminBadge").style.display = isAdmin ? "" : "none";
     document.getElementById("btnLogin").style.display = isAdmin ? "none" : "";
@@ -247,7 +291,7 @@ function updateAdminUI() {
 }
 
 // ============================================================
-// CARGA DE DATOS (OPTIMIZADA - solo carga lo necesario)
+// CARGA DE DATOS
 // ============================================================
 async function loadAll() {
     try {
@@ -294,13 +338,12 @@ function updateEstudianteSelect() {
         estudiantesData.map(e => `<option value="${e.id}" ${estudianteActual && e.id === estudianteActual.id ? 'selected' : ''}>${e.nombre} ${e.apellido}</option>`).join('');
 }
 
-function cambiarEstudiante(id) {
+async function cambiarEstudiante(id) {
     estudianteActual = estudiantesData.find(e => e.id === parseInt(id)) || null;
-    loadProgresoData().then(() => {
-        if (temaActual) verTema(temaActual.id);
-        else if (cursoActual) verCurso(cursoActual.id);
-        else renderCursos();
-    });
+    await loadProgresoData();
+    if (temaActual) verTema(temaActual.id);
+    else if (cursoActual) verCurso(cursoActual.id);
+    else renderCursos();
 }
 
 // ============================================================
@@ -311,7 +354,7 @@ async function renderNiveles() {
     
     const nav = document.getElementById("nivelesNav");
     if (!nivelesData.length) {
-        nav.innerHTML = '<div class="empty-state">No hay niveles configurados.</div>';
+        nav.innerHTML = '<div class="empty-state">No hay niveles configurados. Ejecuta el SQL en Supabase.</div>';
         return;
     }
     
@@ -334,7 +377,7 @@ async function renderNiveles() {
         document.getElementById("mainContent").innerHTML = `
             <div class="empty-state">
                 <p>🎓 Bienvenido a la Academia del Espíritu</p>
-                ${isAdmin ? '<p style="margin-top:1rem">Usa el panel de administración para crear los niveles y cursos.</p>' : ''}
+                ${isAdmin ? '<p style="margin-top:1rem">Usa el panel de administración para crear cursos.</p>' : ''}
             </div>
         `;
     }
@@ -509,7 +552,7 @@ async function verTema(temaId) {
                 ${isAdmin ? `<button class="btn btn-primary btn-sm" onclick="openPasoModal(${temaId})">+ Agregar Paso</button>` : ''}
             </div>
             <div id="pasosContainer">
-                ${pasosTema.length === 0 ? '<p class="empty-state">No hay pasos prácticos para este tema. Agrega pasos para que los estudiantes puedan marcar su progreso.</p>' : ''}
+                ${pasosTema.length === 0 ? '<p class="empty-state">No hay pasos prácticos para este tema.</p>' : ''}
             </div>
         </div>
     `;
@@ -554,7 +597,7 @@ function renderPasosEnContainer(pasosTema) {
 }
 
 // ============================================================
-// TOGGLE PASO (OPTIMIZADO - sin recarga completa)
+// TOGGLE PASO
 // ============================================================
 async function togglePaso(pasoId, checkboxEl) {
     if (!estudianteActual) {
@@ -576,12 +619,11 @@ async function togglePaso(pasoId, checkboxEl) {
     const existing = progresoData.find(pr => pr.paso_id === pasoId);
     const nuevoEstado = !(existing && existing.completado);
     
-    // Actualizar en Supabase
     if (existing) {
         await api(`progreso?id=eq.${existing.id}`, "PATCH", {
             completado: nuevoEstado,
             fecha_completado: nuevoEstado ? new Date().toISOString() : null
-        });
+        }, "return=minimal");
         existing.completado = nuevoEstado;
         existing.fecha_completado = nuevoEstado ? new Date().toISOString() : null;
     } else {
@@ -591,7 +633,7 @@ async function togglePaso(pasoId, checkboxEl) {
             completado: nuevoEstado,
             fecha_completado: nuevoEstado ? new Date().toISOString() : null,
             notas: ""
-        });
+        }, "return=representation");
         if (res && res[0]) {
             progresoData.push(res[0]);
         } else {
@@ -599,7 +641,6 @@ async function togglePaso(pasoId, checkboxEl) {
         }
     }
     
-    // Actualizar UI localmente (sin recargar)
     const pasoItem = document.getElementById(`paso-${pasoId}`);
     if (pasoItem) {
         pasoItem.classList.toggle("completado", nuevoEstado);
@@ -618,19 +659,19 @@ async function togglePaso(pasoId, checkboxEl) {
 }
 
 // ============================================================
-// GUARDAR NOTAS (con debounce)
+// GUARDAR NOTAS
 // ============================================================
 const guardarNotas = debounce(async function(pasoId, notas) {
     if (!estudianteActual) return;
     const existing = progresoData.find(pr => pr.paso_id === pasoId);
     if (existing) {
-        await api(`progreso?id=eq.${existing.id}`, "PATCH", { notas });
+        await api(`progreso?id=eq.${existing.id}`, "PATCH", { notas }, "return=minimal");
         existing.notas = notas;
     }
 }, 500);
 
 // ============================================================
-// ADMIN: MODALES DE CURSOS
+// ADMIN: CURSOS
 // ============================================================
 function openCursoModal() {
     const modal = document.getElementById("adminModal");
@@ -704,28 +745,36 @@ async function saveCurso(e, editId) {
         descripcion: document.getElementById("cursoDesc").value
     };
     
-    if (editId) {
-        await api(`cursos?id=eq.${editId}`, "PATCH", data);
-    } else {
-        await api("cursos", "POST", data);
+    try {
+        if (editId) {
+            await api(`cursos?id=eq.${editId}`, "PATCH", data, "return=minimal");
+        } else {
+            await api("cursos", "POST", data, "return=minimal");
+        }
+        
+        closeAdminModal();
+        await loadCursosData();
+        renderCursos();
+        showToast(editId ? "✅ Curso actualizado" : "✅ Curso creado");
+    } catch(err) {
+        showToast("Error: " + err.message, "error");
     }
-    
-    closeAdminModal();
-    await loadCursosData();
-    renderCursos();
-    showToast(editId ? "Curso actualizado" : "Curso creado correctamente");
 }
 
 async function deleteCurso(id) {
     if (!confirm("¿Eliminar este curso y todos sus temas y pasos? Esta acción no se puede deshacer.")) return;
-    await api(`cursos?id=eq.${id}`, "DELETE");
-    await loadCursosData();
-    renderCursos();
-    showToast("Curso eliminado", "error");
+    try {
+        await api(`cursos?id=eq.${id}`, "DELETE");
+        await loadCursosData();
+        renderCursos();
+        showToast("Curso eliminado", "error");
+    } catch(err) {
+        showToast("Error: " + err.message, "error");
+    }
 }
 
 // ============================================================
-// ADMIN: MODALES DE TEMAS
+// ADMIN: TEMAS
 // ============================================================
 function openTemaModal(cursoIdParam = null) {
     const cid = cursoIdParam || (cursoActual ? cursoActual.id : null);
@@ -768,8 +817,6 @@ function editTema(id) {
     
     const modal = document.getElementById("adminModal");
     const content = document.getElementById("adminModalContent");
-    const curso = cursosData.find(c => c.id === t.curso_id);
-    const niv = nivelesData.find(n => n.id === (curso?.nivel_id));
     
     content.innerHTML = `
         <h2>Editar Tema</h2>
@@ -808,31 +855,39 @@ async function saveTema(e, editId) {
         contenido: document.getElementById("temaContenido").value
     };
     
-    if (editId) {
-        await api(`temas?id=eq.${editId}`, "PATCH", data);
-    } else {
-        await api("temas", "POST", data);
+    try {
+        if (editId) {
+            await api(`temas?id=eq.${editId}`, "PATCH", data, "return=minimal");
+        } else {
+            await api("temas", "POST", data, "return=minimal");
+        }
+        
+        closeAdminModal();
+        await loadTemasData();
+        if (temaActual) verTema(temaActual.id);
+        else if (cursoActual) verCurso(cursoActual.id);
+        else renderCursos();
+        showToast(editId ? "✅ Tema actualizado" : "✅ Tema creado");
+    } catch(err) {
+        showToast("Error: " + err.message, "error");
     }
-    
-    closeAdminModal();
-    await loadTemasData();
-    if (temaActual) verTema(temaActual.id);
-    else if (cursoActual) verCurso(cursoActual.id);
-    else renderCursos();
-    showToast(editId ? "Tema actualizado" : "Tema creado correctamente");
 }
 
 async function deleteTema(id) {
-    if (!confirm("¿Eliminar este tema y todos sus pasos? Esta acción no se puede deshacer.")) return;
-    await api(`temas?id=eq.${id}`, "DELETE");
-    await loadTemasData();
-    if (cursoActual) verCurso(cursoActual.id);
-    else renderCursos();
-    showToast("Tema eliminado", "error");
+    if (!confirm("¿Eliminar este tema y todos sus pasos?")) return;
+    try {
+        await api(`temas?id=eq.${id}`, "DELETE");
+        await loadTemasData();
+        if (cursoActual) verCurso(cursoActual.id);
+        else renderCursos();
+        showToast("Tema eliminado", "error");
+    } catch(err) {
+        showToast("Error: " + err.message, "error");
+    }
 }
 
 // ============================================================
-// ADMIN: MODALES DE PASOS
+// ADMIN: PASOS (CORREGIDO)
 // ============================================================
 function openPasoModal(temaIdParam = null) {
     const tid = temaIdParam || (temaActual ? temaActual.id : null);
@@ -854,7 +909,7 @@ function openPasoModal(temaIdParam = null) {
             </div>
             <div class="form-group">
                 <label>Descripción del Paso Práctico</label>
-                <textarea id="pasoDesc" required placeholder="Describe la acción práctica que el estudiante debe realizar... Ej: Orar 15 minutos cada mañana durante una semana."></textarea>
+                <textarea id="pasoDesc" required placeholder="Describe la acción práctica que el estudiante debe realizar..."></textarea>
             </div>
             <div class="modal-actions">
                 <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
@@ -869,8 +924,6 @@ function editPaso(id) {
     const p = pasosData.find(x => x.id === id);
     if (!p) return;
     
-    const tema = temasData.find(t => t.id === p.tema_id);
-    const curso = tema ? cursosData.find(c => c.id === tema.curso_id) : null;
     const modal = document.getElementById("adminModal");
     const content = document.getElementById("adminModalContent");
     
@@ -901,31 +954,69 @@ function editPaso(id) {
 
 async function savePaso(e, editId) {
     e.preventDefault();
-    const data = {
-        tema_id: parseInt(document.getElementById("pasoTemaId").value),
-        descripcion: document.getElementById("pasoDesc").value
-    };
     
-    if (editId) {
-        await api(`pasos?id=eq.${editId}`, "PATCH", data);
-    } else {
-        await api("pasos", "POST", data);
+    const temaId = parseInt(document.getElementById("pasoTemaId").value);
+    const descripcion = document.getElementById("pasoDesc").value.trim();
+    
+    if (!temaId) {
+        showToast("Selecciona un tema", "error");
+        return;
+    }
+    if (!descripcion) {
+        showToast("Escribe la descripción del paso", "error");
+        return;
     }
     
-    closeAdminModal();
-    await loadPasosData();
-    if (temaActual) verTema(temaActual.id);
-    else if (cursoActual) verCurso(cursoActual.id);
-    else renderCursos();
-    showToast(editId ? "Paso actualizado" : "Paso práctico creado correctamente");
+    const data = {
+        tema_id: temaId,
+        descripcion: descripcion,
+        orden: 0
+    };
+    
+    try {
+        if (editId) {
+            await api(`pasos?id=eq.${editId}`, "PATCH", data, "return=minimal");
+        } else {
+            const res = await api("pasos", "POST", data, "return=representation");
+            console.log("Respuesta al crear paso:", res);
+            if (!res || !res[0]) {
+                throw new Error("No se recibió confirmación del servidor");
+            }
+        }
+        
+        // Cerrar modal
+        closeAdminModal();
+        
+        // Recargar datos de pasos
+        await loadPasosData();
+        
+        // Refrescar la vista actual
+        if (temaActual) {
+            await verTema(temaActual.id);
+        } else if (cursoActual) {
+            await verCurso(cursoActual.id);
+        } else {
+            await renderCursos();
+        }
+        
+        showToast(editId ? "✅ Paso actualizado" : "✅ Paso práctico creado");
+        
+    } catch(err) {
+        console.error("Error guardando paso:", err);
+        showToast("Error al guardar: " + err.message, "error");
+    }
 }
 
 async function deletePaso(id) {
-    if (!confirm("¿Eliminar este paso práctico? También se eliminará el progreso asociado.")) return;
-    await api(`pasos?id=eq.${id}`, "DELETE");
-    await loadPasosData();
-    if (temaActual) verTema(temaActual.id);
-    showToast("Paso eliminado", "error");
+    if (!confirm("¿Eliminar este paso práctico?")) return;
+    try {
+        await api(`pasos?id=eq.${id}`, "DELETE");
+        await loadPasosData();
+        if (temaActual) verTema(temaActual.id);
+        showToast("Paso eliminado", "error");
+    } catch(err) {
+        showToast("Error: " + err.message, "error");
+    }
 }
 
 // ============================================================
@@ -1020,27 +1111,35 @@ async function saveEstudiante(e, editId) {
         telefono: document.getElementById("estTelefono").value
     };
     
-    if (editId) {
-        await api(`estudiantes?id=eq.${editId}`, "PATCH", data);
-    } else {
-        await api("estudiantes", "POST", data);
+    try {
+        if (editId) {
+            await api(`estudiantes?id=eq.${editId}`, "PATCH", data, "return=minimal");
+        } else {
+            await api("estudiantes", "POST", data, "return=minimal");
+        }
+        
+        await loadAll();
+        showEstudiantes();
+        showToast(editId ? "✅ Estudiante actualizado" : "✅ Estudiante creado");
+    } catch(err) {
+        showToast("Error: " + err.message, "error");
     }
-    
-    await loadAll();
-    showEstudiantes();
-    showToast(editId ? "Estudiante actualizado" : "Estudiante creado");
 }
 
 async function deleteEstudiante(id) {
     if (!confirm("¿Eliminar este estudiante y todo su progreso?")) return;
-    await api(`estudiantes?id=eq.${id}`, "DELETE");
-    await loadAll();
-    showEstudiantes();
-    showToast("Estudiante eliminado", "error");
+    try {
+        await api(`estudiantes?id=eq.${id}`, "DELETE");
+        await loadAll();
+        showEstudiantes();
+        showToast("Estudiante eliminado", "error");
+    } catch(err) {
+        showToast("Error: " + err.message, "error");
+    }
 }
 
 // ============================================================
-// MODAL GENÉRICO
+// MODAL
 // ============================================================
 function closeAdminModal() {
     document.getElementById("adminModal").classList.remove("active");
@@ -1060,6 +1159,8 @@ async function init() {
     if (nivelesData.length > 0) {
         nivelActual = nivelesData[0];
         await loadCursosData();
+        await loadTemasData();
+        await loadPasosData();
     }
     
     renderNiveles();
