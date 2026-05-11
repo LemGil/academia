@@ -18,6 +18,7 @@
             --success: #27ae60; --danger: #c0392b; --warning: #f39c12;
             --shadow: 0 2px 8px rgba(0,0,0,0.08);
             --radius: 8px;
+            --font-size-content: 1.1rem;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; min-height:100vh; background-image:radial-gradient(#D6D0C4 1px,transparent 1px); background-size:20px 20px; }
@@ -34,6 +35,7 @@
         .btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
         .btn-sm { padding:0.3rem 0.7rem; font-size:0.75rem; }
         .btn-xs { padding:0.2rem 0.5rem; font-size:0.7rem; }
+        .btn-icon { padding:0.4rem 0.6rem; font-size:1rem; }
         .btn-primary { background:var(--nivel2); color:var(--gold-light); }
         .btn-secondary { background:var(--surface); color:var(--nivel2); border:1px solid var(--gold); }
         .btn-danger { background:var(--surface); color:var(--danger); border:1px solid var(--danger); }
@@ -80,7 +82,15 @@
         
         .tema-contenido { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); margin-bottom:2rem; }
         .tema-contenido h2 { font-family:'Cinzel',serif; color:var(--nivel2); margin-bottom:1.5rem; }
-        .contenido-texto { font-family:'Crimson Pro',serif; font-size:1.1rem; line-height:1.9; white-space:pre-wrap; }
+        .contenido-texto { font-family:'Crimson Pro',serif; font-size:var(--font-size-content); line-height:1.9; white-space:pre-wrap; transition:font-size 0.3s; }
+        
+        /* Controles de lectura */
+        .reading-controls { display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; padding:0.8rem 1rem; background:var(--bg); border-radius:var(--radius); flex-wrap:wrap; }
+        .reading-controls span { font-size:0.85rem; color:var(--text-light); font-weight:600; }
+        .font-size-btn { width:36px; height:36px; border-radius:50%; border:2px solid var(--border); background:var(--surface); cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; font-weight:700; color:var(--nivel2); }
+        .font-size-btn:hover { border-color:var(--gold); background:var(--gold-light); }
+        .font-size-btn:active { transform:scale(0.95); }
+        .font-size-indicator { font-family:'Cinzel',serif; font-weight:700; color:var(--nivel2); min-width:40px; text-align:center; }
         
         .pasos-section { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); }
         .pasos-section h3 { font-family:'Cinzel',serif; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; }
@@ -113,13 +123,21 @@
         .back-btn { margin-bottom:1.5rem; }
         .empty-state { text-align:center; padding:2rem; color:var(--text-light); font-style:italic; }
         .loading { text-align:center; padding:2rem; color:var(--gold-dark); }
-        .spinner { display:inline-block; width:20px; height:20px; border:3px solid #ccc; border-top-color:var(--gold); border-radius:50%; animation:spin 0.6s linear infinite; }
-        @keyframes spin { to { transform:rotate(360deg); } }
         
         .toast { position:fixed; bottom:2rem; right:2rem; padding:1rem 2rem; border-radius:var(--radius); box-shadow:0 8px 24px rgba(0,0,0,0.2); z-index:2000; animation:slideIn 0.3s ease; font-weight:600; }
         .toast-success { background:var(--success); color:#fff; }
         .toast-error { background:var(--danger); color:#fff; }
         @keyframes slideIn { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+        
+        /* Tema oscuro/claro para lectura */
+        .modo-lectura { background:#1a1a1a; }
+        .modo-lectura .tema-contenido { background:#2a2a2a; color:#e0e0e0; border:1px solid #444; }
+        .modo-lectura .tema-contenido h2 { color:#F5D77A; }
+        .modo-lectura .contenido-texto { color:#d0d0d0; }
+        .modo-lectura .pasos-section { background:#2a2a2a; border:1px solid #444; }
+        .modo-lectura .pasos-section h3 { color:#F5D77A; }
+        .modo-lectura .paso-item { background:#333; border-color:#555; }
+        .modo-lectura .paso-texto { color:#d0d0d0; }
         
         @media(max-width:768px) {
             .niveles-nav { flex-direction:column; }
@@ -128,6 +146,8 @@
             .cursos-grid { grid-template-columns:1fr; }
             .modal { padding:0.5rem; }
             .paso-actions { flex-direction:column; }
+            .tema-contenido { padding:1rem; }
+            .reading-controls { justify-content:center; }
         }
     </style>
 </head>
@@ -188,8 +208,17 @@ let isAdmin = false;
 let nivelesData = [], cursosData = [], temasData = [], pasosData = [], progresoData = [], estudiantesData = [];
 let nivelActual = null, cursoActual = null, temaActual = null, estudianteActual = null;
 
+// Tamaño de fuente para el contenido
+let currentFontSize = 1.1; // rem
+const FONT_SIZES = [0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6];
+let fontSizeIndex = FONT_SIZES.indexOf(currentFontSize);
+if (fontSizeIndex === -1) fontSizeIndex = 2; // default 1.1
+
+// Modo lectura (oscuro)
+let modoLecturaOscuro = false;
+
 // ============================================================
-// API (CORREGIDA)
+// API
 // ============================================================
 async function api(path, method, body, prefer) {
     const headers = {...H};
@@ -208,17 +237,14 @@ async function api(path, method, body, prefer) {
         const url = SUPABASE_URL + "/rest/v1/" + path;
         const res = await fetch(url, opts);
         
-        // Para DELETE o PATCH con return=minimal (respuesta vacía)
         if (res.status === 204) return null;
         if (res.status === 200 && method === "DELETE") return null;
         
-        // Para POST con return=representation o GET
         if (res.status === 200 || res.status === 201) {
             const text = await res.text();
             return text ? JSON.parse(text) : null;
         }
         
-        // Si hay error
         const errorText = await res.text();
         console.error("API Error:", res.status, errorText);
         throw new Error(errorText || `Error ${res.status}`);
@@ -246,7 +272,7 @@ function showToast(msg, type = 'success') {
 }
 
 // ============================================================
-// DEBOUNCE (para notas)
+// DEBOUNCE
 // ============================================================
 function debounce(func, wait) {
     let timeout;
@@ -254,6 +280,63 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(this, args), wait);
     };
+}
+
+// ============================================================
+// TAMAÑO DE FUENTE
+// ============================================================
+function aumentarFuente() {
+    if (fontSizeIndex < FONT_SIZES.length - 1) {
+        fontSizeIndex++;
+        currentFontSize = FONT_SIZES[fontSizeIndex];
+        aplicarTamanoFuente();
+    }
+}
+
+function disminuirFuente() {
+    if (fontSizeIndex > 0) {
+        fontSizeIndex--;
+        currentFontSize = FONT_SIZES[fontSizeIndex];
+        aplicarTamanoFuente();
+    }
+}
+
+function resetearFuente() {
+    fontSizeIndex = 2; // 1.1rem
+    currentFontSize = FONT_SIZES[fontSizeIndex];
+    aplicarTamanoFuente();
+}
+
+function aplicarTamanoFuente() {
+    document.documentElement.style.setProperty('--font-size-content', currentFontSize + 'rem');
+    
+    // Actualizar indicador si existe
+    const indicator = document.getElementById("fontSizeIndicator");
+    if (indicator) {
+        indicator.textContent = currentFontSize.toFixed(1) + 'rem';
+    }
+}
+
+// ============================================================
+// MODO LECTURA (OSCURO)
+// ============================================================
+function toggleModoLectura() {
+    modoLecturaOscuro = !modoLecturaOscuro;
+    const temaContenido = document.querySelector('.tema-contenido');
+    const pasosSection = document.querySelector('.pasos-section');
+    
+    if (modoLecturaOscuro) {
+        document.body.classList.add('modo-lectura');
+    } else {
+        document.body.classList.remove('modo-lectura');
+    }
+    
+    // Actualizar botón
+    const btn = document.getElementById("btnModoLectura");
+    if (btn) {
+        btn.textContent = modoLecturaOscuro ? '☀️' : '🌙';
+        btn.title = modoLecturaOscuro ? 'Modo claro' : 'Modo oscuro';
+    }
 }
 
 // ============================================================
@@ -526,7 +609,7 @@ async function verCurso(cursoId) {
 }
 
 // ============================================================
-// VER TEMA Y SUS PASOS
+// VER TEMA Y SUS PASOS (CON CONTROLES DE LECTURA)
 // ============================================================
 async function verTema(temaId) {
     temaActual = temasData.find(t => t.id === temaId);
@@ -537,8 +620,22 @@ async function verTema(temaId) {
     const pasosTema = pasosData.filter(p => p.tema_id === temaId);
     const main = document.getElementById("mainContent");
     
+    // Aplicar tamaño de fuente guardado
+    aplicarTamanoFuente();
+    
     let html = `
         <button class="btn btn-secondary back-btn" onclick="verCurso(${temaActual.curso_id})">← Volver a Temas</button>
+        
+        <!-- Controles de lectura -->
+        <div class="reading-controls">
+            <span>🔤 Tamaño de letra:</span>
+            <button class="font-size-btn" onclick="disminuirFuente()" title="Disminuir">A-</button>
+            <span class="font-size-indicator" id="fontSizeIndicator">${currentFontSize.toFixed(1)}rem</span>
+            <button class="font-size-btn" onclick="aumentarFuente()" title="Aumentar">A+</button>
+            <button class="btn btn-sm btn-secondary" onclick="resetearFuente()" title="Tamaño normal" style="margin-left:0.3rem">Normal</button>
+            <span style="margin-left:1rem">🎨 Modo:</span>
+            <button class="btn btn-sm btn-secondary" id="btnModoLectura" onclick="toggleModoLectura()" title="Modo oscuro">🌙</button>
+        </div>
         
         <div class="tema-contenido">
             <span style="display:inline-block;background:${nivelActual.color};color:#fff;padding:0.2rem 0.6rem;border-radius:3px;font-size:0.75rem;font-weight:700;margin-bottom:1rem">${nivelActual.nombre}</span>
@@ -558,6 +655,13 @@ async function verTema(temaId) {
     `;
     
     main.innerHTML = html;
+    
+    // Restaurar modo lectura si estaba activo
+    if (modoLecturaOscuro) {
+        document.body.classList.add('modo-lectura');
+        const btn = document.getElementById("btnModoLectura");
+        if (btn) btn.textContent = '☀️';
+    }
     
     if (pasosTema.length > 0) {
         renderPasosEnContainer(pasosTema);
@@ -887,7 +991,7 @@ async function deleteTema(id) {
 }
 
 // ============================================================
-// ADMIN: PASOS (CORREGIDO)
+// ADMIN: PASOS
 // ============================================================
 function openPasoModal(temaIdParam = null) {
     const tid = temaIdParam || (temaActual ? temaActual.id : null);
@@ -978,19 +1082,14 @@ async function savePaso(e, editId) {
             await api(`pasos?id=eq.${editId}`, "PATCH", data, "return=minimal");
         } else {
             const res = await api("pasos", "POST", data, "return=representation");
-            console.log("Respuesta al crear paso:", res);
             if (!res || !res[0]) {
                 throw new Error("No se recibió confirmación del servidor");
             }
         }
         
-        // Cerrar modal
         closeAdminModal();
-        
-        // Recargar datos de pasos
         await loadPasosData();
         
-        // Refrescar la vista actual
         if (temaActual) {
             await verTema(temaActual.id);
         } else if (cursoActual) {
@@ -1155,6 +1254,7 @@ document.getElementById("adminModal").addEventListener("click", function(e) {
 async function init() {
     await loadAll();
     updateAdminUI();
+    aplicarTamanoFuente();
     
     if (nivelesData.length > 0) {
         nivelActual = nivelesData[0];
