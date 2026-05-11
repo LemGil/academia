@@ -4,677 +4,856 @@
     <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academia del Espiritu</title>
+    <title>Academia del Espíritu</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1A3A4A; --primary-light: #2C525F;
-            --gold: #C9A24A; --gold-highlight: #F5D77A; --gold-shadow: #8A6A2F;
-            --bg-parchment: #F5F1E8; --text-charcoal: #1C1C1C;
-            --surface: #FFFFFF; --border: #D6D0C4;
+            --nivel1: #3D1C4D; --nivel1-light: #5D3C6D; --nivel1-bg: #F8F0FB;
+            --nivel2: #1A3A4A; --nivel2-light: #2C525F; --nivel2-bg: #F0F4F8;
+            --nivel3: #4A5A3D; --nivel3-light: #6A7A5D; --nivel3-bg: #F4F8F0;
+            --gold: #C9A24A; --gold-light: #F5D77A; --gold-dark: #8A6A2F;
+            --bg: #F5F1E8; --surface: #FFFFFF; --border: #D6D0C4;
+            --text: #1C1C1C; --text-light: #666;
             --success: #27ae60; --danger: #c0392b;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --radius: 8px;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { background-color:var(--bg-parchment); color:var(--text-charcoal); font-family:'Inter',sans-serif; line-height:1.6; padding:1rem; min-height:100vh; background-image:radial-gradient(#D6D0C4 1px,transparent 1px); background-size:20px 20px; }
-        .container { max-width:1200px; margin:0 auto; }
-        h1,h2,h3 { font-family:'Cinzel',serif; color:var(--primary); text-transform:uppercase; letter-spacing:1px; }
-        p,td,th,input,label { font-family:'Crimson Pro',serif; font-size:1.05rem; }
+        body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; min-height:100vh; background-image:radial-gradient(#D6D0C4 1px,transparent 1px); background-size:20px 20px; }
+        .container { max-width:1200px; margin:0 auto; padding:1rem; }
+        
+        /* Header */
         header { display:flex; align-items:center; gap:1.5rem; margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:2px solid var(--gold); flex-wrap:wrap; }
-        .logo-img { height:90px; width:auto; flex-shrink:0; }
-        .header-text { flex:1; }
-        .header-text h1 { font-size:2rem; }
-        .header-text p { color:var(--gold-shadow); font-style:italic; font-size:1.1rem; }
-        .header-actions { display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; }
-        .admin-badge { background:var(--gold); color:var(--primary); padding:0.3rem 0.8rem; border-radius:4px; font-size:0.8rem; font-weight:700; text-transform:uppercase; }
-        .nav-tabs { display:flex; gap:0.5rem; margin-bottom:2rem; border-bottom:2px solid var(--border); flex-wrap:wrap; }
-        .nav-tab { padding:0.8rem 1.5rem; cursor:pointer; font-family:'Cinzel',serif; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; color:var(--primary); border-bottom:3px solid transparent; transition:all 0.2s; background:none; border-top:none; border-left:none; border-right:none; }
-        .nav-tab.active { color:var(--gold-shadow); border-bottom-color:var(--gold); font-weight:700; }
-        .section { display:none; }
-        .section.active { display:block; }
-        .stats-container { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1.5rem; margin-bottom:2rem; }
-        .stat-card { background:var(--surface); padding:1.5rem; border-radius:4px; border-left:4px solid var(--gold); box-shadow:0 2px 8px rgba(26,58,74,0.1); text-align:center; position:relative; overflow:hidden; }
-        .stat-card::after { content:''; position:absolute; top:0; right:0; width:40px; height:40px; background:linear-gradient(135deg,transparent 50%,var(--gold-highlight) 50%); opacity:0.3; }
-        .stat-number { font-family:'Cinzel',serif; font-size:2.2rem; font-weight:700; color:var(--primary); }
-        .stat-label { color:var(--gold-shadow); font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; font-family:'Inter',sans-serif; }
-        .btn { padding:0.7rem 1.4rem; border:none; border-radius:4px; cursor:pointer; font-family:'Inter',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; transition:all 0.3s; display:inline-flex; align-items:center; gap:0.5rem; font-size:0.85rem; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
-        .btn-primary { background:var(--primary); color:var(--gold-highlight); border:1px solid var(--gold); }
-        .btn-primary:hover { background:var(--primary-light); transform:translateY(-1px); }
-        .btn-secondary { background:var(--surface); color:var(--primary); border:1px solid var(--gold); }
-        .btn-secondary:hover { background:var(--gold-highlight); }
-        .btn-danger { background:#fff; color:var(--danger); border:1px solid var(--danger); }
+        .logo { height:80px; }
+        .header-text h1 { font-family:'Cinzel',serif; font-size:1.8rem; color:var(--nivel2); text-transform:uppercase; letter-spacing:1px; }
+        .header-text p { font-family:'Crimson Pro',serif; color:var(--gold-dark); font-style:italic; }
+        .header-actions { display:flex; gap:0.5rem; align-items:center; margin-left:auto; }
+        .admin-badge { background:var(--gold); color:var(--nivel2); padding:0.3rem 0.8rem; border-radius:4px; font-size:0.75rem; font-weight:700; text-transform:uppercase; }
+        
+        /* Botones */
+        .btn { padding:0.6rem 1.2rem; border:none; border-radius:4px; cursor:pointer; font-family:'Inter',sans-serif; font-weight:600; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; transition:all 0.3s; display:inline-flex; align-items:center; gap:0.5rem; }
+        .btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+        .btn-sm { padding:0.3rem 0.7rem; font-size:0.75rem; }
+        .btn-primary { background:var(--nivel2); color:var(--gold-light); }
+        .btn-secondary { background:var(--surface); color:var(--nivel2); border:1px solid var(--gold); }
+        .btn-danger { background:var(--surface); color:var(--danger); border:1px solid var(--danger); }
         .btn-danger:hover { background:var(--danger); color:#fff; }
-        .btn-sm { padding:0.35rem 0.7rem; font-size:0.75rem; }
-        .toolbar { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; }
-        .table-container { background:var(--surface); border-radius:4px; box-shadow:0 4px 12px rgba(26,58,74,0.08); overflow:hidden; border:1px solid var(--border); overflow-x:auto; }
-        table { width:100%; border-collapse:collapse; min-width:700px; }
-        th,td { padding:0.9rem 1rem; text-align:left; border-bottom:1px solid var(--border); font-family:'Crimson Pro',serif; font-size:1rem; }
-        th { background:var(--primary); color:var(--gold-highlight); font-family:'Cinzel',serif; font-size:0.85rem; text-transform:uppercase; }
-        tr:last-child td { border-bottom:none; }
-        tr:hover { background:#FAF9F6; }
-        .actions { display:flex; gap:0.4rem; flex-wrap:wrap; }
-        .cursos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.5rem; margin-top:1rem; }
-        .curso-card { background:var(--surface); border-radius:8px; border:1px solid var(--border); border-top:4px solid var(--gold); box-shadow:0 2px 8px rgba(26,58,74,0.08); padding:1.5rem; transition:transform 0.2s,box-shadow 0.2s; }
-        .curso-card:hover { transform:translateY(-3px); box-shadow:0 6px 16px rgba(26,58,74,0.15); }
-        .curso-nivel { display:inline-block; background:var(--primary); color:var(--gold-highlight); padding:0.2rem 0.6rem; border-radius:3px; font-size:0.75rem; font-weight:700; text-transform:uppercase; margin-bottom:0.5rem; }
-        .curso-materia { display:inline-block; background:var(--gold-highlight); color:var(--gold-shadow); padding:0.2rem 0.6rem; border-radius:3px; font-size:0.75rem; font-weight:700; text-transform:uppercase; margin-bottom:0.5rem; margin-left:0.3rem; }
-        .curso-titulo { font-family:'Cinzel',serif; color:var(--primary); font-size:1.1rem; margin-bottom:0.5rem; }
-        .curso-desc { font-family:'Crimson Pro',serif; color:#666; font-size:0.95rem; margin-bottom:1rem; }
-        .curso-actions { display:flex; gap:0.5rem; flex-wrap:wrap; }
-        .filtros { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center; }
-        .filtros select,.filtros input { padding:0.6rem 1rem; border:1px solid var(--border); border-radius:4px; font-family:'Inter',sans-serif; font-size:0.9rem; background:var(--surface); color:var(--text-charcoal); }
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(26,58,74,0.85); justify-content:center; align-items:flex-start; z-index:1000; backdrop-filter:blur(2px); overflow-y:auto; padding:1rem; }
+        .btn-success { background:var(--success); color:#fff; }
+        
+        /* Navegación de Niveles */
+        .niveles-nav { display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap; }
+        .nivel-tab { flex:1; min-width:180px; padding:1.2rem; border:none; border-radius:var(--radius); cursor:pointer; text-align:center; transition:all 0.3s; position:relative; overflow:hidden; }
+        .nivel-tab::before { content:''; position:absolute; top:0; left:0; width:100%; height:4px; }
+        .nivel-tab.nivel-1 { background:var(--nivel1-bg); border:2px solid var(--nivel1); }
+        .nivel-tab.nivel-1::before { background:var(--nivel1); }
+        .nivel-tab.nivel-1 .nivel-numero { color:var(--nivel1); }
+        .nivel-tab.nivel-2 { background:var(--nivel2-bg); border:2px solid var(--nivel2); }
+        .nivel-tab.nivel-2::before { background:var(--nivel2); }
+        .nivel-tab.nivel-2 .nivel-numero { color:var(--nivel2); }
+        .nivel-tab.nivel-3 { background:var(--nivel3-bg); border:2px solid var(--nivel3); }
+        .nivel-tab.nivel-3::before { background:var(--nivel3); }
+        .nivel-tab.nivel-3 .nivel-numero { color:var(--nivel3); }
+        .nivel-tab.active { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.15); }
+        .nivel-tab:hover { transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,0.1); }
+        .nivel-numero { font-family:'Cinzel',serif; font-size:1.4rem; font-weight:700; display:block; }
+        .nivel-nombre { font-family:'Crimson Pro',serif; font-size:0.9rem; font-style:italic; }
+        .nivel-progreso { font-size:0.8rem; margin-top:0.5rem; color:var(--text-light); }
+        
+        /* Cards de Cursos */
+        .cursos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.5rem; }
+        .curso-card { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); transition:all 0.3s; overflow:hidden; }
+        .curso-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.12); }
+        .curso-card-header { padding:1.2rem 1.5rem; color:#fff; display:flex; justify-content:space-between; align-items:center; }
+        .nivel-1 .curso-card-header { background:var(--nivel1); }
+        .nivel-2 .curso-card-header { background:var(--nivel2); }
+        .nivel-3 .curso-card-header { background:var(--nivel3); }
+        .curso-card-body { padding:1.5rem; }
+        .curso-titulo { font-family:'Cinzel',serif; font-size:1.1rem; color:var(--text); margin-bottom:0.5rem; }
+        .curso-desc { font-family:'Crimson Pro',serif; color:var(--text-light); font-size:0.95rem; margin-bottom:1rem; }
+        .curso-stats { display:flex; gap:1rem; margin-bottom:1rem; font-size:0.85rem; color:var(--text-light); }
+        .curso-stats span { display:flex; align-items:center; gap:0.3rem; }
+        .progreso-bar { height:6px; background:#eee; border-radius:3px; margin-bottom:0.5rem; overflow:hidden; }
+        .progreso-fill { height:100%; border-radius:3px; transition:width 0.5s; }
+        .nivel-1 .progreso-fill { background:var(--nivel1); }
+        .nivel-2 .progreso-fill { background:var(--nivel2); }
+        .nivel-3 .progreso-fill { background:var(--nivel3); }
+        
+        /* Lista de Temas */
+        .temas-lista { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
+        .tema-item { padding:1rem 1.5rem; border-bottom:1px solid var(--border); cursor:pointer; transition:background 0.2s; display:flex; align-items:center; gap:1rem; }
+        .tema-item:hover { background:#FAF9F6; }
+        .tema-item:last-child { border-bottom:none; }
+        .tema-numero { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0; }
+        .tema-completado { background:#d5f5e3; color:var(--success); }
+        .tema-pendiente { background:#f0f0f0; color:#999; }
+        .tema-info { flex:1; }
+        .tema-titulo { font-family:'Cinzel',serif; font-weight:600; }
+        .tema-pasos { font-size:0.85rem; color:var(--text-light); }
+        .tema-check { font-size:1.2rem; }
+        
+        /* Pasos Prácticos */
+        .paso-item { display:flex; align-items:flex-start; gap:1rem; padding:1rem; border-radius:var(--radius); background:var(--surface); margin-bottom:0.5rem; border:1px solid var(--border); transition:all 0.2s; }
+        .paso-item.completado { background:#f0faf4; border-color:var(--success); }
+        .paso-checkbox { width:24px; height:24px; border-radius:50%; border:2px solid #ccc; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:all 0.3s; font-size:0.8rem; }
+        .paso-checkbox:hover { border-color:var(--gold); }
+        .paso-checkbox.checked { background:var(--success); border-color:var(--success); color:#fff; }
+        .paso-texto { flex:1; font-family:'Crimson Pro',serif; font-size:1.05rem; }
+        .paso-notas { width:100%; margin-top:0.5rem; padding:0.5rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:0.9rem; resize:vertical; min-height:40px; display:none; }
+        .paso-item.completado .paso-notas { display:block; }
+        
+        /* Modales */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:flex-start; padding:2rem; overflow-y:auto; backdrop-filter:blur(2px); }
         .modal.active { display:flex; }
-        .modal-content { background:var(--bg-parchment); padding:2rem; border-radius:4px; border:2px solid var(--gold); width:100%; max-width:700px; box-shadow:0 10px 25px rgba(0,0,0,0.3); margin:auto; }
-        .modal-content h2 { margin-bottom:1.5rem; border-bottom:1px solid var(--gold); padding-bottom:1rem; text-align:center; }
-        .form-group { margin-bottom:1.2rem; }
-        label { display:block; margin-bottom:0.4rem; font-weight:600; color:var(--primary); font-family:'Inter',sans-serif; font-size:0.85rem; text-transform:uppercase; }
-        input[type=text],input[type=email],input[type=tel],input[type=date],input[type=password],select,textarea { width:100%; padding:0.7rem; border:1px solid var(--border); border-radius:4px; font-size:1rem; background:#fff; font-family:'Crimson Pro',serif; }
-        textarea { min-height:200px; resize:vertical; }
-        input:focus,select:focus,textarea:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,162,74,0.2); }
+        .modal-content { background:var(--bg); padding:2rem; border-radius:var(--radius); border:2px solid var(--gold); width:100%; max-width:700px; margin:auto; box-shadow:0 20px 40px rgba(0,0,0,0.3); }
+        .modal-content h2 { font-family:'Cinzel',serif; margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid var(--gold); text-align:center; }
+        .form-group { margin-bottom:1rem; }
+        .form-group label { display:block; margin-bottom:0.3rem; font-weight:600; font-size:0.85rem; text-transform:uppercase; color:var(--nivel2); }
+        .form-group input, .form-group select, .form-group textarea { width:100%; padding:0.7rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:1rem; }
+        .form-group textarea { min-height:150px; resize:vertical; }
         .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-        .modal-actions { display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
-        .curso-reader { background:var(--surface); border-radius:8px; padding:2rem; box-shadow:0 4px 12px rgba(26,58,74,0.08); border:1px solid var(--border); margin-bottom:2rem; }
-        .curso-reader h2 { font-size:1.5rem; margin-bottom:1rem; }
-        .curso-reader .contenido { font-family:'Crimson Pro',serif; font-size:1.1rem; line-height:1.9; white-space:pre-wrap; }
-        .evaluacion { background:var(--surface); border-radius:8px; padding:2rem; border:1px solid var(--border); }
-        .evaluacion h3 { margin-bottom:1.5rem; font-size:1rem; }
-        .pregunta-item { margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border); }
-        .pregunta-item:last-child { border-bottom:none; }
-        .pregunta-texto { font-family:'Crimson Pro',serif; font-size:1.1rem; font-weight:600; color:var(--primary); margin-bottom:0.8rem; }
-        .opcion-label { display:flex; align-items:center; gap:0.5rem; padding:0.5rem 0.8rem; margin-bottom:0.4rem; border-radius:4px; cursor:pointer; font-family:'Crimson Pro',serif; font-size:1rem; transition:background 0.2s; }
-        .opcion-label:hover { background:#FAF9F6; }
-        .opcion-label input { width:auto; }
-        .resultado-msg { text-align:center; padding:1.5rem; border-radius:8px; margin-top:1rem; font-family:'Cinzel',serif; font-size:1.1rem; }
-        .resultado-aprobado { background:#d5f5e3; color:var(--success); border:2px solid var(--success); }
-        .resultado-reprobado { background:#fadbd8; color:var(--danger); border:2px solid var(--danger); }
-        .pregunta-admin { background:var(--bg-parchment); border:1px solid var(--border); border-radius:6px; padding:1rem; margin-bottom:1rem; }
-        .pregunta-admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; }
-        .login-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(26,58,74,0.9); justify-content:center; align-items:center; z-index:2000; }
+        .modal-actions { display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border); }
+        
+        /* Vista de Tema */
+        .tema-contenido { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); margin-bottom:2rem; }
+        .tema-contenido h2 { font-family:'Cinzel',serif; color:var(--nivel2); margin-bottom:1.5rem; }
+        .tema-contenido .contenido-texto { font-family:'Crimson Pro',serif; font-size:1.1rem; line-height:1.9; white-space:pre-wrap; }
+        
+        .pasos-section { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); }
+        .pasos-section h3 { font-family:'Cinzel',serif; margin-bottom:1.5rem; }
+        
+        /* Admin secciones */
+        .admin-section { margin-top:2rem; padding-top:2rem; border-top:2px solid var(--gold); }
+        .admin-section h3 { font-family:'Cinzel',serif; color:var(--gold-dark); margin-bottom:1rem; }
+        
+        /* Toast */
+        .toast { position:fixed; bottom:2rem; right:2rem; background:var(--success); color:#fff; padding:1rem 2rem; border-radius:var(--radius); box-shadow:0 8px 24px rgba(0,0,0,0.2); z-index:2000; animation:slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+        
+        /* Login */
+        .login-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:3000; justify-content:center; align-items:center; }
         .login-overlay.active { display:flex; }
-        .login-box { background:var(--bg-parchment); padding:2.5rem; border-radius:8px; border:2px solid var(--gold); width:100%; max-width:380px; text-align:center; }
-        .login-box h2 { margin-bottom:1.5rem; }
-        .loading { text-align:center; padding:2rem; color:var(--gold-shadow); font-style:italic; font-family:'Crimson Pro',serif; }
-        .empty-state { text-align:center; padding:2rem; color:var(--gold-shadow); font-style:italic; font-family:'Crimson Pro',serif; }
+        .login-box { background:var(--bg); padding:2.5rem; border-radius:var(--radius); border:2px solid var(--gold); width:100%; max-width:380px; text-align:center; }
+        
+        .back-btn { margin-bottom:1.5rem; }
+        .empty-state { text-align:center; padding:2rem; color:var(--text-light); font-style:italic; }
+        .loading { text-align:center; padding:2rem; color:var(--gold-dark); }
+        
         @media(max-width:768px) {
-            body { padding:0.5rem; }
-            .logo-img { height:65px; }
-            .header-text h1 { font-size:1.4rem; }
+            .niveles-nav { flex-direction:column; }
+            .nivel-tab { min-width:auto; }
             .form-row { grid-template-columns:1fr; }
             .cursos-grid { grid-template-columns:1fr; }
-            .nav-tab { padding:0.6rem 1rem; font-size:0.75rem; }
-            .modal-actions { flex-direction:column-reverse; }
-            .modal-actions .btn { width:100%; justify-content:center; }
+            .modal { padding:0.5rem; }
         }
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container" id="app">
+    <!-- Header -->
     <header>
-        <img src="logo.png" alt="Logo" class="logo-img">
+        <img src="logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
         <div class="header-text">
-            <h1>Academia del Espiritu</h1>
-            <p>Formacion Teologica Apostolica</p>
+            <h1>Academia del Espíritu</h1>
+            <p>Formación Teológica Apostólica</p>
         </div>
         <div class="header-actions">
-            <span class="admin-badge" id="adminBadge" style="display:none">Administrador</span>
-            <button class="btn btn-secondary btn-sm" id="btnAdminLogin" onclick="showLogin()">Acceso Admin</button>
-            <button class="btn btn-danger btn-sm" id="btnAdminLogout" style="display:none" onclick="logout()">Salir</button>
+            <span class="admin-badge" id="adminBadge" style="display:none">Admin</span>
+            <button class="btn btn-sm btn-secondary" id="btnLogin" onclick="showLogin()">Acceso Admin</button>
+            <button class="btn btn-sm btn-danger" id="btnLogout" style="display:none" onclick="logout()">Salir</button>
         </div>
     </header>
 
-    <div class="nav-tabs">
-        <button class="nav-tab active" onclick="showSection('estudiantes',this)">Estudiantes</button>
-        <button class="nav-tab" onclick="showSection('cursos',this)">Cursos</button>
-        <button class="nav-tab" id="tabResultados" onclick="showSection('resultados',this)" style="display:none">Resultados</button>
-    </div>
+    <!-- Navegación de Niveles -->
+    <div class="niveles-nav" id="nivelesNav"></div>
 
-    <!-- ESTUDIANTES -->
-    <div class="section active" id="section-estudiantes">
-        <div class="stats-container">
-            <div class="stat-card"><div class="stat-number" id="totalStudents">0</div><div class="stat-label">Estudiantes</div></div>
-            <div class="stat-card"><div class="stat-number" id="newStudentsMonth">0</div><div class="stat-label">Nuevos este Mes</div></div>
-            <div class="stat-card"><div class="stat-number" id="totalCursos">0</div><div class="stat-label">Cursos</div></div>
-        </div>
-        <div class="toolbar">
-            <button class="btn btn-primary" id="btnNuevoEst" style="display:none" onclick="openEstudianteModal()">Nuevo Estudiante</button>
-            <button class="btn btn-secondary" id="btnExportCSV" style="display:none" onclick="exportToCSV()">Exportar CSV</button>
-        </div>
-        <div class="table-container">
-            <table>
-                <thead><tr>
-                    <th>Nombre</th><th>Apellido</th><th>Email</th><th>Telefono</th><th>Fecha Ingreso</th>
-                    <th id="thAcciones" style="display:none">Acciones</th>
-                </tr></thead>
-                <tbody id="studentsTableBody"><tr><td colspan="6" class="loading">Cargando...</td></tr></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- CURSOS -->
-    <div class="section" id="section-cursos">
-        <div id="vista-cursos">
-            <div class="toolbar">
-                <button class="btn btn-primary" id="btnNuevoCurso" style="display:none" onclick="openCursoModal()">Nuevo Curso</button>
-            </div>
-            <div class="filtros">
-                <select id="filtroNivel" onchange="renderCursos()">
-                    <option value="">Todos los niveles</option>
-                    <option>Nivel 1</option><option>Nivel 2</option><option>Nivel 3</option><option>Nivel 4</option>
-                </select>
-                <select id="filtroMateria" onchange="renderCursos()"><option value="">Todas las materias</option></select>
-                <input type="text" id="filtroBuscar" placeholder="Buscar..." oninput="renderCursos()">
-            </div>
-            <div class="cursos-grid" id="cursosGrid"><p class="loading">Cargando cursos...</p></div>
-        </div>
-        <div id="vista-leer" style="display:none">
-            <button class="btn btn-secondary" onclick="volverCursos()" style="margin-bottom:1.5rem">Volver a Cursos</button>
-            <div class="curso-reader" id="cursoReader"></div>
-            <div class="evaluacion" id="evaluacionContainer" style="display:none"></div>
-        </div>
-    </div>
-
-    <!-- RESULTADOS -->
-    <div class="section" id="section-resultados">
-        <div class="table-container">
-            <table>
-                <thead><tr><th>Estudiante</th><th>Curso</th><th>Puntaje</th><th>Estado</th><th>Fecha</th></tr></thead>
-                <tbody id="resultadosBody"><tr><td colspan="5" class="loading">Cargando...</td></tr></tbody>
-            </table>
-        </div>
-    </div>
+    <!-- Contenido Principal -->
+    <div id="mainContent"></div>
 </div>
 
-<!-- LOGIN -->
+<!-- Login Modal -->
 <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
         <h2>Acceso Admin</h2>
         <div class="form-group">
-            <label>Contrasena</label>
-            <input type="password" id="adminPassword" placeholder="Ingresa la contrasena" onkeydown="if(event.key==='Enter')checkLogin()">
+            <label>Contraseña</label>
+            <input type="password" id="adminPassword" placeholder="Ingresa la contraseña" onkeydown="if(event.key==='Enter')checkLogin()">
         </div>
         <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem">
             <button class="btn btn-secondary" onclick="hideLogin()">Cancelar</button>
             <button class="btn btn-primary" onclick="checkLogin()">Entrar</button>
         </div>
-        <p id="loginError" style="color:var(--danger);margin-top:0.8rem;font-size:0.9rem;display:none">Contrasena incorrecta</p>
+        <p id="loginError" style="color:var(--danger);margin-top:0.8rem;display:none">Contraseña incorrecta</p>
     </div>
 </div>
 
-<!-- MODAL ESTUDIANTE -->
-<div class="modal" id="studentModal">
-    <div class="modal-content">
-        <h2 id="studentModalTitle">Registro de Estudiante</h2>
-        <form id="studentForm">
-            <input type="hidden" id="studentId">
-            <div class="form-row">
-                <div class="form-group"><label>Nombre</label><input type="text" id="nombre" required placeholder="Juan"></div>
-                <div class="form-group"><label>Apellido</label><input type="text" id="apellido" required placeholder="Perez"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Email</label><input type="email" id="email" required placeholder="juan@ejemplo.com"></div>
-                <div class="form-group"><label>Telefono</label><input type="tel" id="telefono" required placeholder="+54 9 11..."></div>
-            </div>
-            <div class="form-group"><label>Fecha de Ingreso</label><input type="date" id="fecha_ingreso" required></div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeModal('studentModal')">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-        </form>
-    </div>
+<!-- Modal Genérico para Admin -->
+<div class="modal" id="adminModal">
+    <div class="modal-content" id="adminModalContent"></div>
 </div>
 
-<!-- MODAL CURSO -->
-<div class="modal" id="cursoModal">
-    <div class="modal-content" style="max-width:800px">
-        <h2 id="cursoModalTitle">Nuevo Curso</h2>
-        <form id="cursoForm" onsubmit="guardarCurso(event)">
-            <input type="hidden" id="cursoId">
-            <div class="form-group"><label>Titulo del Curso</label><input type="text" id="cursoTitulo" required placeholder="Ej: Fundamentos de la Fe"></div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nivel</label>
-                    <select id="cursoNivel" required>
-                        <option value="">Seleccionar nivel</option>
-                        <option>Academia 1</option><option>Academia 2</option><option>Academia 3</option><option>Academia 4</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>Materia</label><input type="text" id="cursoMateria" required placeholder="Ej: Teologia Biblica"></div>
-            </div>
-            <div class="form-group"><label>Descripcion breve</label><input type="text" id="cursoDesc" placeholder="Resumen del curso"></div>
-            <div class="form-group"><label>Contenido del Curso</label><textarea id="cursoContenido" required placeholder="Escribe aqui el contenido completo del curso..."></textarea></div>
-            <div style="margin-top:1.5rem;border-top:1px solid var(--border);padding-top:1.5rem">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-                    <h3 style="font-size:1rem">Preguntas de Evaluacion</h3>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="addPreguntaForm()">+ Agregar Pregunta</button>
-                </div>
-                <div id="preguntasContainer"></div>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeModal('cursoModal')">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar Curso</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- MODAL EVALUACION -->
-<div class="modal" id="evalModal">
-    <div class="modal-content" style="max-width:400px">
-        <h2>Iniciar Evaluacion</h2>
-        <div class="form-group">
-            <label>Quien realiza la evaluacion?</label>
-            <select id="evalEstudiante"><option value="">Seleccionar estudiante...</option></select>
-        </div>
-        <div class="modal-actions">
-            <button class="btn btn-secondary" onclick="closeModal('evalModal')">Cancelar</button>
-            <button class="btn btn-primary" onclick="iniciarEvaluacion()">Comenzar</button>
-        </div>
-    </div>
-</div>
+<!-- Toast -->
+<div id="toast" class="toast" style="display:none"></div>
 
 <script>
+// ============================================================
+// CONFIGURACIÓN
+// ============================================================
 const SUPABASE_URL = "https://cdabgazsrjkfcqzqeint.supabase.co";
 const SUPABASE_KEY = "sb_publishable_gbS0u_HxiWdEuCANkRbGeQ_gKChZZiN";
-const ADMIN_PASS   = "academia2025";
+const ADMIN_PASS = "academia2025";
 const H = {
-    "Content-Type":  "application/json",
-    "apikey":        SUPABASE_KEY,
+    "Content-Type": "application/json",
+    "apikey": SUPABASE_KEY,
     "Authorization": "Bearer " + SUPABASE_KEY
 };
 
+// ============================================================
+// ESTADO GLOBAL
+// ============================================================
 let isAdmin = false;
-let studentsData = [], cursosData = [], preguntasData = [];
-let cursoActual = null, preguntaCount = 0;
+let nivelesData = [];
+let cursosData = [];
+let temasData = [];
+let pasosData = [];
+let progresoData = [];
+let estudiantesData = [];
+let nivelActual = null;
+let cursoActual = null;
+let temaActual = null;
+let estudianteActual = null; // Para el progreso (simplificado: primer estudiante)
 
+// ============================================================
+// API
+// ============================================================
 async function api(path, method, body, prefer) {
-    const headers = Object.assign({}, H);
+    const headers = {...H};
     if (prefer) headers["Prefer"] = prefer;
-    const opts = { method: method || "GET", headers: headers };
+    const opts = { method: method || "GET", headers };
     if (body) opts.body = JSON.stringify(body);
     const res = await fetch(SUPABASE_URL + "/rest/v1/" + path, opts);
-    if (res.status === 204 || res.status === 200 && method === "DELETE") return null;
+    if (res.status === 204 || (res.status === 200 && method === "DELETE")) return null;
     if (res.status === 200 || res.status === 201) {
         const text = await res.text();
         return text ? JSON.parse(text) : null;
     }
-    const text = await res.text();
-    throw new Error(text);
+    throw new Error(await res.text());
 }
 
-function showLogin() { document.getElementById("loginOverlay").classList.add("active"); setTimeout(function(){ document.getElementById("adminPassword").focus(); }, 100); }
-function hideLogin() { document.getElementById("loginOverlay").classList.remove("active"); document.getElementById("adminPassword").value = ""; document.getElementById("loginError").style.display = "none"; }
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.style.display = "block";
+    setTimeout(() => t.style.display = "none", 3000);
+}
+
+// ============================================================
+// LOGIN
+// ============================================================
+function showLogin() { document.getElementById("loginOverlay").classList.add("active"); }
+function hideLogin() { 
+    document.getElementById("loginOverlay").classList.remove("active"); 
+    document.getElementById("adminPassword").value = "";
+    document.getElementById("loginError").style.display = "none";
+}
 function checkLogin() {
     if (document.getElementById("adminPassword").value === ADMIN_PASS) {
-        isAdmin = true; hideLogin(); applyAdminUI(); loadResultados();
-    } else { document.getElementById("loginError").style.display = "block"; }
-}
-function logout() { isAdmin = false; applyAdminUI(); }
-function applyAdminUI() {
-    var show = isAdmin ? "" : "none";
-    document.getElementById("adminBadge").style.display    = isAdmin ? "" : "none";
-    document.getElementById("btnAdminLogin").style.display = isAdmin ? "none" : "";
-    document.getElementById("btnAdminLogout").style.display= isAdmin ? "" : "none";
-    document.getElementById("btnNuevoEst").style.display   = show;
-    document.getElementById("btnExportCSV").style.display  = show;
-    document.getElementById("btnNuevoCurso").style.display = show;
-    document.getElementById("thAcciones").style.display    = show;
-    document.getElementById("tabResultados").style.display = show;
-    renderStudents(); renderCursos();
-}
-
-function showSection(name, btn) {
-    document.querySelectorAll(".section").forEach(function(s){ s.classList.remove("active"); });
-    document.querySelectorAll(".nav-tab").forEach(function(t){ t.classList.remove("active"); });
-    document.getElementById("section-" + name).classList.add("active");
-    if (btn) btn.classList.add("active");
-    if (name === "resultados") loadResultados();
-}
-
-function closeModal(id) { 
-    document.getElementById(id).classList.remove("active"); 
-}
-
-document.querySelectorAll(".modal").forEach(function(m){
-    m.addEventListener("click", function(e){ if (e.target === m) m.classList.remove("active"); });
-});
-
-async function loadStudents() {
-    var data = await api("estudiantes?select=*&order=fecha_ingreso.asc");
-    studentsData = data || [];
-    renderStudents(); updateStats(); populateEvalSelect();
-}
-
-function renderStudents() {
-    var tbody = document.getElementById("studentsTableBody");
-    if (!studentsData.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No hay estudiantes.</td></tr>'; return; }
-    tbody.innerHTML = studentsData.map(function(s) {
-        var fecha = new Date(s.fecha_ingreso);
-        var adj = new Date(fecha.getTime() + fecha.getTimezoneOffset() * 60000);
-        var acciones = isAdmin
-            ? '<td class="actions"><button class="btn btn-sm btn-secondary" onclick="openEditEstudiante(' + s.id + ')">Editar</button><button class="btn btn-sm btn-danger" onclick="deleteEstudiante(' + s.id + ')">Eliminar</button></td>'
-            : '<td style="display:none"></td>';
-        return "<tr><td>" + (s.nombre||"") + "</td><td>" + (s.apellido||"") + "</td><td>" + (s.email||"") + "</td><td>" + (s.telefono||"") + "</td><td>" + adj.toLocaleDateString("es-ES") + "</td>" + acciones + "</tr>";
-    }).join("");
-}
-
-function updateStats() {
-    document.getElementById("totalStudents").textContent = studentsData.length;
-    document.getElementById("totalCursos").textContent   = cursosData.length;
-    var now = new Date();
-    var mes = studentsData.filter(function(s){
-        var d = new Date(s.fecha_ingreso);
-        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-    }).length;
-    document.getElementById("newStudentsMonth").textContent = mes;
-}
-
-function openEstudianteModal() {
-    document.getElementById("studentForm").reset();
-    document.getElementById("studentId").value = "";
-    document.getElementById("studentModalTitle").textContent = "Nuevo Estudiante";
-    document.getElementById("studentModal").classList.add("active");
-}
-
-function openEditEstudiante(id) {
-    var s = studentsData.find(function(x){ return x.id === id; });
-    if (!s) return;
-    document.getElementById("studentModalTitle").textContent = "Editar Estudiante";
-    document.getElementById("studentId").value  = s.id;
-    document.getElementById("nombre").value     = s.nombre || "";
-    document.getElementById("apellido").value   = s.apellido || "";
-    document.getElementById("email").value      = s.email || "";
-    document.getElementById("telefono").value   = s.telefono || "";
-    var fecha = new Date(s.fecha_ingreso);
-    var adj = new Date(fecha.getTime() + fecha.getTimezoneOffset() * 60000);
-    document.getElementById("fecha_ingreso").value = adj.toISOString().split("T")[0];
-    document.getElementById("studentModal").classList.add("active");
-}
-
-document.getElementById("studentForm").addEventListener("submit", async function(e) {
-    e.preventDefault();
-    var id   = document.getElementById("studentId").value;
-    var data = {
-        nombre:        document.getElementById("nombre").value,
-        apellido:      document.getElementById("apellido").value,
-        email:         document.getElementById("email").value,
-        telefono:      document.getElementById("telefono").value,
-        fecha_ingreso: new Date(document.getElementById("fecha_ingreso").value).getTime()
-    };
-    try {
-        if (id) await api("estudiantes?id=eq." + id, "PATCH", data, "return=minimal");
-        else    await api("estudiantes", "POST", data, "return=minimal");
-        await loadStudents(); 
-        closeModal("studentModal");
-    } catch(err) { alert("Error: " + err.message); }
-});
-
-async function deleteEstudiante(id) {
-    if (!confirm("Eliminar este estudiante?")) return;
-    await api("estudiantes?id=eq." + id, "DELETE");
-    await loadStudents();
-}
-
-function exportToCSV() {
-    if (!studentsData.length) return alert("Sin datos");
-    var csv = "data:text/csv;charset=utf-8,ID,Nombre,Apellido,Email,Telefono,Fecha\n";
-    studentsData.forEach(function(s){
-        var f = new Date(s.fecha_ingreso);
-        csv += s.id + ',"' + s.nombre + '","' + s.apellido + '","' + s.email + '","' + s.telefono + '",' + f.toLocaleDateString() + "\n";
-    });
-    var link = document.createElement("a");
-    link.href = encodeURI(csv);
-    link.download = "alumnos_" + new Date().toISOString().split("T")[0] + ".csv";
-    link.click();
-}
-
-async function loadCursos() {
-    var data = await api("cursos?select=*&order=nivel.asc,materia.asc");
-    cursosData = data || [];
-    var materias = cursosData.map(function(c){ return c.materia; }).filter(function(v,i,a){ return v && a.indexOf(v)===i; });
-    var sel = document.getElementById("filtroMateria");
-    sel.innerHTML = '<option value="">Todas las materias</option>';
-    materias.forEach(function(m){ sel.innerHTML += '<option value="' + m + '">' + m + '</option>'; });
-    renderCursos(); updateStats();
-}
-
-function renderCursos() {
-    var grid   = document.getElementById("cursosGrid");
-    var nivel  = document.getElementById("filtroNivel").value;
-    var mat    = document.getElementById("filtroMateria").value;
-    var buscar = document.getElementById("filtroBuscar").value.toLowerCase();
-    var filtrados = cursosData.filter(function(c){
-        if (nivel  && c.nivel   !== nivel) return false;
-        if (mat    && c.materia !== mat)   return false;
-        if (buscar && !(c.titulo||"").toLowerCase().includes(buscar) && !(c.descripcion||"").toLowerCase().includes(buscar)) return false;
-        return true;
-    });
-    if (!filtrados.length) { grid.innerHTML = '<p class="empty-state">No hay cursos disponibles.</p>'; return; }
-    grid.innerHTML = filtrados.map(function(c){
-        var adminBtns = isAdmin
-            ? '<button class="btn btn-secondary btn-sm" onclick="openEditCurso(' + c.id + ')">Editar</button><button class="btn btn-danger btn-sm" onclick="deleteCurso(' + c.id + ')">Eliminar</button>'
-            : "";
-        return '<div class="curso-card"><div><span class="curso-nivel">' + c.nivel + '</span><span class="curso-materia">' + c.materia + '</span></div><div class="curso-titulo">' + c.titulo + '</div><div class="curso-desc">' + (c.descripcion||"") + '</div><div class="curso-actions"><button class="btn btn-primary btn-sm" onclick="leerCurso(' + c.id + ')">Leer</button>' + adminBtns + '</div></div>';
-    }).join("");
-}
-
-async function leerCurso(id) {
-    cursoActual = cursosData.find(function(c){ return c.id === id; });
-    if (!cursoActual) return;
-    var pregs = await api("preguntas?curso_id=eq." + id + "&select=*");
-    preguntasData = pregs || [];
-    document.getElementById("vista-cursos").style.display = "none";
-    document.getElementById("vista-leer").style.display   = "block";
-    document.getElementById("cursoReader").innerHTML =
-        '<span class="curso-nivel">' + cursoActual.nivel + '</span><span class="curso-materia" style="margin-left:0.5rem">' + cursoActual.materia + '</span><h2 style="margin-top:0.8rem;margin-bottom:1.5rem">' + cursoActual.titulo + '</h2><div class="contenido">' + (cursoActual.contenido||"") + '</div>';
-    var evalCont = document.getElementById("evaluacionContainer");
-    if (preguntasData.length > 0) { evalCont.style.display = "block"; renderEvaluacion(); }
-    else evalCont.style.display = "none";
-}
-
-function renderEvaluacion() {
-    var cont = document.getElementById("evaluacionContainer");
-    var pregsHTML = preguntasData.map(function(p, i){
-        var opciones;
-        if (p.tipo === "verdadero_falso") {
-            opciones = '<label class="opcion-label"><input type="radio" name="p' + p.id + '" value="Verdadero"> Verdadero</label><label class="opcion-label"><input type="radio" name="p' + p.id + '" value="Falso"> Falso</label>';
-        } else {
-            var opts = p.opciones || [];
-            opciones = opts.map(function(o){ return '<label class="opcion-label"><input type="radio" name="p' + p.id + '" value="' + o + '"> ' + o + '</label>'; }).join("");
-        }
-        return '<div class="pregunta-item"><div class="pregunta-texto">' + (i+1) + '. ' + p.pregunta + '</div>' + opciones + '</div>';
-    }).join("");
-    cont.innerHTML = '<h3>Evaluacion - ' + cursoActual.titulo + '</h3><div id="preguntasEval">' + pregsHTML + '</div><div style="margin-top:1.5rem;border-top:1px solid var(--border);padding-top:1.5rem"><button class="btn btn-primary" onclick="showEvalModal()">Enviar Evaluacion</button></div><div id="resultadoMsg"></div>';
-}
-
-function showEvalModal() {
-    var todas = true;
-    preguntasData.forEach(function(p){
-        if (!document.querySelector('input[name="p' + p.id + '"]:checked')) todas = false;
-    });
-    if (!todas) { alert("Por favor responde todas las preguntas."); return; }
-    document.getElementById("evalModal").classList.add("active");
-}
-
-async function iniciarEvaluacion() {
-    var estId = document.getElementById("evalEstudiante").value;
-    if (!estId) { alert("Selecciona un estudiante"); return; }
-    var correctas = 0;
-    preguntasData.forEach(function(p){
-        var sel = document.querySelector('input[name="p' + p.id + '"]:checked');
-        if (sel && sel.value === p.respuesta_correcta) correctas++;
-    });
-    var puntaje  = Math.round((correctas / preguntasData.length) * 100);
-    var aprobado = puntaje >= 60;
-    await api("resultados", "POST", { estudiante_id: parseInt(estId), curso_id: cursoActual.id, puntaje: puntaje, aprobado: aprobado }, "return=minimal");
-    closeModal("evalModal");
-    var clase = aprobado ? "resultado-aprobado" : "resultado-reprobado";
-    var msg   = aprobado ? "Aprobaste!" : "No aprobaste";
-    document.getElementById("resultadoMsg").innerHTML = '<div class="resultado-msg ' + clase + '">' + msg + '<br>Puntaje: ' + puntaje + '% (' + correctas + '/' + preguntasData.length + ' correctas)<br>' + (aprobado ? "Felicidades, has completado este curso." : "Necesitas 60% para aprobar.") + '</div>';
-}
-
-function volverCursos() {
-    document.getElementById("vista-cursos").style.display = "";
-    document.getElementById("vista-leer").style.display   = "none";
-    cursoActual = null;
-}
-
-function populateEvalSelect() {
-    var sel = document.getElementById("evalEstudiante");
-    sel.innerHTML = '<option value="">Seleccionar estudiante...</option>';
-    studentsData.forEach(function(s){ sel.innerHTML += '<option value="' + s.id + '">' + s.nombre + ' ' + s.apellido + '</option>'; });
-}
-
-function openCursoModal() {
-    document.getElementById("cursoForm").reset();
-    document.getElementById("cursoId").value = "";
-    document.getElementById("cursoModalTitle").textContent = "Nuevo Curso";
-    document.getElementById("preguntasContainer").innerHTML = "";
-    preguntaCount = 0;
-    document.getElementById("cursoModal").classList.add("active");
-}
-
-async function openEditCurso(id) {
-    var c = cursosData.find(function(x){ return x.id === id; });
-    if (!c) return;
-    document.getElementById("cursoModalTitle").textContent = "Editar Curso";
-    document.getElementById("cursoId").value        = c.id;
-    document.getElementById("cursoTitulo").value    = c.titulo || "";
-    document.getElementById("cursoNivel").value     = c.nivel || "";
-    document.getElementById("cursoMateria").value   = c.materia || "";
-    document.getElementById("cursoDesc").value      = c.descripcion || "";
-    document.getElementById("cursoContenido").value = c.contenido || "";
-    var pregs = await api("preguntas?curso_id=eq." + id + "&select=*");
-    document.getElementById("preguntasContainer").innerHTML = "";
-    preguntaCount = 0;
-    (pregs || []).forEach(function(p){ addPreguntaForm(p); });
-    document.getElementById("cursoModal").classList.add("active");
-}
-
-function addPreguntaForm(p) {
-    preguntaCount++;
-    var n   = preguntaCount;
-    var div = document.createElement("div");
-    div.className = "pregunta-admin";
-    div.id = "pregunta-form-" + n;
-    var tipoMultiple = !p || p.tipo === "multiple";
-    var opcionesHTML = tipoMultiple ? renderMultipleUI(p) : renderVFUI();
-    div.innerHTML =
-        '<div class="pregunta-admin-header"><strong style="font-family:Cinzel,serif;color:var(--primary);font-size:0.9rem">Pregunta ' + n + '</strong><button type="button" class="btn btn-danger btn-sm" onclick="this.closest(\'.pregunta-admin\').remove()">Eliminar</button></div>' +
-        '<input type="hidden" class="p-id" value="' + (p && p.id ? p.id : "") + '">' +
-        '<div class="form-group"><label>Pregunta</label><input type="text" class="p-texto" required placeholder="Escribe la pregunta..." value="' + (p ? p.pregunta || "" : "") + '"></div>' +
-        '<div class="form-group"><label>Tipo</label><select class="p-tipo" onchange="updateTipoUI(this,' + n + ')">' +
-        '<option value="multiple"' + (tipoMultiple ? ' selected' : '') + '>Seleccion multiple</option>' +
-        '<option value="verdadero_falso"' + (!tipoMultiple ? ' selected' : '') + '>Verdadero / Falso</option>' +
-        '</select></div>' +
-        '<div class="p-opciones-container" id="opciones-' + n + '">' + opcionesHTML + '</div>' +
-        '<div class="form-group"><label>Respuesta Correcta</label><input type="text" class="p-correcta" required placeholder="Escribe la respuesta exacta" value="' + (p ? p.respuesta_correcta || "" : "") + '"></div>';
-    document.getElementById("preguntasContainer").appendChild(div);
-}
-
-function renderMultipleUI(p) {
-    var opts = (p && p.opciones) ? p.opciones : ["","","",""];
-    return opts.map(function(o, i){
-        return '<div class="form-group"><label>Opcion ' + String.fromCharCode(65+i) + '</label><input type="text" class="p-opcion" placeholder="Opcion ' + String.fromCharCode(65+i) + '" value="' + o + '"></div>';
-    }).join("");
-}
-
-function renderVFUI() {
-    return '<p style="font-family:Crimson Pro,serif;color:var(--gold-shadow);font-style:italic">Las opciones son Verdadero y Falso automaticamente.</p>';
-}
-
-function updateTipoUI(sel, n) {
-    var cont = document.getElementById("opciones-" + n);
-    cont.innerHTML = sel.value === "verdadero_falso" ? renderVFUI() : renderMultipleUI(null);
-}
-
-// ============================================================
-// FUNCIÓN guardarCurso CORREGIDA
-// ============================================================
-window.guardarCurso = async function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    var id = document.getElementById("cursoId").value;
-    var cursoData = {
-        titulo:      document.getElementById("cursoTitulo").value,
-        nivel:       document.getElementById("cursoNivel").value,
-        materia:     document.getElementById("cursoMateria").value,
-        descripcion: document.getElementById("cursoDesc").value,
-        contenido:   document.getElementById("cursoContenido").value
-    };
-    
-    try {
-        var cursoId = id;
-        
-        if (id) {
-            // EDITAR curso existente
-            await api("cursos?id=eq." + id, "PATCH", cursoData, "return=minimal");
-            await api("preguntas?curso_id=eq." + id, "DELETE");
-        } else {
-            // CREAR curso nuevo - CORREGIDO
-            var res = await api("cursos", "POST", cursoData, "return=representation");
-            if (!res || !res[0]) throw new Error("No se obtuvo respuesta del servidor");
-            cursoId = res[0].id;
-            if (!cursoId) throw new Error("No se obtuvo el ID del curso");
-        }
-        
-        // Guardar las preguntas
-        var forms = document.querySelectorAll(".pregunta-admin");
-        for (var i = 0; i < forms.length; i++) {
-            var f        = forms[i];
-            var tipo     = f.querySelector(".p-tipo").value;
-            var pregunta = f.querySelector(".p-texto").value;
-            var correcta = f.querySelector(".p-correcta").value;
-            var opciones;
-            if (tipo === "multiple") {
-                opciones = Array.from(f.querySelectorAll(".p-opcion")).map(function(x){ return x.value; }).filter(function(v){ return v; });
-            } else {
-                opciones = ["Verdadero","Falso"];
-            }
-            await api("preguntas", "POST", { 
-                curso_id: cursoId, 
-                pregunta: pregunta, 
-                tipo: tipo, 
-                opciones: opciones, 
-                respuesta_correcta: correcta 
-            }, "return=minimal");
-        }
-        
-        // CERRAR EL MODAL INMEDIATAMENTE
-        document.getElementById("cursoModal").classList.remove("active");
-        
-        // Recargar cursos en segundo plano
-        await loadCursos();
-        
-    } catch(err) { 
-        alert("Error al guardar: " + err.message); 
+        isAdmin = true; hideLogin(); updateAdminUI(); renderNiveles();
+    } else {
+        document.getElementById("loginError").style.display = "block";
     }
-};
+}
+function logout() { isAdmin = false; updateAdminUI(); renderNiveles(); }
+function updateAdminUI() {
+    document.getElementById("adminBadge").style.display = isAdmin ? "" : "none";
+    document.getElementById("btnLogin").style.display = isAdmin ? "none" : "";
+    document.getElementById("btnLogout").style.display = isAdmin ? "" : "none";
+}
+
+// ============================================================
+// CARGA DE DATOS
+// ============================================================
+async function loadAll() {
+    try {
+        const [niveles, cursos, temas, pasos, estudiantes, progreso] = await Promise.all([
+            api("niveles?select=*&order=orden"),
+            api("cursos?select=*&order=orden"),
+            api("temas?select=*&order=orden"),
+            api("pasos?select=*&order=orden"),
+            api("estudiantes?select=*&order=nombre"),
+            api("progreso?select=*")
+        ]);
+        nivelesData = niveles || [];
+        cursosData = cursos || [];
+        temasData = temas || [];
+        pasosData = pasos || [];
+        estudiantesData = estudiantes || [];
+        progresoData = progreso || [];
+        
+        if (estudiantesData.length > 0 && !estudianteActual) {
+            estudianteActual = estudiantesData[0];
+        }
+    } catch(e) {
+        console.error("Error cargando datos:", e);
+    }
+}
+
+// ============================================================
+// RENDERIZADO PRINCIPAL
+// ============================================================
+async function renderNiveles() {
+    await loadAll();
+    
+    // Renderizar tabs de niveles
+    const nav = document.getElementById("nivelesNav");
+    nav.innerHTML = nivelesData.map(n => {
+        const totalPasos = getTotalPasosNivel(n.id);
+        const completados = getPasosCompletadosNivel(n.id);
+        const pct = totalPasos > 0 ? Math.round((completados / totalPasos) * 100) : 0;
+        const activeClass = nivelActual && nivelActual.id === n.id ? ' active' : '';
+        
+        return `
+            <button class="nivel-tab nivel-${n.orden}${activeClass}" onclick="selectNivel(${n.id})" style="--nivel-color:${n.color}">
+                <span class="nivel-numero" style="color:${n.color}">${n.nombre}</span>
+                <span class="nivel-nombre">${n.descripcion || ''}</span>
+                ${estudianteActual ? `<span class="nivel-progreso">${completados}/${totalPasos} pasos · ${pct}%</span>` : ''}
+            </button>
+        `;
+    }).join("");
+    
+    // Si hay nivel seleccionado, mostrar sus cursos
+    if (nivelActual) {
+        renderCursos();
+    } else if (nivelesData.length > 0) {
+        selectNivel(nivelesData[0].id);
+    } else {
+        document.getElementById("mainContent").innerHTML = `
+            <div class="empty-state">
+                <p>🎓 Bienvenido a la Academia del Espíritu</p>
+                ${isAdmin ? '<p style="margin-top:1rem">Usa el panel de administración para crear los niveles y cursos.</p>' : ''}
+            </div>
+        `;
+    }
+}
+
+function selectNivel(nivelId) {
+    nivelActual = nivelesData.find(n => n.id === nivelId) || null;
+    cursoActual = null;
+    temaActual = null;
+    renderNiveles();
+}
+
+function getTotalPasosNivel(nivelId) {
+    const cursosNivel = cursosData.filter(c => c.nivel_id === nivelId);
+    const temasNivel = temasData.filter(t => cursosNivel.some(c => c.id === t.curso_id));
+    return pasosData.filter(p => temasNivel.some(t => t.id === p.tema_id)).length;
+}
+
+function getPasosCompletadosNivel(nivelId) {
+    if (!estudianteActual) return 0;
+    const cursosNivel = cursosData.filter(c => c.nivel_id === nivelId);
+    const temasNivel = temasData.filter(t => cursosNivel.some(c => c.id === t.curso_id));
+    const pasosNivel = pasosData.filter(p => temasNivel.some(t => t.id === p.tema_id));
+    return progresoData.filter(pr => 
+        pr.estudiante_id === estudianteActual.id && 
+        pr.completado && 
+        pasosNivel.some(p => p.id === pr.paso_id)
+    ).length;
+}
+
+// ============================================================
+// RENDERIZAR CURSOS DE UN NIVEL
+// ============================================================
+function renderCursos() {
+    if (!nivelActual) return;
+    
+    const cursosNivel = cursosData.filter(c => c.nivel_id === nivelActual.id);
+    const main = document.getElementById("mainContent");
+    
+    // Estilo del nivel actual
+    const colorVar = `--nivel-color:${nivelActual.color}`;
+    
+    let html = `
+        <div style="margin-bottom:1.5rem">
+            <h2 style="font-family:'Cinzel',serif;color:${nivelActual.color};font-size:1.4rem;margin-bottom:0.5rem">
+                📚 Cursos de ${nivelActual.nombre}
+            </h2>
+            <p style="color:var(--text-light);font-family:'Crimson Pro',serif">${nivelActual.descripcion || ''}</p>
+        </div>
+    `;
+    
+    if (isAdmin) {
+        html += `
+            <div style="margin-bottom:1.5rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+                <button class="btn btn-primary btn-sm" onclick="openCursoModal()">+ Nuevo Curso</button>
+                <button class="btn btn-secondary btn-sm" onclick="openTemaModal()">+ Nuevo Tema</button>
+                <button class="btn btn-secondary btn-sm" onclick="openPasoModal()">+ Nuevo Paso</button>
+                <button class="btn btn-secondary btn-sm" onclick="showEstudiantes()">👥 Estudiantes</button>
+            </div>
+        `;
+    }
+    
+    if (cursosNivel.length === 0) {
+        html += '<div class="empty-state">No hay cursos en este nivel aún.</div>';
+    } else {
+        html += '<div class="cursos-grid">';
+        cursosNivel.forEach(curso => {
+            const temasCurso = temasData.filter(t => t.curso_id === curso.id);
+            const totalPasos = pasosData.filter(p => temasCurso.some(t => t.id === p.tema_id)).length;
+            const completados = estudianteActual ? 
+                progresoData.filter(pr => {
+                    if (pr.estudiante_id !== estudianteActual.id || !pr.completado) return false;
+                    return pasosData.some(p => p.id === pr.paso_id && temasCurso.some(t => t.id === p.tema_id));
+                }).length : 0;
+            const pct = totalPasos > 0 ? Math.round((completados / totalPasos) * 100) : 0;
+            
+            html += `
+                <div class="curso-card nivel-${nivelActual.orden}">
+                    <div class="curso-card-header" style="background:${nivelActual.color}">
+                        <span style="font-family:'Cinzel',serif;font-size:0.85rem">${temasCurso.length} temas</span>
+                        <span>${totalPasos} pasos</span>
+                    </div>
+                    <div class="curso-card-body">
+                        <div class="curso-titulo">${curso.titulo}</div>
+                        <div class="curso-desc">${curso.descripcion || ''}</div>
+                        <div class="progreso-bar">
+                            <div class="progreso-fill" style="width:${pct}%;background:${nivelActual.color}"></div>
+                        </div>
+                        <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem">${completados}/${totalPasos} pasos completados (${pct}%)</div>
+                        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+                            <button class="btn btn-primary btn-sm" onclick="verCurso(${curso.id})">📖 Ver Temas</button>
+                            ${isAdmin ? `
+                                <button class="btn btn-secondary btn-sm" onclick="editCurso(${curso.id})">✏️</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteCurso(${curso.id})">🗑️</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+    }
+    
+    main.innerHTML = html;
+}
+
+// ============================================================
+// VER TEMAS DE UN CURSO
+// ============================================================
+function verCurso(cursoId) {
+    cursoActual = cursosData.find(c => c.id === cursoId);
+    if (!cursoActual || !nivelActual) return;
+    
+    const temasCurso = temasData.filter(t => t.curso_id === cursoId);
+    const main = document.getElementById("mainContent");
+    
+    let html = `
+        <button class="btn btn-secondary back-btn" onclick="renderCursos()">← Volver a Cursos</button>
+        <div style="margin-bottom:1.5rem">
+            <h2 style="font-family:'Cinzel',serif;color:${nivelActual.color};font-size:1.4rem">📖 ${cursoActual.titulo}</h2>
+            <p style="color:var(--text-light);font-family:'Crimson Pro',serif">${cursoActual.descripcion || ''}</p>
+        </div>
+    `;
+    
+    if (isAdmin) {
+        html += `
+            <div style="margin-bottom:1rem">
+                <button class="btn btn-primary btn-sm" onclick="openTemaModal(${cursoId})">+ Agregar Tema</button>
+            </div>
+        `;
+    }
+    
+    if (temasCurso.length === 0) {
+        html += '<div class="empty-state">No hay temas en este curso aún.</div>';
+    } else {
+        html += '<div class="temas-lista">';
+        temasCurso.forEach((tema, i) => {
+            const pasosTema = pasosData.filter(p => p.tema_id === tema.id);
+            const completados = estudianteActual ?
+                progresoData.filter(pr => 
+                    pr.estudiante_id === estudianteActual.id && 
+                    pr.completado && 
+                    pasosTema.some(p => p.id === pr.paso_id)
+                ).length : 0;
+            const allDone = pasosTema.length > 0 && completados === pasosTema.length;
+            
+            html += `
+                <div class="tema-item" onclick="verTema(${tema.id})">
+                    <div class="tema-numero ${allDone ? 'tema-completado' : 'tema-pendiente'}">${allDone ? '✓' : i+1}</div>
+                    <div class="tema-info">
+                        <div class="tema-titulo">${tema.titulo}</div>
+                        <div class="tema-pasos">${pasosTema.length} pasos prácticos · ${completados} completados</div>
+                    </div>
+                    <div class="tema-check">${allDone ? '✅' : '▶️'}</div>
+                </div>
+            `;
+        });
+        html += '</div>';
+    }
+    
+    main.innerHTML = html;
+}
+
+// ============================================================
+// VER TEMA Y SUS PASOS
+// ============================================================
+function verTema(temaId) {
+    temaActual = temasData.find(t => t.id === temaId);
+    if (!temaActual || !nivelActual) return;
+    
+    const pasosTema = pasosData.filter(p => p.tema_id === temaId);
+    const main = document.getElementById("mainContent");
+    
+    let html = `
+        <button class="btn btn-secondary back-btn" onclick="verCurso(${temaActual.curso_id})">← Volver a Temas</button>
+        
+        <div class="tema-contenido">
+            <span style="display:inline-block;background:${nivelActual.color};color:#fff;padding:0.2rem 0.6rem;border-radius:3px;font-size:0.75rem;font-weight:700;margin-bottom:1rem">${nivelActual.nombre}</span>
+            <h2>${temaActual.titulo}</h2>
+            <div class="contenido-texto">${temaActual.contenido || 'Sin contenido aún.'}</div>
+        </div>
+        
+        <div class="pasos-section">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+                <h3>✋ Pasos Prácticos</h3>
+                ${isAdmin ? `<button class="btn btn-primary btn-sm" onclick="openPasoModal(${temaId})">+ Agregar Paso</button>` : ''}
+            </div>
+            <div id="pasosContainer">
+                ${pasosTema.length === 0 ? '<p class="empty-state">No hay pasos prácticos para este tema.</p>' : ''}
+            </div>
+        </div>
+    `;
+    
+    main.innerHTML = html;
+    
+    // Renderizar cada paso con su estado
+    if (pasosTema.length > 0) {
+        const container = document.getElementById("pasosContainer");
+        container.innerHTML = pasosTema.map(paso => {
+            const prog = progresoData.find(pr => 
+                pr.paso_id === paso.id && 
+                (!estudianteActual || pr.estudiante_id === estudianteActual.id)
+            ) || { completado: false, notas: '' };
+            
+            return `
+                <div class="paso-item ${prog.completado ? 'completado' : ''}">
+                    <div class="paso-checkbox ${prog.completado ? 'checked' : ''}" 
+                         onclick="togglePaso(${paso.id}, this)" 
+                         title="Marcar como completado">
+                        ${prog.completado ? '✓' : ''}
+                    </div>
+                    <div style="flex:1">
+                        <div class="paso-texto">${paso.descripcion}</div>
+                        <textarea class="paso-notas" 
+                                  placeholder="Tus notas personales sobre este paso..." 
+                                  onchange="guardarNotas(${paso.id}, this.value)"
+                                  style="${prog.completado ? 'display:block' : 'display:none'}">${prog.notas || ''}</textarea>
+                    </div>
+                </div>
+            `;
+        }).join("");
+    }
+}
+
+// ============================================================
+// TOGGLE PASO COMPLETADO
+// ============================================================
+async function togglePaso(pasoId, checkboxEl) {
+    if (!estudianteActual) {
+        // Si no hay estudiante seleccionado, usar el primero o crear uno demo
+        if (estudiantesData.length === 0) {
+            await api("estudiantes", "POST", {
+                nombre: "Estudiante",
+                apellido: "Demo",
+                email: "demo@academia.com",
+                telefono: "",
+                fecha_ingreso: new Date().toISOString()
+            });
+            await loadAll();
+        }
+        estudianteActual = estudiantesData[0];
+    }
+    
+    const existing = progresoData.find(pr => 
+        pr.estudiante_id === estudianteActual.id && 
+        pr.paso_id === pasoId
+    );
+    
+    const nuevoEstado = !(existing && existing.completado);
+    
+    if (existing) {
+        await api(`progreso?id=eq.${existing.id}`, "PATCH", {
+            completado: nuevoEstado,
+            fecha_completado: nuevoEstado ? new Date().toISOString() : null
+        });
+    } else {
+        await api("progreso", "POST", {
+            estudiante_id: estudianteActual.id,
+            paso_id: pasoId,
+            completado: nuevoEstado,
+            fecha_completado: nuevoEstado ? new Date().toISOString() : null,
+            notas: ""
+        });
+    }
+    
+    // Actualizar UI local
+    checkboxEl.classList.toggle("checked", nuevoEstado);
+    checkboxEl.textContent = nuevoEstado ? '✓' : '';
+    
+    const pasoItem = checkboxEl.closest(".paso-item");
+    pasoItem.classList.toggle("completado", nuevoEstado);
+    
+    const notasArea = pasoItem.querySelector(".paso-notas");
+    if (notasArea) {
+        notasArea.style.display = nuevoEstado ? "block" : "none";
+    }
+    
+    await loadAll();
+    showToast(nuevoEstado ? "✅ ¡Paso completado! Sigue avanzando." : "Paso desmarcado");
+}
+
+// ============================================================
+// GUARDAR NOTAS
+// ============================================================
+async function guardarNotas(pasoId, notas) {
+    if (!estudianteActual) return;
+    const existing = progresoData.find(pr =>
+        pr.estudiante_id === estudianteActual.id && pr.paso_id === pasoId
+    );
+    if (existing) {
+        await api(`progreso?id=eq.${existing.id}`, "PATCH", { notas });
+    }
+}
+
+// ============================================================
+// ADMIN: MODALES
+// ============================================================
+function openCursoModal(cursoEdit = null) {
+    const modal = document.getElementById("adminModal");
+    const content = document.getElementById("adminModalContent");
+    const isEdit = cursoEdit !== null;
+    const c = isEdit ? cursosData.find(x => x.id === cursoEdit) : null;
+    
+    content.innerHTML = `
+        <h2>${isEdit ? 'Editar Curso' : 'Nuevo Curso'}</h2>
+        <form onsubmit="saveCurso(event, ${isEdit ? cursoEdit : 'null'})">
+            <input type="hidden" id="cursoId" value="${isEdit ? c.id : ''}">
+            <div class="form-group">
+                <label>Nivel</label>
+                <select id="cursoNivelId" required>
+                    <option value="">Seleccionar nivel</option>
+                    ${nivelesData.map(n => `<option value="${n.id}" ${isEdit && c.nivel_id === n.id ? 'selected' : ''}>${n.nombre}</option>`).join('')}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Título del Curso</label>
+                <input type="text" id="cursoTitulo" required value="${isEdit ? c.titulo : ''}">
+            </div>
+            <div class="form-group">
+                <label>Descripción</label>
+                <input type="text" id="cursoDesc" value="${isEdit ? c.descripcion || '' : ''}">
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    `;
+    modal.classList.add("active");
+}
+
+async function saveCurso(e, editId) {
+    e.preventDefault();
+    const data = {
+        nivel_id: parseInt(document.getElementById("cursoNivelId").value),
+        titulo: document.getElementById("cursoTitulo").value,
+        descripcion: document.getElementById("cursoDesc").value,
+        orden: 0
+    };
+    
+    if (editId) {
+        await api(`cursos?id=eq.${editId}`, "PATCH", data);
+    } else {
+        await api("cursos", "POST", data);
+    }
+    
+    closeAdminModal();
+    await loadAll();
+    renderCursos();
+    showToast("Curso guardado correctamente");
+}
+
+function openTemaModal(cursoIdParam = null) {
+    const modal = document.getElementById("adminModal");
+    const content = document.getElementById("adminModalContent");
+    const cid = cursoIdParam || (cursoActual ? cursoActual.id : null);
+    
+    content.innerHTML = `
+        <h2>Nuevo Tema</h2>
+        <form onsubmit="saveTema(event)">
+            <div class="form-group">
+                <label>Curso</label>
+                <select id="temaCursoId" required>
+                    <option value="">Seleccionar curso</option>
+                    ${cursosData.map(c => `<option value="${c.id}" ${c.id === cid ? 'selected' : ''}>${nivelesData.find(n=>n.id===c.nivel_id)?.nombre || ''} - ${c.titulo}</option>`).join('')}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Título del Tema</label>
+                <input type="text" id="temaTitulo" required>
+            </div>
+            <div class="form-group">
+                <label>Contenido</label>
+                <textarea id="temaContenido"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    `;
+    modal.classList.add("active");
+}
+
+async function saveTema(e) {
+    e.preventDefault();
+    await api("temas", "POST", {
+        curso_id: parseInt(document.getElementById("temaCursoId").value),
+        titulo: document.getElementById("temaTitulo").value,
+        contenido: document.getElementById("temaContenido").value,
+        orden: 0
+    });
+    closeAdminModal();
+    await loadAll();
+    if (cursoActual) verCurso(cursoActual.id);
+    else renderCursos();
+    showToast("Tema guardado correctamente");
+}
+
+function openPasoModal(temaIdParam = null) {
+    const modal = document.getElementById("adminModal");
+    const content = document.getElementById("adminModalContent");
+    const tid = temaIdParam || (temaActual ? temaActual.id : null);
+    
+    content.innerHTML = `
+        <h2>Nuevo Paso Práctico</h2>
+        <form onsubmit="savePaso(event)">
+            <div class="form-group">
+                <label>Tema</label>
+                <select id="pasoTemaId" required>
+                    <option value="">Seleccionar tema</option>
+                    ${temasData.map(t => {
+                        const curso = cursosData.find(c => c.id === t.curso_id);
+                        return `<option value="${t.id}" ${t.id === tid ? 'selected' : ''}>${curso?.titulo || ''} - ${t.titulo}</option>`;
+                    }).join('')}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Descripción del Paso Práctico</label>
+                <textarea id="pasoDesc" required placeholder="Describe la acción práctica que el estudiante debe realizar..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    `;
+    modal.classList.add("active");
+}
+
+async function savePaso(e) {
+    e.preventDefault();
+    await api("pasos", "POST", {
+        tema_id: parseInt(document.getElementById("pasoTemaId").value),
+        descripcion: document.getElementById("pasoDesc").value,
+        orden: 0
+    });
+    closeAdminModal();
+    await loadAll();
+    if (temaActual) verTema(temaActual.id);
+    else if (cursoActual) verCurso(cursoActual.id);
+    else renderCursos();
+    showToast("Paso práctico guardado correctamente");
+}
+
+function editCurso(id) { openCursoModal(id); }
 
 async function deleteCurso(id) {
-    if (!confirm("Eliminar este curso y sus preguntas?")) return;
-    await api("preguntas?curso_id=eq." + id, "DELETE");
-    await api("cursos?id=eq." + id, "DELETE");
-    await loadCursos();
+    if (!confirm("¿Eliminar este curso y todos sus temas y pasos?")) return;
+    const temasCurso = temasData.filter(t => t.curso_id === id);
+    for (const tema of temasCurso) {
+        await api(`pasos?tema_id=eq.${tema.id}`, "DELETE");
+    }
+    await api(`temas?curso_id=eq.${id}`, "DELETE");
+    await api(`cursos?id=eq.${id}`, "DELETE");
+    await loadAll();
+    renderCursos();
+    showToast("Curso eliminado");
 }
 
-async function loadResultados() {
-    if (!isAdmin) return;
-    var data = await api("resultados?select=*,estudiantes(nombre,apellido),cursos(titulo)&order=fecha.desc");
-    var tbody = document.getElementById("resultadosBody");
-    if (!data || !data.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No hay resultados.</td></tr>'; return; }
-    tbody.innerHTML = data.map(function(r){
-        var color  = r.aprobado ? "var(--success)" : "var(--danger)";
-        var estado = r.aprobado ? "Aprobado" : "Reprobado";
-        return "<tr><td>" + (r.estudiantes ? r.estudiantes.nombre + " " + r.estudiantes.apellido : "") + "</td><td>" + (r.cursos ? r.cursos.titulo : "") + "</td><td>" + r.puntaje + "%</td><td><span style='color:" + color + ";font-weight:700'>" + estado + "</span></td><td>" + new Date(r.fecha).toLocaleDateString("es-ES") + "</td></tr>";
-    }).join("");
+function showEstudiantes() {
+    const modal = document.getElementById("adminModal");
+    const content = document.getElementById("adminModalContent");
+    
+    content.innerHTML = `
+        <h2>Estudiantes</h2>
+        <div style="max-height:400px;overflow-y:auto">
+            ${estudiantesData.length === 0 ? '<p class="empty-state">No hay estudiantes registrados.</p>' : `
+                <table style="width:100%;border-collapse:collapse">
+                    <thead><tr style="background:var(--nivel2);color:var(--gold-light)">
+                        <th style="padding:0.5rem">Nombre</th><th style="padding:0.5rem">Email</th><th style="padding:0.5rem">Progreso</th>
+                    </tr></thead>
+                    <tbody>
+                        ${estudiantesData.map(e => {
+                            const total = pasosData.length;
+                            const comp = progresoData.filter(p => p.estudiante_id === e.id && p.completado).length;
+                            const pct = total > 0 ? Math.round((comp/total)*100) : 0;
+                            return `
+                                <tr>
+                                    <td style="padding:0.5rem">${e.nombre} ${e.apellido}</td>
+                                    <td style="padding:0.5rem">${e.email}</td>
+                                    <td style="padding:0.5rem">${comp}/${total} (${pct}%)</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `}
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeAdminModal()">Cerrar</button>
+        </div>
+    `;
+    modal.classList.add("active");
 }
 
+function closeAdminModal() {
+    document.getElementById("adminModal").classList.remove("active");
+}
+
+// Click fuera del modal para cerrar
+document.getElementById("adminModal").addEventListener("click", function(e) {
+    if (e.target === this) closeAdminModal();
+});
+
+// ============================================================
+// INICIO
+// ============================================================
 async function init() {
-    await loadStudents();
-    await loadCursos();
+    await loadAll();
+    updateAdminUI();
+    
+    // Seleccionar primer nivel por defecto
+    if (nivelesData.length > 0) {
+        nivelActual = nivelesData[0];
+    }
+    
+    renderNiveles();
 }
+
 init();
 </script>
 </body>
