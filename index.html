@@ -35,7 +35,6 @@
         .btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
         .btn-sm { padding:0.3rem 0.7rem; font-size:0.75rem; }
         .btn-xs { padding:0.2rem 0.5rem; font-size:0.7rem; }
-        .btn-icon { padding:0.35rem 0.5rem; font-size:0.9rem; min-width:32px; justify-content:center; }
         .btn-primary { background:var(--nivel2); color:var(--gold-light); }
         .btn-secondary { background:var(--surface); color:var(--nivel2); border:1px solid var(--gold); }
         .btn-danger { background:var(--surface); color:var(--danger); border:1px solid var(--danger); }
@@ -67,10 +66,9 @@
         .progreso-bar { height:6px; background:#eee; border-radius:3px; margin-bottom:0.5rem; overflow:hidden; }
         .progreso-fill { height:100%; border-radius:3px; transition:width 0.5s; }
         
-        /* Drag & Drop */
-        .draggable { cursor:default; transition:all 0.2s; }
+        .draggable { transition:all 0.2s; }
         .draggable[draggable="true"] { cursor:grab; }
-        .draggable[daaggable="true"]:active { cursor:grabbing; }
+        .draggable[draggable="true"]:active { cursor:grabbing; }
         .draggable.dragging { opacity:0.4; background:var(--gold-light) !important; }
         .drag-over { border:2px dashed var(--gold) !important; background:#fdf8ed !important; }
         .drag-handle { cursor:grab; color:#999; font-size:1.2rem; padding:0 0.3rem; user-select:none; }
@@ -78,7 +76,7 @@
         .drag-handle:hover { color:var(--gold); }
         .orden-controls { display:flex; gap:0.2rem; align-items:center; }
         .orden-btn { width:24px; height:24px; border:1px solid var(--border); border-radius:3px; background:var(--surface); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.7rem; transition:all 0.15s; color:var(--text-light); }
-        .orden-btn:hover { background:var(--gold-light); border-color:var(--gold); color:var(--nivel2); }
+        .orden-btn:hover:not(:disabled) { background:var(--gold-light); border-color:var(--gold); color:var(--nivel2); }
         .orden-btn:disabled { opacity:0.3; cursor:not-allowed; }
         
         .temas-lista { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
@@ -96,47 +94,30 @@
         .tema-contenido { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); margin-bottom:2rem; }
         .tema-contenido h2 { font-family:'Cinzel',serif; color:var(--nivel2); margin-bottom:1.5rem; }
         .contenido-texto { font-family:'Crimson Pro',serif; font-size:var(--font-size-content); line-height:1.9; white-space:pre-wrap; transition:font-size 0.3s; }
-        .contenido-texto h2, .contenido-texto h3, .contenido-texto h4 { font-family:'Cinzel',serif; color:var(--nivel2); margin:1.2rem 0 0.6rem; }
-        .contenido-texto h2 { font-size:1.4rem; border-bottom:1px solid var(--gold); padding-bottom:0.3rem; }
-        .contenido-texto h3 { font-size:1.2rem; }
-        .contenido-texto h4 { font-size:1.05rem; }
+        .contenido-texto h2,.contenido-texto h3,.contenido-texto h4 { font-family:'Cinzel',serif; color:var(--nivel2); margin:1.2rem 0 0.6rem; }
         .contenido-texto blockquote { border-left:4px solid var(--gold); padding:0.8rem 1.2rem; margin:1rem 0; background:#fdf8ed; font-style:italic; color:var(--gold-dark); border-radius:0 4px 4px 0; }
-        .contenido-texto ul, .contenido-texto ol { margin-left:1.5rem; margin-bottom:0.8rem; }
-        .contenido-texto li { margin-bottom:0.3rem; }
+        .contenido-texto ul,.contenido-texto ol { margin-left:1.5rem; margin-bottom:0.8rem; }
         .contenido-texto strong { color:var(--nivel2); }
         .contenido-texto em { color:var(--gold-dark); }
         .contenido-texto hr { border:none; border-top:2px solid var(--gold); margin:1.5rem 0; opacity:0.5; }
         
-        /* Editor */
         .editor-wrapper { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--surface); }
         .editor-toolbar { display:flex; gap:0.2rem; padding:0.5rem; background:#f8f6f0; border-bottom:1px solid var(--border); flex-wrap:wrap; align-items:center; }
         .editor-toolbar .tool-group { display:flex; gap:0.15rem; padding:0 0.5rem; border-right:1px solid var(--border); }
         .editor-toolbar .tool-group:last-child { border-right:none; }
         .tool-btn { width:34px; height:34px; border:1px solid transparent; border-radius:4px; background:transparent; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center; transition:all 0.15s; color:var(--text); font-family:'Inter',sans-serif; }
         .tool-btn:hover { background:#e8e4d8; border-color:var(--border); }
-        .tool-btn.active { background:var(--gold-light); border-color:var(--gold); color:var(--gold-dark); }
         .tool-btn.tool-heading { font-family:'Cinzel',serif; font-weight:700; font-size:0.75rem; width:auto; padding:0 0.5rem; }
         .editor-textarea { width:100%; min-height:300px; padding:1.5rem; border:none; font-family:'Crimson Pro',serif; font-size:1.05rem; line-height:1.8; resize:vertical; background:var(--surface); color:var(--text); }
         .editor-textarea:focus { outline:none; }
         .editor-textarea.fullscreen { position:fixed; top:0; left:0; width:100%; height:100%; z-index:5000; min-height:100vh; padding:5rem 2rem 2rem; font-size:1.2rem; }
         .editor-preview { padding:1.5rem; min-height:150px; font-family:'Crimson Pro',serif; font-size:1.05rem; line-height:1.8; border-top:2px solid var(--border); background:#fdfcf8; }
-        .editor-preview h2, .editor-preview h3, .editor-preview h4 { font-family:'Cinzel',serif; color:var(--nivel2); margin:1.2rem 0 0.6rem; }
-        .editor-preview h2 { font-size:1.4rem; border-bottom:1px solid var(--gold); padding-bottom:0.3rem; }
-        .editor-preview h3 { font-size:1.2rem; }
-        .editor-preview h4 { font-size:1.05rem; }
-        .editor-preview blockquote { border-left:4px solid var(--gold); padding:0.8rem 1.2rem; margin:1rem 0; background:#fdf8ed; font-style:italic; color:var(--gold-dark); border-radius:0 4px 4px 0; }
-        .editor-preview ul, .editor-preview ol { margin-left:1.5rem; margin-bottom:0.8rem; }
-        .editor-preview li { margin-bottom:0.3rem; }
-        .editor-preview strong { color:var(--nivel2); }
-        .editor-preview em { color:var(--gold-dark); }
         .editor-tabs { display:flex; border-bottom:1px solid var(--border); }
         .editor-tab { padding:0.6rem 1.2rem; cursor:pointer; font-weight:600; font-size:0.85rem; border:none; background:transparent; color:var(--text-light); transition:all 0.2s; }
         .editor-tab.active { color:var(--nivel2); border-bottom:3px solid var(--gold); }
-        .editor-tab:hover { color:var(--nivel2); }
         .editor-statusbar { display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0.8rem; background:#f8f6f0; border-top:1px solid var(--border); font-size:0.75rem; color:var(--text-light); }
         
         .reading-controls { display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; padding:0.8rem 1rem; background:var(--bg); border-radius:var(--radius); flex-wrap:wrap; }
-        .reading-controls span { font-size:0.85rem; color:var(--text-light); font-weight:600; }
         .font-size-btn { width:36px; height:36px; border-radius:50%; border:2px solid var(--border); background:var(--surface); cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; font-weight:700; color:var(--nivel2); }
         .font-size-btn:hover { border-color:var(--gold); background:var(--gold-light); }
         .font-size-indicator { font-family:'Cinzel',serif; font-weight:700; color:var(--nivel2); min-width:40px; text-align:center; }
@@ -146,7 +127,6 @@
         .paso-item { display:flex; align-items:flex-start; gap:1rem; padding:1rem; border-radius:var(--radius); background:var(--bg); margin-bottom:0.5rem; border:1px solid var(--border); transition:all 0.2s; }
         .paso-item.completado { background:#f0faf4; border-color:var(--success); }
         .paso-checkbox { width:26px; height:26px; border-radius:50%; border:2px solid #ccc; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:all 0.3s; font-size:0.8rem; background:#fff; }
-        .paso-checkbox:hover { border-color:var(--gold); }
         .paso-checkbox.checked { background:var(--success); border-color:var(--success); color:#fff; }
         .paso-texto { flex:1; font-family:'Crimson Pro',serif; font-size:1.05rem; }
         .paso-notas { width:100%; margin-top:0.5rem; padding:0.5rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:0.9rem; resize:vertical; min-height:40px; display:none; }
@@ -159,7 +139,7 @@
         .modal-content h2 { font-family:'Cinzel',serif; margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid var(--gold); text-align:center; }
         .form-group { margin-bottom:1rem; }
         .form-group label { display:block; margin-bottom:0.3rem; font-weight:600; font-size:0.85rem; text-transform:uppercase; color:var(--nivel2); }
-        .form-group input, .form-group select { width:100%; padding:0.7rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:1rem; }
+        .form-group input,.form-group select { width:100%; padding:0.7rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:1rem; }
         .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
         .modal-actions { display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border); flex-wrap:wrap; }
         
@@ -336,50 +316,109 @@ async function cambiarEstudiante(id) {
 }
 
 // ============================================================
-// DRAG & DROP Y ORDENAMIENTO
+// ORDENAMIENTO INSTANTÁNEO
 // ============================================================
 let draggedItem = null, draggedType = null;
-function handleDragStart(e, id, type) { draggedItem = id; draggedType = type; e.target.closest('.draggable')?.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; }
-function handleDragEnd(e) { e.target.closest('.draggable')?.classList.remove('dragging'); document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over')); }
-function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; e.target.closest('.draggable')?.classList.add('drag-over'); }
-function handleDragLeave(e) { e.target.closest('.draggable')?.classList.remove('drag-over'); }
+
+function handleDragStart(e, id, type) { 
+    draggedItem = id; draggedType = type; 
+    e.target.closest('.draggable')?.classList.add('dragging'); 
+    e.dataTransfer.effectAllowed = 'move'; 
+}
+function handleDragEnd(e) { 
+    e.target.closest('.draggable')?.classList.remove('dragging'); 
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over')); 
+}
+function handleDragOver(e) { 
+    e.preventDefault(); e.dataTransfer.dropEffect = 'move'; 
+    e.target.closest('.draggable')?.classList.add('drag-over'); 
+}
+function handleDragLeave(e) { 
+    e.target.closest('.draggable')?.classList.remove('drag-over'); 
+}
 async function handleDrop(e, targetId, type) {
-    e.preventDefault(); e.target.closest('.draggable')?.classList.remove('drag-over');
+    e.preventDefault(); 
+    e.target.closest('.draggable')?.classList.remove('drag-over');
     if (draggedItem && draggedItem !== targetId && draggedType === type) {
-        await reordenarItems(type, draggedItem, targetId);
+        reordenarInstantaneo(type, draggedItem, targetId);
     }
 }
-async function reordenarItems(type, fromId, toId) {
+
+function reordenarInstantaneo(type, fromId, toId) {
     let items;
     if (type === 'curso') items = cursosData.filter(c => nivelActual && c.nivel_id === nivelActual.id);
     else if (type === 'tema') items = temasData.filter(t => cursoActual && t.curso_id === cursoActual.id);
     else items = pasosData.filter(p => temaActual && p.tema_id === temaActual.id);
+    
     if (!items || items.length < 2) return;
     items.sort((a, b) => (a.orden || a.id) - (b.orden || b.id));
-    const fromIdx = items.findIndex(i => i.id === fromId), toIdx = items.findIndex(i => i.id === toId);
-    if (fromIdx === -1 || toIdx === -1) return;
-    const [moved] = items.splice(fromIdx, 1); items.splice(toIdx, 0, moved);
-    const table = type === 'curso' ? 'cursos' : type === 'tema' ? 'temas' : 'pasos';
-    for (let i = 0; i < items.length; i++) { await api(`${table}?id=eq.${items[i].id}`, "PATCH", { orden: i }, "return=minimal"); }
-    if (type === 'curso') { await loadCursosData(); renderCursos(); }
-    else if (type === 'tema') { await loadTemasData(); verCurso(cursoActual.id); }
-    else { await loadPasosData(); verTema(temaActual.id); }
+    
+    const fromIdx = items.findIndex(i => i.id === fromId);
+    const toIdx = items.findIndex(i => i.id === toId);
+    if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
+    
+    const [moved] = items.splice(fromIdx, 1);
+    items.splice(toIdx, 0, moved);
+    
+    // Actualizar memoria local
+    const table = type === 'curso' ? cursosData : type === 'tema' ? temasData : pasosData;
+    items.forEach((item, index) => {
+        const found = table.find(x => x.id === item.id);
+        if (found) found.orden = index;
+    });
+    
+    // Refrescar vista inmediatamente
+    refrescarVista(type);
+    
+    // Guardar en background
+    guardarOrdenBackground(type, items);
 }
-async function moverItem(type, id, direction) {
+
+function moverItem(type, id, direction) {
     let items;
     if (type === 'curso') items = cursosData.filter(c => nivelActual && c.nivel_id === nivelActual.id);
     else if (type === 'tema') items = temasData.filter(t => cursoActual && t.curso_id === cursoActual.id);
     else items = pasosData.filter(p => temaActual && p.tema_id === temaActual.id);
+    
     if (!items || items.length < 2) return;
     items.sort((a, b) => (a.orden || a.id) - (b.orden || b.id));
-    const idx = items.findIndex(i => i.id === id); if (idx === -1) return;
-    const newIdx = idx + direction; if (newIdx < 0 || newIdx >= items.length) return;
+    
+    const idx = items.findIndex(i => i.id === id);
+    if (idx === -1) return;
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= items.length) return;
+    
     [items[idx], items[newIdx]] = [items[newIdx], items[idx]];
-    const table = type === 'curso' ? 'cursos' : type === 'tema' ? 'temas' : 'pasos';
-    for (let i = 0; i < items.length; i++) { await api(`${table}?id=eq.${items[i].id}`, "PATCH", { orden: i }, "return=minimal"); }
-    if (type === 'curso') { await loadCursosData(); renderCursos(); }
-    else if (type === 'tema') { await loadTemasData(); verCurso(cursoActual.id); }
-    else { await loadPasosData(); verTema(temaActual.id); }
+    
+    // Actualizar memoria local
+    const table = type === 'curso' ? cursosData : type === 'tema' ? temasData : pasosData;
+    items.forEach((item, index) => {
+        const found = table.find(x => x.id === item.id);
+        if (found) found.orden = index;
+    });
+    
+    // Refrescar vista inmediatamente
+    refrescarVista(type);
+    
+    // Guardar en background    guardarOrdenBackground(type, items);
+}
+
+function refrescarVista(type) {
+    if (type === 'curso') renderCursos();
+    else if (type === 'tema') verCurso(cursoActual.id);
+    else verTema(temaActual.id);
+}
+
+async function guardarOrdenBackground(type, items) {
+    const tableName = type === 'curso' ? 'cursos' : type === 'tema' ? 'temas' : 'pasos';
+    try {
+        await Promise.all(items.map((item, index) => 
+            api(`${tableName}?id=eq.${item.id}`, "PATCH", { orden: index }, "return=minimal")
+        ));
+    } catch(err) {
+        console.error("Error guardando orden:", err);
+        showToast("Error al guardar orden", "error");
+    }
 }
 
 // ============================================================
@@ -446,7 +485,7 @@ function handleEditorCommand(cmd, ta, textarea, preview, tabs) {
         case 'hr': rep = '\n---\n'; break;
         case 'preview': tabs.querySelector('[data-tab="preview"]')?.click(); return;
         case 'fullscreen': toggleFullscreen(ta); return;
-        case 'help': alert('📝 Formato:\n\n**negrita**\n*cursiva*\n_subrayado_\n## Título H2\n### Título H3\n- Lista\n1. Numerada\n> Cita\n--- Línea\n\nCtrl+B/I/U para rápido'); return;
+        case 'help': alert('📝 Formato:\n\n**negrita**\n*cursiva*\n_subrayado_\n## Título H2\n### Título H3\n- Lista\n1. Numerada\n> Cita\n--- Línea'); return;
     }
     ta.value = text.substring(0,start) + rep + text.substring(end); ta.focus();
     ta.selectionStart = sel ? start : start + rep.length + off; ta.selectionEnd = sel ? start + rep.length : start + rep.length + off;
@@ -469,7 +508,7 @@ async function renderNiveles() {
 async function selectNivel(nivelId) { nivelActual = nivelesData.find(n => n.id === nivelId) || null; cursoActual = null; temaActual = null; await loadCursosData(); renderNiveles(); }
 
 // ============================================================
-// RENDERIZAR CURSOS (CON ORDENAMIENTO)
+// RENDERIZAR CURSOS
 // ============================================================
 async function renderCursos() {
     if (!nivelActual) return;
@@ -486,7 +525,7 @@ async function renderCursos() {
             const totalPasos = pasosData.filter(p => temasCurso.some(t => t.id === p.tema_id)).length;
             const completados = estudianteActual ? progresoData.filter(pr => pr.completado && pasosData.some(p => p.id === pr.paso_id && temasCurso.some(t => t.id === p.tema_id))).length : 0;
             const pct = totalPasos > 0 ? Math.round((completados/totalPasos)*100) : 0;
-            html += `<div class="curso-card draggable" draggable="${isAdmin}" ondragstart="${isAdmin?`handleDragStart(event,${curso.id},'curso')`:''}" ondragend="handleDragEnd(event)" ondragover="${isAdmin?'handleDragOver(event)':''}" ondragleave="${isAdmin?'handleDragLeave(event)':''}" ondrop="${isAdmin?`handleDrop(event,${curso.id},'curso')`:''}"><div class="curso-card-header" style="background:${nivelActual.color}"><span style="font-family:'Cinzel',serif;font-size:0.85rem">${isAdmin?`<span class="drag-handle" title="Arrastrar">⋮⋮</span> `:''}${temasCurso.length} temas</span><span>${totalPasos} pasos</span></div><div class="curso-card-body"><div class="curso-titulo">${curso.titulo}</div><div class="curso-desc">${curso.descripcion||''}</div><div class="progreso-bar"><div class="progreso-fill" style="width:${pct}%;background:${nivelActual.color}"></div></div><div style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem">${completados}/${totalPasos} pasos (${pct}%)</div><div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center"><button class="btn btn-primary btn-sm" onclick="verCurso(${curso.id})">📖 Ver Temas</button>${isAdmin?`<div class="orden-controls"><button class="orden-btn" onclick="moverItem('curso',${curso.id},-1)" ${index===0?'disabled':''} title="Subir">▲</button><button class="orden-btn" onclick="moverItem('curso',${curso.id},1)" ${index===cursosNivel.length-1?'disabled':''} title="Bajar">▼</button></div><button class="btn btn-warning btn-sm" onclick="editCurso(${curso.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteCurso(${curso.id})">🗑️</button>`:''}</div></div></div>`;
+            html += `<div class="curso-card draggable" draggable="${isAdmin}" ondragstart="${isAdmin?`handleDragStart(event,${curso.id},'curso')`:''}" ondragend="handleDragEnd(event)" ondragover="${isAdmin?'handleDragOver(event)':''}" ondragleave="${isAdmin?'handleDragLeave(event)':''}" ondrop="${isAdmin?`handleDrop(event,${curso.id},'curso')`:''}"><div class="curso-card-header" style="background:${nivelActual.color}"><span style="font-family:'Cinzel',serif;font-size:0.85rem">${isAdmin?`<span class="drag-handle" title="Arrastrar">⋮⋮</span> `:''}${temasCurso.length} temas</span><span>${totalPasos} pasos</span></div><div class="curso-card-body"><div class="curso-titulo">${curso.titulo}</div><div class="curso-desc">${curso.descripcion||''}</div><div class="progreso-bar"><div class="progreso-fill" style="width:${pct}%;background:${nivelActual.color}"></div></div><div style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem">${completados}/${totalPasos} pasos (${pct}%)</div><div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center"><button class="btn btn-primary btn-sm" onclick="verCurso(${curso.id})">📖 Ver Temas</button>${isAdmin?`<div class="orden-controls"><button class="orden-btn" onclick="event.stopPropagation();moverItem('curso',${curso.id},-1)" ${index===0?'disabled':''} title="Subir">▲</button><button class="orden-btn" onclick="event.stopPropagation();moverItem('curso',${curso.id},1)" ${index===cursosNivel.length-1?'disabled':''} title="Bajar">▼</button></div><button class="btn btn-warning btn-sm" onclick="event.stopPropagation();editCurso(${curso.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteCurso(${curso.id})">🗑️</button>`:''}</div></div></div>`;
         });
         html += '</div>';
     }
@@ -494,7 +533,7 @@ async function renderCursos() {
 }
 
 // ============================================================
-// VER TEMAS (CON ORDENAMIENTO)
+// VER TEMAS
 // ============================================================
 async function verCurso(cursoId) {
     cursoActual = cursosData.find(c => c.id === cursoId); if (!cursoActual||!nivelActual) return;
@@ -519,7 +558,7 @@ async function verCurso(cursoId) {
 }
 
 // ============================================================
-// VER TEMA Y PASOS (CON ORDENAMIENTO)
+// VER TEMA Y PASOS
 // ============================================================
 async function verTema(temaId) {
     temaActual = temasData.find(t => t.id === temaId); if (!temaActual||!nivelActual) return;
@@ -578,7 +617,7 @@ function editCurso(id) {
 }
 async function saveCurso(e, editId) {
     e.preventDefault();
-    const data = { nivel_id: parseInt(document.getElementById("cursoNivelId").value), titulo: document.getElementById("cursoTitulo").value, descripcion: document.getElementById("cursoDesc").value };
+    const data = { nivel_id: parseInt(document.getElementById("cursoNivelId").value), titulo: document.getElementById("cursoTitulo").value, descripcion: document.getElementById("cursoDesc").value, orden: editId ? undefined : cursosData.filter(c=>nivelActual&&c.nivel_id===nivelActual.id).length };
     try {
         if (editId) await api(`cursos?id=eq.${editId}`,"PATCH",data,"return=minimal");
         else await api("cursos","POST",data,"return=minimal");
@@ -612,7 +651,7 @@ function editTema(id) {
 async function saveTema(e, editId) {
     e.preventDefault();
     const textarea = document.getElementById("temaContenido");
-    const data = { curso_id: parseInt(document.getElementById("temaCursoId").value), titulo: document.getElementById("temaTitulo").value, contenido: textarea?textarea.value:'' };
+    const data = { curso_id: parseInt(document.getElementById("temaCursoId").value), titulo: document.getElementById("temaTitulo").value, contenido: textarea?textarea.value:'', orden: editId ? undefined : temasData.filter(t=>cursoActual&&t.curso_id===cursoActual.id).length };
     try {
         if (editId) await api(`temas?id=eq.${editId}`,"PATCH",data,"return=minimal");
         else await api("temas","POST",data,"return=minimal");
@@ -648,9 +687,10 @@ async function savePaso(e, editId) {
     const desc = document.getElementById("pasoDesc").value.trim();
     if (!temaId) { showToast("Selecciona un tema","error"); return; }
     if (!desc) { showToast("Escribe la descripción","error"); return; }
+    const data = { tema_id: temaId, descripcion: desc, orden: editId ? undefined : pasosData.filter(p=>temaActual&&p.tema_id===temaActual.id).length };
     try {
-        if (editId) await api(`pasos?id=eq.${editId}`,"PATCH",{tema_id:temaId,descripcion:desc,orden:0},"return=minimal");
-        else { const res = await api("pasos","POST",{tema_id:temaId,descripcion:desc,orden:0},"return=representation"); if (!res||!res[0]) throw new Error("No se recibió confirmación"); }
+        if (editId) await api(`pasos?id=eq.${editId}`,"PATCH",data,"return=minimal");
+        else { const res = await api("pasos","POST",data,"return=representation"); if (!res||!res[0]) throw new Error("No se recibió confirmación"); }
         closeAdminModal(); await loadPasosData();
         if (temaActual) await verTema(temaActual.id); else if (cursoActual) await verCurso(cursoActual.id); else await renderCursos();
         showToast(editId?"✅ Paso actualizado":"✅ Paso creado");
