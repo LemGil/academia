@@ -68,19 +68,17 @@
         
         .draggable { transition:all 0.2s; }
         .draggable[draggable="true"] { cursor:grab; }
-        .draggable[draggable="true"]:active { cursor:grabbing; }
         .draggable.dragging { opacity:0.4; background:var(--gold-light) !important; }
         .drag-over { border:2px dashed var(--gold) !important; background:#fdf8ed !important; }
         .drag-handle { cursor:grab; color:#999; font-size:1.2rem; padding:0 0.3rem; user-select:none; }
-        .drag-handle:active { cursor:grabbing; }
         .drag-handle:hover { color:var(--gold); }
         .orden-controls { display:flex; gap:0.2rem; align-items:center; }
-        .orden-btn { width:24px; height:24px; border:1px solid var(--border); border-radius:3px; background:var(--surface); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.7rem; transition:all 0.15s; color:var(--text-light); }
+        .orden-btn { width:28px; height:28px; border:1px solid var(--border); border-radius:4px; background:var(--surface); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.7rem; transition:all 0.15s; color:var(--text-light); }
         .orden-btn:hover:not(:disabled) { background:var(--gold-light); border-color:var(--gold); color:var(--nivel2); }
         .orden-btn:disabled { opacity:0.3; cursor:not-allowed; }
         
         .temas-lista { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
-        .tema-item { padding:1rem 1.5rem; border-bottom:1px solid var(--border); transition:background 0.2s; display:flex; align-items:center; gap:1rem; }
+        .tema-item { padding:1rem 1.5rem; border-bottom:1px solid var(--border); transition:background 0.2s; display:flex; align-items:center; gap:0.8rem; }
         .tema-item:hover { background:#FAF9F6; }
         .tema-item:last-child { border-bottom:none; }
         .tema-numero { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0; }
@@ -90,6 +88,7 @@
         .tema-titulo { font-family:'Cinzel',serif; font-weight:600; }
         .tema-pasos { font-size:0.85rem; color:var(--text-light); }
         .tema-check { font-size:1.2rem; cursor:pointer; }
+        .tema-actions { display:flex; gap:0.3rem; align-items:center; }
         
         .tema-contenido { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); margin-bottom:2rem; }
         .tema-contenido h2 { font-family:'Cinzel',serif; color:var(--nivel2); margin-bottom:1.5rem; }
@@ -124,14 +123,14 @@
         
         .pasos-section { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); }
         .pasos-section h3 { font-family:'Cinzel',serif; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; }
-        .paso-item { display:flex; align-items:flex-start; gap:1rem; padding:1rem; border-radius:var(--radius); background:var(--bg); margin-bottom:0.5rem; border:1px solid var(--border); transition:all 0.2s; }
+        .paso-item { display:flex; align-items:flex-start; gap:0.8rem; padding:1rem; border-radius:var(--radius); background:var(--bg); margin-bottom:0.5rem; border:1px solid var(--border); transition:all 0.2s; }
         .paso-item.completado { background:#f0faf4; border-color:var(--success); }
         .paso-checkbox { width:26px; height:26px; border-radius:50%; border:2px solid #ccc; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:all 0.3s; font-size:0.8rem; background:#fff; }
         .paso-checkbox.checked { background:var(--success); border-color:var(--success); color:#fff; }
         .paso-texto { flex:1; font-family:'Crimson Pro',serif; font-size:1.05rem; }
         .paso-notas { width:100%; margin-top:0.5rem; padding:0.5rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:0.9rem; resize:vertical; min-height:40px; display:none; }
         .paso-item.completado .paso-notas { display:block; }
-        .paso-actions { display:flex; gap:0.3rem; flex-shrink:0; }
+        .paso-actions { display:flex; gap:0.3rem; flex-shrink:0; align-items:center; }
         
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:flex-start; padding:2rem; overflow-y:auto; backdrop-filter:blur(2px); }
         .modal.active { display:flex; }
@@ -270,7 +269,7 @@ function toggleModoLectura() {
     modoLecturaOscuro = !modoLecturaOscuro;
     document.body.classList.toggle('modo-lectura', modoLecturaOscuro);
     const btn = document.getElementById("btnModoLectura");
-    if (btn) { btn.textContent = modoLecturaOscuro ? '☀️' : '🌙'; btn.title = modoLecturaOscuro ? 'Modo claro' : 'Modo oscuro'; }
+    if (btn) { btn.textContent = modoLecturaOscuro ? '☀️' : '🌙'; }
 }
 
 // ============================================================
@@ -318,6 +317,61 @@ async function cambiarEstudiante(id) {
 // ============================================================
 // ORDENAMIENTO INSTANTÁNEO
 // ============================================================
+function getItemsOrdenados(type) {
+    let items;
+    if (type === 'curso') items = cursosData.filter(c => nivelActual && c.nivel_id === nivelActual.id);
+    else if (type === 'tema') items = temasData.filter(t => cursoActual && t.curso_id === cursoActual.id);
+    else items = pasosData.filter(p => temaActual && p.tema_id === temaActual.id);
+    items.sort((a, b) => (a.orden || a.id) - (b.orden || b.id));
+    return items;
+}
+
+function actualizarOrdenLocal(type, items) {
+    const table = type === 'curso' ? cursosData : type === 'tema' ? temasData : pasosData;
+    items.forEach((item, index) => {
+        const found = table.find(x => x.id === item.id);
+        if (found) found.orden = index;
+    });
+}
+
+function refrescarVista(type) {
+    if (type === 'curso') renderCursos();
+    else if (type === 'tema') verCurso(cursoActual.id);
+    else verTema(temaActual.id);
+}
+
+async function guardarOrdenBackground(type, items) {
+    const tableName = type === 'curso' ? 'cursos' : type === 'tema' ? 'temas' : 'pasos';
+    try {
+        await Promise.all(items.map((item, index) => 
+            api(`${tableName}?id=eq.${item.id}`, "PATCH", { orden: index }, "return=minimal")
+        ));
+    } catch(err) {
+        console.error("Error guardando orden:", err);
+    }
+}
+
+function moverItem(type, id, direction) {
+    const items = getItemsOrdenados(type);
+    if (items.length < 2) return;
+    
+    const idx = items.findIndex(i => i.id === id);
+    if (idx === -1) return;
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= items.length) return;
+    
+    // Intercambiar
+    [items[idx], items[newIdx]] = [items[newIdx], items[idx]];
+    
+    // Actualizar local y refrescar
+    actualizarOrdenLocal(type, items);
+    refrescarVista(type);
+    
+    // Guardar en background
+    guardarOrdenBackground(type, items);
+}
+
+// Drag & Drop
 let draggedItem = null, draggedType = null;
 
 function handleDragStart(e, id, type) { 
@@ -340,84 +394,16 @@ async function handleDrop(e, targetId, type) {
     e.preventDefault(); 
     e.target.closest('.draggable')?.classList.remove('drag-over');
     if (draggedItem && draggedItem !== targetId && draggedType === type) {
-        reordenarInstantaneo(type, draggedItem, targetId);
-    }
-}
-
-function reordenarInstantaneo(type, fromId, toId) {
-    let items;
-    if (type === 'curso') items = cursosData.filter(c => nivelActual && c.nivel_id === nivelActual.id);
-    else if (type === 'tema') items = temasData.filter(t => cursoActual && t.curso_id === cursoActual.id);
-    else items = pasosData.filter(p => temaActual && p.tema_id === temaActual.id);
-    
-    if (!items || items.length < 2) return;
-    items.sort((a, b) => (a.orden || a.id) - (b.orden || b.id));
-    
-    const fromIdx = items.findIndex(i => i.id === fromId);
-    const toIdx = items.findIndex(i => i.id === toId);
-    if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
-    
-    const [moved] = items.splice(fromIdx, 1);
-    items.splice(toIdx, 0, moved);
-    
-    // Actualizar memoria local
-    const table = type === 'curso' ? cursosData : type === 'tema' ? temasData : pasosData;
-    items.forEach((item, index) => {
-        const found = table.find(x => x.id === item.id);
-        if (found) found.orden = index;
-    });
-    
-    // Refrescar vista inmediatamente
-    refrescarVista(type);
-    
-    // Guardar en background
-    guardarOrdenBackground(type, items);
-}
-
-function moverItem(type, id, direction) {
-    let items;
-    if (type === 'curso') items = cursosData.filter(c => nivelActual && c.nivel_id === nivelActual.id);
-    else if (type === 'tema') items = temasData.filter(t => cursoActual && t.curso_id === cursoActual.id);
-    else items = pasosData.filter(p => temaActual && p.tema_id === temaActual.id);
-    
-    if (!items || items.length < 2) return;
-    items.sort((a, b) => (a.orden || a.id) - (b.orden || b.id));
-    
-    const idx = items.findIndex(i => i.id === id);
-    if (idx === -1) return;
-    const newIdx = idx + direction;
-    if (newIdx < 0 || newIdx >= items.length) return;
-    
-    [items[idx], items[newIdx]] = [items[newIdx], items[idx]];
-    
-    // Actualizar memoria local
-    const table = type === 'curso' ? cursosData : type === 'tema' ? temasData : pasosData;
-    items.forEach((item, index) => {
-        const found = table.find(x => x.id === item.id);
-        if (found) found.orden = index;
-    });
-    
-    // Refrescar vista inmediatamente
-    refrescarVista(type);
-    
-    // Guardar en background    guardarOrdenBackground(type, items);
-}
-
-function refrescarVista(type) {
-    if (type === 'curso') renderCursos();
-    else if (type === 'tema') verCurso(cursoActual.id);
-    else verTema(temaActual.id);
-}
-
-async function guardarOrdenBackground(type, items) {
-    const tableName = type === 'curso' ? 'cursos' : type === 'tema' ? 'temas' : 'pasos';
-    try {
-        await Promise.all(items.map((item, index) => 
-            api(`${tableName}?id=eq.${item.id}`, "PATCH", { orden: index }, "return=minimal")
-        ));
-    } catch(err) {
-        console.error("Error guardando orden:", err);
-        showToast("Error al guardar orden", "error");
+        const items = getItemsOrdenados(type);
+        const fromIdx = items.findIndex(i => i.id === draggedItem);
+        const toIdx = items.findIndex(i => i.id === targetId);
+        if (fromIdx !== -1 && toIdx !== -1 && fromIdx !== toIdx) {
+            const [moved] = items.splice(fromIdx, 1);
+            items.splice(toIdx, 0, moved);
+            actualizarOrdenLocal(type, items);
+            refrescarVista(type);
+            guardarOrdenBackground(type, items);
+        }
     }
 }
 
@@ -443,14 +429,14 @@ function createEditor(textareaId, initialValue) {
     const wrapper = document.createElement('div'); wrapper.className = 'editor-wrapper';
     textarea.parentNode.insertBefore(wrapper, textarea);
     const toolbar = document.createElement('div'); toolbar.className = 'editor-toolbar';
-    toolbar.innerHTML = `<div class="tool-group"><button type="button" class="tool-btn" data-cmd="bold" title="Negrita (Ctrl+B)"><b>B</b></button><button type="button" class="tool-btn" data-cmd="italic" title="Cursiva (Ctrl+I)"><i>I</i></button><button type="button" class="tool-btn" data-cmd="underline" title="Subrayado (Ctrl+U)"><u>U</u></button></div><div class="tool-group"><button type="button" class="tool-btn tool-heading" data-cmd="h2" title="Título grande">H2</button><button type="button" class="tool-btn tool-heading" data-cmd="h3" title="Título mediano">H3</button><button type="button" class="tool-btn tool-heading" data-cmd="h4" title="Título pequeño">H4</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="ul" title="Lista con viñetas">•≡</button><button type="button" class="tool-btn" data-cmd="ol" title="Lista numerada">1≡</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="quote" title="Cita bíblica">❝</button><button type="button" class="tool-btn" data-cmd="hr" title="Línea separadora">—</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="preview" title="Vista previa">👁️</button><button type="button" class="tool-btn" data-cmd="fullscreen" title="Pantalla completa">⛶</button><button type="button" class="tool-btn" data-cmd="help" title="Ayuda de formato">❓</button></div>`;
+    toolbar.innerHTML = `<div class="tool-group"><button type="button" class="tool-btn" data-cmd="bold" title="Negrita"><b>B</b></button><button type="button" class="tool-btn" data-cmd="italic" title="Cursiva"><i>I</i></button><button type="button" class="tool-btn" data-cmd="underline" title="Subrayado"><u>U</u></button></div><div class="tool-group"><button type="button" class="tool-btn tool-heading" data-cmd="h2" title="Título">H2</button><button type="button" class="tool-btn tool-heading" data-cmd="h3" title="Título">H3</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="ul" title="Lista">•≡</button><button type="button" class="tool-btn" data-cmd="ol" title="Numerada">1≡</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="quote" title="Cita">❝</button><button type="button" class="tool-btn" data-cmd="hr" title="Línea">—</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="preview" title="Vista previa">👁️</button><button type="button" class="tool-btn" data-cmd="fullscreen" title="Pantalla completa">⛶</button></div>`;
     const editorArea = document.createElement('textarea'); editorArea.className = 'editor-textarea';
     editorArea.id = textareaId + '_editor'; editorArea.value = initialValue || ''; editorArea.placeholder = textarea.placeholder || '';
     const preview = document.createElement('div'); preview.className = 'editor-preview'; preview.id = textareaId + '_preview'; preview.style.display = 'none';
     const tabs = document.createElement('div'); tabs.className = 'editor-tabs';
     tabs.innerHTML = `<button type="button" class="editor-tab active" data-tab="edit">✏️ Editar</button><button type="button" class="editor-tab" data-tab="preview">👁️ Vista previa</button>`;
     const statusBar = document.createElement('div'); statusBar.className = 'editor-statusbar';
-    statusBar.innerHTML = `<span>Markdown: **negrita** *cursiva* ## Título</span><span id="${textareaId}_count">0 caracteres</span>`;
+    statusBar.innerHTML = `<span>**negrita** *cursiva* ## Título</span><span id="${textareaId}_count">0</span>`;
     wrapper.appendChild(toolbar); wrapper.appendChild(tabs); wrapper.appendChild(editorArea); wrapper.appendChild(preview); wrapper.appendChild(statusBar);
     textarea.style.display = 'none';
     function update() { textarea.value = editorArea.value; updateStatusBar(); updatePreview(); }
@@ -465,7 +451,7 @@ function createEditor(textareaId, initialValue) {
         if ((e.ctrlKey||e.metaKey) && {b:'bold',i:'italic',u:'underline'}[e.key]) { e.preventDefault(); handleEditorCommand({b:'bold',i:'italic',u:'underline'}[e.key], editorArea, textarea, preview, tabs); }
         if (e.key === 'Escape' && editorArea.classList.contains('fullscreen')) toggleFullscreen(editorArea);
     });
-    function updateStatusBar() { document.getElementById(textareaId+'_count').textContent = `${editorArea.value.length} caracteres · ${(editorArea.value.trim()?editorArea.value.trim().split(/\s+/).length:0)} palabras`; }
+    function updateStatusBar() { document.getElementById(textareaId+'_count').textContent = `${editorArea.value.length} caracteres`; }
     function updatePreview() { preview.innerHTML = parseMarkdown(editorArea.value); }
     update(); return { editorArea, preview, wrapper };
 }
@@ -478,20 +464,18 @@ function handleEditorCommand(cmd, ta, textarea, preview, tabs) {
         case 'underline': rep = `_${sel||'texto'}_`; off = sel ? 0 : -1; break;
         case 'h2': rep = `\n## ${sel||'Título'}\n`; break;
         case 'h3': rep = `\n### ${sel||'Título'}\n`; break;
-        case 'h4': rep = `\n#### ${sel||'Título'}\n`; break;
         case 'ul': rep = sel ? sel.split('\n').map(l=>`- ${l}`).join('\n') : '\n- Elemento\n- Elemento\n'; break;
         case 'ol': rep = sel ? sel.split('\n').map((l,i)=>`${i+1}. ${l}`).join('\n') : '\n1. Primero\n2. Segundo\n'; break;
-        case 'quote': rep = `\n> ${sel||'Cita bíblica'}\n`; break;
+        case 'quote': rep = `\n> ${sel||'Cita'}\n`; break;
         case 'hr': rep = '\n---\n'; break;
         case 'preview': tabs.querySelector('[data-tab="preview"]')?.click(); return;
         case 'fullscreen': toggleFullscreen(ta); return;
-        case 'help': alert('📝 Formato:\n\n**negrita**\n*cursiva*\n_subrayado_\n## Título H2\n### Título H3\n- Lista\n1. Numerada\n> Cita\n--- Línea'); return;
     }
     ta.value = text.substring(0,start) + rep + text.substring(end); ta.focus();
     ta.selectionStart = sel ? start : start + rep.length + off; ta.selectionEnd = sel ? start + rep.length : start + rep.length + off;
     textarea.value = ta.value; ta.dispatchEvent(new Event('input'));
 }
-function toggleFullscreen(ta) { ta.classList.toggle('fullscreen'); document.body.style.overflow = ta.classList.contains('fullscreen') ? 'hidden' : ''; if (ta.classList.contains('fullscreen')) ta.focus(); }
+function toggleFullscreen(ta) { ta.classList.toggle('fullscreen'); document.body.style.overflow = ta.classList.contains('fullscreen') ? 'hidden' : ''; }
 
 // ============================================================
 // RENDERIZADO PRINCIPAL
@@ -507,17 +491,14 @@ async function renderNiveles() {
 }
 async function selectNivel(nivelId) { nivelActual = nivelesData.find(n => n.id === nivelId) || null; cursoActual = null; temaActual = null; await loadCursosData(); renderNiveles(); }
 
-// ============================================================
-// RENDERIZAR CURSOS
-// ============================================================
 async function renderCursos() {
     if (!nivelActual) return;
     let cursosNivel = cursosData.filter(c => c.nivel_id === nivelActual.id);
     cursosNivel.sort((a, b) => (a.orden || 0) - (b.orden || 0));
     const main = document.getElementById("mainContent");
-    let html = `<div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${nivelActual.color};font-size:1.4rem;margin-bottom:0.5rem">📚 Cursos de ${nivelActual.nombre}</h2><p style="color:var(--text-light);font-family:'Crimson Pro',serif">${nivelActual.descripcion||''}</p></div>`;
-    if (isAdmin) html += `<div style="margin-bottom:1.5rem;display:flex;gap:0.5rem;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="openCursoModal()">+ Nuevo Curso</button><button class="btn btn-secondary btn-sm" onclick="showEstudiantes()">👥 Ver Estudiantes</button></div>`;
-    if (!cursosNivel.length) { html += '<div class="empty-state">No hay cursos en este nivel aún.</div>'; }
+    let html = `<div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${nivelActual.color}">📚 Cursos de ${nivelActual.nombre}</h2><p style="color:var(--text-light)">${nivelActual.descripcion||''}</p></div>`;
+    if (isAdmin) html += `<div style="margin-bottom:1.5rem;display:flex;gap:0.5rem"><button class="btn btn-primary btn-sm" onclick="openCursoModal()">+ Nuevo Curso</button><button class="btn btn-secondary btn-sm" onclick="showEstudiantes()">👥 Estudiantes</button></div>`;
+    if (!cursosNivel.length) { html += '<div class="empty-state">No hay cursos en este nivel.</div>'; }
     else {
         html += '<div class="cursos-grid">';
         cursosNivel.forEach((curso, index) => {
@@ -525,41 +506,35 @@ async function renderCursos() {
             const totalPasos = pasosData.filter(p => temasCurso.some(t => t.id === p.tema_id)).length;
             const completados = estudianteActual ? progresoData.filter(pr => pr.completado && pasosData.some(p => p.id === pr.paso_id && temasCurso.some(t => t.id === p.tema_id))).length : 0;
             const pct = totalPasos > 0 ? Math.round((completados/totalPasos)*100) : 0;
-            html += `<div class="curso-card draggable" draggable="${isAdmin}" ondragstart="${isAdmin?`handleDragStart(event,${curso.id},'curso')`:''}" ondragend="handleDragEnd(event)" ondragover="${isAdmin?'handleDragOver(event)':''}" ondragleave="${isAdmin?'handleDragLeave(event)':''}" ondrop="${isAdmin?`handleDrop(event,${curso.id},'curso')`:''}"><div class="curso-card-header" style="background:${nivelActual.color}"><span style="font-family:'Cinzel',serif;font-size:0.85rem">${isAdmin?`<span class="drag-handle" title="Arrastrar">⋮⋮</span> `:''}${temasCurso.length} temas</span><span>${totalPasos} pasos</span></div><div class="curso-card-body"><div class="curso-titulo">${curso.titulo}</div><div class="curso-desc">${curso.descripcion||''}</div><div class="progreso-bar"><div class="progreso-fill" style="width:${pct}%;background:${nivelActual.color}"></div></div><div style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem">${completados}/${totalPasos} pasos (${pct}%)</div><div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center"><button class="btn btn-primary btn-sm" onclick="verCurso(${curso.id})">📖 Ver Temas</button>${isAdmin?`<div class="orden-controls"><button class="orden-btn" onclick="event.stopPropagation();moverItem('curso',${curso.id},-1)" ${index===0?'disabled':''} title="Subir">▲</button><button class="orden-btn" onclick="event.stopPropagation();moverItem('curso',${curso.id},1)" ${index===cursosNivel.length-1?'disabled':''} title="Bajar">▼</button></div><button class="btn btn-warning btn-sm" onclick="event.stopPropagation();editCurso(${curso.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteCurso(${curso.id})">🗑️</button>`:''}</div></div></div>`;
+            html += `<div class="curso-card draggable" draggable="${isAdmin}" ondragstart="${isAdmin?`handleDragStart(event,${curso.id},'curso')`:''}" ondragend="handleDragEnd(event)" ondragover="${isAdmin?'handleDragOver(event)':''}" ondragleave="${isAdmin?'handleDragLeave(event)':''}" ondrop="${isAdmin?`handleDrop(event,${curso.id},'curso')`:''}"><div class="curso-card-header" style="background:${nivelActual.color}"><span>${isAdmin?`<span class="drag-handle">⋮⋮</span> `:''}${temasCurso.length} temas</span><span>${totalPasos} pasos</span></div><div class="curso-card-body"><div class="curso-titulo">${curso.titulo}</div><div class="curso-desc">${curso.descripcion||''}</div><div class="progreso-bar"><div class="progreso-fill" style="width:${pct}%;background:${nivelActual.color}"></div></div><div style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem">${completados}/${totalPasos} pasos (${pct}%)</div><div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center"><button class="btn btn-primary btn-sm" onclick="verCurso(${curso.id})">📖 Ver Temas</button>${isAdmin?`<div class="orden-controls"><button class="orden-btn" onclick="moverItem('curso',${curso.id},-1)" ${index===0?'disabled':''}>▲</button><button class="orden-btn" onclick="moverItem('curso',${curso.id},1)" ${index===cursosNivel.length-1?'disabled':''}>▼</button></div><button class="btn btn-warning btn-sm" onclick="editCurso(${curso.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteCurso(${curso.id})">🗑️</button>`:''}</div></div></div>`;
         });
         html += '</div>';
     }
     main.innerHTML = html;
 }
 
-// ============================================================
-// VER TEMAS
-// ============================================================
 async function verCurso(cursoId) {
     cursoActual = cursosData.find(c => c.id === cursoId); if (!cursoActual||!nivelActual) return;
     await Promise.all([loadTemasData(), loadPasosData(), loadProgresoData()]);
     let temasCurso = temasData.filter(t => t.curso_id === cursoId);
     temasCurso.sort((a, b) => (a.orden || 0) - (b.orden || 0));
     const main = document.getElementById("mainContent");
-    let html = `<button class="btn btn-secondary back-btn" onclick="renderCursos()">← Volver a Cursos</button><div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${nivelActual.color};font-size:1.4rem">📖 ${cursoActual.titulo}</h2><p style="color:var(--text-light);font-family:'Crimson Pro',serif">${cursoActual.descripcion||''}</p></div>`;
+    let html = `<button class="btn btn-secondary back-btn" onclick="renderCursos()">← Volver a Cursos</button><div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${nivelActual.color}">📖 ${cursoActual.titulo}</h2><p style="color:var(--text-light)">${cursoActual.descripcion||''}</p></div>`;
     if (isAdmin) html += `<div style="margin-bottom:1rem"><button class="btn btn-primary btn-sm" onclick="openTemaModal(${cursoId})">+ Agregar Tema</button></div>`;
-    if (!temasCurso.length) { html += '<div class="empty-state">No hay temas en este curso aún.</div>'; }
+    if (!temasCurso.length) { html += '<div class="empty-state">No hay temas en este curso.</div>'; }
     else {
         html += '<div class="temas-lista">';
         temasCurso.forEach((tema, i) => {
             const pasosTema = pasosData.filter(p => p.tema_id === tema.id);
             const completados = estudianteActual ? progresoData.filter(pr => pr.completado && pasosTema.some(p => p.id === pr.paso_id)).length : 0;
             const allDone = pasosTema.length > 0 && completados === pasosTema.length;
-            html += `<div class="tema-item draggable" draggable="${isAdmin}" ondragstart="${isAdmin?`handleDragStart(event,${tema.id},'tema')`:''}" ondragend="handleDragEnd(event)" ondragover="${isAdmin?'handleDragOver(event)':''}" ondragleave="${isAdmin?'handleDragLeave(event)':''}" ondrop="${isAdmin?`handleDrop(event,${tema.id},'tema')`:''}">${isAdmin?`<span class="drag-handle" title="Arrastrar">⋮⋮</span>`:''}<div class="tema-numero ${allDone?'tema-completado':'tema-pendiente'}">${allDone?'✓':i+1}</div><div class="tema-info" onclick="verTema(${tema.id})"><div class="tema-titulo">${tema.titulo}</div><div class="tema-pasos">${pasosTema.length} pasos · ${completados} completados</div></div>${isAdmin?`<div class="orden-controls"><button class="orden-btn" onclick="event.stopPropagation();moverItem('tema',${tema.id},-1)" ${i===0?'disabled':''} title="Subir">▲</button><button class="orden-btn" onclick="event.stopPropagation();moverItem('tema',${tema.id},1)" ${i===temasCurso.length-1?'disabled':''} title="Bajar">▼</button></div><div style="display:flex;gap:0.3rem"><button class="btn btn-warning btn-xs" onclick="event.stopPropagation();editTema(${tema.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteTema(${tema.id})">🗑️</button></div>`:''}<div class="tema-check" onclick="verTema(${tema.id})">${allDone?'✅':'▶️'}</div></div>`;
+            html += `<div class="tema-item draggable" draggable="${isAdmin}" ondragstart="${isAdmin?`handleDragStart(event,${tema.id},'tema')`:''}" ondragend="handleDragEnd(event)" ondragover="${isAdmin?'handleDragOver(event)':''}" ondragleave="${isAdmin?'handleDragLeave(event)':''}" ondrop="${isAdmin?`handleDrop(event,${tema.id},'tema')`:''}">${isAdmin?`<span class="drag-handle">⋮⋮</span>`:''}<div class="tema-numero ${allDone?'tema-completado':'tema-pendiente'}">${allDone?'✓':i+1}</div><div class="tema-info" onclick="verTema(${tema.id})"><div class="tema-titulo">${tema.titulo}</div><div class="tema-pasos">${pasosTema.length} pasos · ${completados} completados</div></div>${isAdmin?`<div class="tema-actions"><div class="orden-controls"><button class="orden-btn" onclick="event.stopPropagation();moverItem('tema',${tema.id},-1)" ${i===0?'disabled':''}>▲</button><button class="orden-btn" onclick="event.stopPropagation();moverItem('tema',${tema.id},1)" ${i===temasCurso.length-1?'disabled':''}>▼</button></div><button class="btn btn-warning btn-xs" onclick="event.stopPropagation();editTema(${tema.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteTema(${tema.id})">🗑️</button></div>`:''}<div class="tema-check" onclick="verTema(${tema.id})">${allDone?'✅':'▶️'}</div></div>`;
         });
         html += '</div>';
     }
     main.innerHTML = html;
 }
 
-// ============================================================
-// VER TEMA Y PASOS
-// ============================================================
 async function verTema(temaId) {
     temaActual = temasData.find(t => t.id === temaId); if (!temaActual||!nivelActual) return;
     await Promise.all([loadPasosData(), loadProgresoData()]);
@@ -567,14 +542,14 @@ async function verTema(temaId) {
     pasosTema.sort((a, b) => (a.orden || 0) - (b.orden || 0));
     const main = document.getElementById("mainContent");
     aplicarTamanoFuente();
-    let html = `<button class="btn btn-secondary back-btn" onclick="verCurso(${temaActual.curso_id})">← Volver a Temas</button><div class="reading-controls"><span>🔤 Tamaño:</span><button class="font-size-btn" onclick="disminuirFuente()">A-</button><span class="font-size-indicator" id="fontSizeIndicator">${currentFontSize.toFixed(1)}rem</span><button class="font-size-btn" onclick="aumentarFuente()">A+</button><button class="btn btn-sm btn-secondary" onclick="resetearFuente()" style="margin-left:0.3rem">Normal</button><span style="margin-left:1rem">🎨</span><button class="btn btn-sm btn-secondary" id="btnModoLectura" onclick="toggleModoLectura()">🌙</button></div><div class="tema-contenido"><span style="display:inline-block;background:${nivelActual.color};color:#fff;padding:0.2rem 0.6rem;border-radius:3px;font-size:0.75rem;font-weight:700;margin-bottom:1rem">${nivelActual.nombre}</span><h2>${temaActual.titulo}</h2><div class="contenido-texto">${parseMarkdown(temaActual.contenido||'Sin contenido aún.')}</div></div><div class="pasos-section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.5rem"><h3>✋ Pasos Prácticos (${pasosTema.length})</h3>${isAdmin?`<button class="btn btn-primary btn-sm" onclick="openPasoModal(${temaId})">+ Agregar Paso</button>`:''}</div><div id="pasosContainer">${pasosTema.length===0?'<p class="empty-state">No hay pasos prácticos para este tema.</p>':''}</div></div>`;
+    let html = `<button class="btn btn-secondary back-btn" onclick="verCurso(${temaActual.curso_id})">← Volver a Temas</button><div class="reading-controls"><span>🔤</span><button class="font-size-btn" onclick="disminuirFuente()">A-</button><span class="font-size-indicator" id="fontSizeIndicator">${currentFontSize.toFixed(1)}rem</span><button class="font-size-btn" onclick="aumentarFuente()">A+</button><button class="btn btn-sm btn-secondary" onclick="resetearFuente()">Normal</button><span style="margin-left:1rem">🎨</span><button class="btn btn-sm btn-secondary" id="btnModoLectura" onclick="toggleModoLectura()">🌙</button></div><div class="tema-contenido"><span style="display:inline-block;background:${nivelActual.color};color:#fff;padding:0.2rem 0.6rem;border-radius:3px;font-size:0.75rem;font-weight:700;margin-bottom:1rem">${nivelActual.nombre}</span><h2>${temaActual.titulo}</h2><div class="contenido-texto">${parseMarkdown(temaActual.contenido||'Sin contenido.')}</div></div><div class="pasos-section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.5rem"><h3>✋ Pasos Prácticos (${pasosTema.length})</h3>${isAdmin?`<button class="btn btn-primary btn-sm" onclick="openPasoModal(${temaId})">+ Agregar Paso</button>`:''}</div><div id="pasosContainer">${pasosTema.length===0?'<p class="empty-state">No hay pasos prácticos.</p>':''}</div></div>`;
     main.innerHTML = html;
     if (modoLecturaOscuro) { document.body.classList.add('modo-lectura'); const btn = document.getElementById("btnModoLectura"); if (btn) btn.textContent = '☀️'; }
     if (pasosTema.length > 0) {
         const container = document.getElementById("pasosContainer");
         container.innerHTML = pasosTema.map((paso, index) => {
             const prog = progresoData.find(pr => pr.paso_id === paso.id) || { completado: false, notas: '' };
-            return `<div class="paso-item ${prog.completado?'completado':''} draggable" id="paso-${paso.id}" draggable="${isAdmin}" ondragstart="${isAdmin?`handleDragStart(event,${paso.id},'paso')`:''}" ondragend="handleDragEnd(event)" ondragover="${isAdmin?'handleDragOver(event)':''}" ondragleave="${isAdmin?'handleDragLeave(event)':''}" ondrop="${isAdmin?`handleDrop(event,${paso.id},'paso')`:''}">${isAdmin?`<span class="drag-handle" title="Arrastrar">⋮⋮</span>`:''}<div class="paso-checkbox ${prog.completado?'checked':''}" onclick="togglePaso(${paso.id},this)" title="${prog.completado?'Desmarcar':'Completar'}">${prog.completado?'✓':''}</div><div style="flex:1"><div class="paso-texto">${paso.descripcion}</div><textarea class="paso-notas" placeholder="Tus notas..." onchange="guardarNotas(${paso.id},this.value)" style="${prog.completado?'display:block':'display:none'}">${prog.notas||''}</textarea></div>${isAdmin?`<div class="orden-controls"><button class="orden-btn" onclick="event.stopPropagation();moverItem('paso',${paso.id},-1)" ${index===0?'disabled':''}>▲</button><button class="orden-btn" onclick="event.stopPropagation();moverItem('paso',${paso.id},1)" ${index===pasosTema.length-1?'disabled':''}>▼</button></div><div class="paso-actions"><button class="btn btn-warning btn-xs" onclick="event.stopPropagation();editPaso(${paso.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deletePaso(${paso.id})">🗑️</button></div>`:''}</div>`;
+            return `<div class="paso-item ${prog.completado?'completado':''} draggable" id="paso-${paso.id}" draggable="${isAdmin}" ondragstart="${isAdmin?`handleDragStart(event,${paso.id},'paso')`:''}" ondragend="handleDragEnd(event)" ondragover="${isAdmin?'handleDragOver(event)':''}" ondragleave="${isAdmin?'handleDragLeave(event)':''}" ondrop="${isAdmin?`handleDrop(event,${paso.id},'paso')`:''}">${isAdmin?`<span class="drag-handle">⋮⋮</span>`:''}<div class="paso-checkbox ${prog.completado?'checked':''}" onclick="togglePaso(${paso.id},this)">${prog.completado?'✓':''}</div><div style="flex:1"><div class="paso-texto">${paso.descripcion}</div><textarea class="paso-notas" placeholder="Tus notas..." onchange="guardarNotas(${paso.id},this.value)" style="${prog.completado?'display:block':'display:none'}">${prog.notas||''}</textarea></div>${isAdmin?`<div class="paso-actions"><div class="orden-controls"><button class="orden-btn" onclick="event.stopPropagation();moverItem('paso',${paso.id},-1)" ${index===0?'disabled':''}>▲</button><button class="orden-btn" onclick="event.stopPropagation();moverItem('paso',${paso.id},1)" ${index===pasosTema.length-1?'disabled':''}>▼</button></div><button class="btn btn-warning btn-xs" onclick="event.stopPropagation();editPaso(${paso.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deletePaso(${paso.id})">🗑️</button></div>`:''}</div>`;
         }).join("");
     }
 }
@@ -590,7 +565,7 @@ async function togglePaso(pasoId, checkboxEl) {
     const existing = progresoData.find(pr => pr.paso_id === pasoId);
     const nuevoEstado = !(existing && existing.completado);
     if (existing) { await api(`progreso?id=eq.${existing.id}`,"PATCH",{completado:nuevoEstado,fecha_completado:nuevoEstado?new Date().toISOString():null},"return=minimal"); existing.completado = nuevoEstado; }
-    else { const res = await api("progreso","POST",{estudiante_id:estudianteActual.id,paso_id:pasoId,completado:nuevoEstado,fecha_completado:nuevoEstado?new Date().toISOString():null,notas:""},"return=representation"); if (res&&res[0]) progresoData.push(res[0]); else await loadProgresoData(); }
+    else { const res = await api("progreso","POST",{estudiante_id:estudianteActual.id,paso_id:pasoId,completado:nuevoEstado,fecha_completado:nuevoEstado?new Date().toISOString():null,notas:""},"return=representation"); if (res&&res[0]) progresoData.push(res[0]); }
     const pasoItem = document.getElementById(`paso-${pasoId}`);
     if (pasoItem) { pasoItem.classList.toggle("completado",nuevoEstado); const cb = pasoItem.querySelector(".paso-checkbox"); if (cb) { cb.classList.toggle("checked",nuevoEstado); cb.textContent = nuevoEstado?'✓':''; } const na = pasoItem.querySelector(".paso-notas"); if (na) na.style.display = nuevoEstado?'block':'none'; }
     showToast(nuevoEstado?"✅ ¡Paso completado!":"Paso desmarcado");
@@ -606,7 +581,7 @@ const guardarNotas = debounce(async function(pasoId, notas) {
 // ============================================================
 function openCursoModal() {
     const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>Nuevo Curso</h2><form onsubmit="saveCurso(event,null)"><div class="form-group"><label>Nivel</label><select id="cursoNivelId" required><option value="">Seleccionar nivel</option>${nivelesData.map(n=>`<option value="${n.id}" ${nivelActual&&n.id===nivelActual.id?'selected':''}>${n.nombre}</option>`).join('')}</select></div><div class="form-group"><label>Título</label><input type="text" id="cursoTitulo" required placeholder="Ej: Fundamentos de la Fe"></div><div class="form-group"><label>Descripción</label><input type="text" id="cursoDesc" placeholder="Breve descripción"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
+    content.innerHTML = `<h2>Nuevo Curso</h2><form onsubmit="saveCurso(event,null)"><div class="form-group"><label>Nivel</label><select id="cursoNivelId" required><option value="">Seleccionar</option>${nivelesData.map(n=>`<option value="${n.id}" ${nivelActual&&n.id===nivelActual.id?'selected':''}>${n.nombre}</option>`).join('')}</select></div><div class="form-group"><label>Título</label><input type="text" id="cursoTitulo" required></div><div class="form-group"><label>Descripción</label><input type="text" id="cursoDesc"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
     document.getElementById("adminModal").classList.add("active");
 }
 function editCurso(id) {
@@ -617,7 +592,8 @@ function editCurso(id) {
 }
 async function saveCurso(e, editId) {
     e.preventDefault();
-    const data = { nivel_id: parseInt(document.getElementById("cursoNivelId").value), titulo: document.getElementById("cursoTitulo").value, descripcion: document.getElementById("cursoDesc").value, orden: editId ? undefined : cursosData.filter(c=>nivelActual&&c.nivel_id===nivelActual.id).length };
+    const data = { nivel_id: parseInt(document.getElementById("cursoNivelId").value), titulo: document.getElementById("cursoTitulo").value, descripcion: document.getElementById("cursoDesc").value };
+    if (!editId) data.orden = cursosData.filter(c=>nivelActual&&c.nivel_id===nivelActual.id).length;
     try {
         if (editId) await api(`cursos?id=eq.${editId}`,"PATCH",data,"return=minimal");
         else await api("cursos","POST",data,"return=minimal");
@@ -626,7 +602,7 @@ async function saveCurso(e, editId) {
     } catch(err) { showToast("Error: "+err.message,"error"); }
 }
 async function deleteCurso(id) {
-    if (!confirm("¿Eliminar este curso y todos sus temas y pasos?")) return;
+    if (!confirm("¿Eliminar este curso y su contenido?")) return;
     try { await api(`cursos?id=eq.${id}`,"DELETE"); await loadCursosData(); renderCursos(); showToast("Curso eliminado","error"); }
     catch(err) { showToast("Error: "+err.message,"error"); }
 }
@@ -637,7 +613,7 @@ async function deleteCurso(id) {
 function openTemaModal(cursoIdParam) {
     const cid = cursoIdParam || (cursoActual?cursoActual.id:null);
     const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>Nuevo Tema</h2><form onsubmit="saveTema(event,null)"><div class="form-group"><label>Curso</label><select id="temaCursoId" required><option value="">Seleccionar curso</option>${cursosData.map(c=>{const n=nivelesData.find(x=>x.id===c.nivel_id);return `<option value="${c.id}" ${c.id===cid?'selected':''}>${n?.nombre||''} → ${c.titulo}</option>`;}).join('')}</select></div><div class="form-group"><label>Título</label><input type="text" id="temaTitulo" required placeholder="Ej: La Oración"></div><div class="form-group"><label>Contenido</label><textarea id="temaContenido" placeholder="Escribe el contenido..."></textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
+    content.innerHTML = `<h2>Nuevo Tema</h2><form onsubmit="saveTema(event,null)"><div class="form-group"><label>Curso</label><select id="temaCursoId" required><option value="">Seleccionar</option>${cursosData.map(c=>{const n=nivelesData.find(x=>x.id===c.nivel_id);return `<option value="${c.id}" ${c.id===cid?'selected':''}>${n?.nombre||''} → ${c.titulo}</option>`;}).join('')}</select></div><div class="form-group"><label>Título</label><input type="text" id="temaTitulo" required></div><div class="form-group"><label>Contenido</label><textarea id="temaContenido" placeholder="Escribe el contenido..."></textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
     document.getElementById("adminModal").classList.add("active");
     setTimeout(() => createEditor('temaContenido', ''), 200);
 }
@@ -651,7 +627,8 @@ function editTema(id) {
 async function saveTema(e, editId) {
     e.preventDefault();
     const textarea = document.getElementById("temaContenido");
-    const data = { curso_id: parseInt(document.getElementById("temaCursoId").value), titulo: document.getElementById("temaTitulo").value, contenido: textarea?textarea.value:'', orden: editId ? undefined : temasData.filter(t=>cursoActual&&t.curso_id===cursoActual.id).length };
+    const data = { curso_id: parseInt(document.getElementById("temaCursoId").value), titulo: document.getElementById("temaTitulo").value, contenido: textarea?textarea.value:'' };
+    if (!editId) data.orden = temasData.filter(t=>cursoActual&&t.curso_id===cursoActual.id).length;
     try {
         if (editId) await api(`temas?id=eq.${editId}`,"PATCH",data,"return=minimal");
         else await api("temas","POST",data,"return=minimal");
@@ -661,7 +638,7 @@ async function saveTema(e, editId) {
     } catch(err) { showToast("Error: "+err.message,"error"); }
 }
 async function deleteTema(id) {
-    if (!confirm("¿Eliminar este tema y todos sus pasos?")) return;
+    if (!confirm("¿Eliminar este tema?")) return;
     try { await api(`temas?id=eq.${id}`,"DELETE"); await loadTemasData(); if (cursoActual) verCurso(cursoActual.id); else renderCursos(); showToast("Tema eliminado","error"); }
     catch(err) { showToast("Error: "+err.message,"error"); }
 }
@@ -672,7 +649,7 @@ async function deleteTema(id) {
 function openPasoModal(temaIdParam) {
     const tid = temaIdParam || (temaActual?temaActual.id:null);
     const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>Nuevo Paso Práctico</h2><form onsubmit="savePaso(event,null)"><div class="form-group"><label>Tema</label><select id="pasoTemaId" required><option value="">Seleccionar tema</option>${temasData.map(t=>{const c=cursosData.find(x=>x.id===t.curso_id);return `<option value="${t.id}" ${t.id===tid?'selected':''}>${c?.titulo||''} → ${t.titulo}</option>`;}).join('')}</select></div><div class="form-group"><label>Descripción</label><textarea id="pasoDesc" required placeholder="Describe la acción práctica..."></textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
+    content.innerHTML = `<h2>Nuevo Paso</h2><form onsubmit="savePaso(event,null)"><div class="form-group"><label>Tema</label><select id="pasoTemaId" required><option value="">Seleccionar</option>${temasData.map(t=>{const c=cursosData.find(x=>x.id===t.curso_id);return `<option value="${t.id}" ${t.id===tid?'selected':''}>${c?.titulo||''} → ${t.titulo}</option>`;}).join('')}</select></div><div class="form-group"><label>Descripción</label><textarea id="pasoDesc" required placeholder="Acción práctica..."></textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
     document.getElementById("adminModal").classList.add("active");
 }
 function editPaso(id) {
@@ -687,10 +664,11 @@ async function savePaso(e, editId) {
     const desc = document.getElementById("pasoDesc").value.trim();
     if (!temaId) { showToast("Selecciona un tema","error"); return; }
     if (!desc) { showToast("Escribe la descripción","error"); return; }
-    const data = { tema_id: temaId, descripcion: desc, orden: editId ? undefined : pasosData.filter(p=>temaActual&&p.tema_id===temaActual.id).length };
+    const data = { tema_id: temaId, descripcion: desc };
+    if (!editId) data.orden = pasosData.filter(p=>temaActual&&p.tema_id===temaActual.id).length;
     try {
         if (editId) await api(`pasos?id=eq.${editId}`,"PATCH",data,"return=minimal");
-        else { const res = await api("pasos","POST",data,"return=representation"); if (!res||!res[0]) throw new Error("No se recibió confirmación"); }
+        else { const res = await api("pasos","POST",data,"return=representation"); if (!res||!res[0]) throw new Error("Sin confirmación"); }
         closeAdminModal(); await loadPasosData();
         if (temaActual) await verTema(temaActual.id); else if (cursoActual) await verCurso(cursoActual.id); else await renderCursos();
         showToast(editId?"✅ Paso actualizado":"✅ Paso creado");
@@ -707,7 +685,7 @@ async function deletePaso(id) {
 // ============================================================
 function showEstudiantes() {
     const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>👥 Estudiantes</h2><div style="margin-bottom:1rem"><button class="btn btn-primary btn-sm" onclick="openEstudianteModal()">+ Nuevo Estudiante</button></div><div style="max-height:400px;overflow-y:auto">${estudiantesData.length===0?'<p class="empty-state">No hay estudiantes.</p>':`<table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--nivel2);color:var(--gold-light)"><th style="padding:0.5rem">Nombre</th><th style="padding:0.5rem">Email</th><th style="padding:0.5rem">Progreso</th><th style="padding:0.5rem">Acciones</th></tr></thead><tbody>${estudiantesData.map(e=>{const t=pasosData.length,c=progresoData.filter(p=>p.estudiante_id===e.id&&p.completado).length,p=t>0?Math.round((c/t)*100):0;return`<tr><td style="padding:0.5rem">${e.nombre} ${e.apellido}</td><td style="padding:0.5rem">${e.email||'-'}</td><td style="padding:0.5rem">${c}/${t} (${p}%)</td><td style="padding:0.5rem"><button class="btn btn-warning btn-xs" onclick="editEstudiante(${e.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="deleteEstudiante(${e.id})">🗑️</button></td></tr>`;}).join('')}</tbody></table>`}</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeAdminModal()">Cerrar</button></div>`;
+    content.innerHTML = `<h2>👥 Estudiantes</h2><div style="margin-bottom:1rem"><button class="btn btn-primary btn-sm" onclick="openEstudianteModal()">+ Nuevo</button></div>${estudiantesData.length===0?'<p class="empty-state">No hay estudiantes.</p>':`<table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--nivel2);color:var(--gold-light)"><th>Nombre</th><th>Email</th><th>Progreso</th><th>Acciones</th></tr></thead><tbody>${estudiantesData.map(e=>{const t=pasosData.length,c=progresoData.filter(p=>p.estudiante_id===e.id&&p.completado).length,p=t>0?Math.round((c/t)*100):0;return`<tr><td>${e.nombre} ${e.apellido}</td><td>${e.email||'-'}</td><td>${c}/${t} (${p}%)</td><td><button class="btn btn-warning btn-xs" onclick="editEstudiante(${e.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="deleteEstudiante(${e.id})">🗑️</button></td></tr>`;}).join('')}</tbody></table>`}<div class="modal-actions"><button class="btn btn-secondary" onclick="closeAdminModal()">Cerrar</button></div>`;
     document.getElementById("adminModal").classList.add("active");
 }
 function openEstudianteModal(editId) {
@@ -724,12 +702,12 @@ async function saveEstudiante(e, editId) {
         if (editId) await api(`estudiantes?id=eq.${editId}`,"PATCH",data,"return=minimal");
         else await api("estudiantes","POST",data,"return=minimal");
         await loadAll(); showEstudiantes();
-        showToast(editId?"✅ Estudiante actualizado":"✅ Estudiante creado");
+        showToast(editId?"✅ Actualizado":"✅ Creado");
     } catch(err) { showToast("Error: "+err.message,"error"); }
 }
 async function deleteEstudiante(id) {
-    if (!confirm("¿Eliminar este estudiante y su progreso?")) return;
-    try { await api(`estudiantes?id=eq.${id}`,"DELETE"); await loadAll(); showEstudiantes(); showToast("Estudiante eliminado","error"); }
+    if (!confirm("¿Eliminar?")) return;
+    try { await api(`estudiantes?id=eq.${id}`,"DELETE"); await loadAll(); showEstudiantes(); showToast("Eliminado","error"); }
     catch(err) { showToast("Error: "+err.message,"error"); }
 }
 
