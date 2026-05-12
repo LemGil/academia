@@ -7,94 +7,232 @@
     <title>Academia del Espíritu</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="data:text/css;base64,/* Aquí irían los estilos */">
     <style>
-        /* Estilos (los mismos de antes, omitidos por brevedad) */
         :root {
-            --nivel1: #3D1C4D; --nivel2: #1A3A4A; --nivel3: #4A5A3D;
-            --gold: #C9A24A; --gold-light: #F5D77A;
+            --nivel1: #3D1C4D; --nivel1-light: #5D3C6D; --nivel1-bg: #F8F0FB;
+            --nivel2: #1A3A4A; --nivel2-light: #2C525F; --nivel2-bg: #F0F4F8;
+            --nivel3: #4A5A3D; --nivel3-light: #6A7A5D; --nivel3-bg: #F4F8F0;
+            --gold: #C9A24A; --gold-light: #F5D77A; --gold-dark: #8A6A2F;
             --bg: #F5F1E8; --surface: #FFFFFF; --border: #D6D0C4;
-            --text: #1C1C1C; --success: #27ae60; --danger: #c0392b;
+            --text: #1C1C1C; --text-light: #666;
+            --success: #27ae60; --danger: #c0392b; --warning: #f39c12;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
             --radius: 8px;
+            --font-size-content: 1.1rem;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Inter',sans-serif; background:var(--bg); }
-        .hidden { display:none !important; }
-        .skeleton { background:linear-gradient(90deg,#eee 25%,#f5f5f5 50%,#eee 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:4px; }
+        body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; min-height:100vh; background-image:radial-gradient(#D6D0C4 1px,transparent 1px); background-size:20px 20px; }
+        .container { max-width:1200px; margin:0 auto; padding:1rem; }
+        
+        header { display:flex; align-items:center; gap:1.5rem; margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:2px solid var(--gold); flex-wrap:wrap; }
+        .logo { height:60px; }
+        .header-text h1 { font-family:'Cinzel',serif; font-size:1.8rem; color:var(--nivel2); text-transform:uppercase; letter-spacing:1px; }
+        .header-text p { font-family:'Crimson Pro',serif; color:var(--gold-dark); font-style:italic; }
+        .header-actions { display:flex; gap:0.5rem; align-items:center; margin-left:auto; flex-wrap:wrap; }
+        .admin-badge { background:var(--gold); color:var(--nivel2); padding:0.3rem 0.8rem; border-radius:4px; font-size:0.75rem; font-weight:700; text-transform:uppercase; }
+        
+        .btn { padding:0.6rem 1.2rem; border:none; border-radius:4px; cursor:pointer; font-family:'Inter',sans-serif; font-weight:600; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; transition:all 0.3s; display:inline-flex; align-items:center; gap:0.5rem; }
+        .btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+        .btn-sm { padding:0.3rem 0.7rem; font-size:0.75rem; }
+        .btn-xs { padding:0.2rem 0.5rem; font-size:0.7rem; }
+        .btn-primary { background:var(--nivel2); color:var(--gold-light); }
+        .btn-secondary { background:var(--surface); color:var(--nivel2); border:1px solid var(--gold); }
+        .btn-danger { background:var(--surface); color:var(--danger); border:1px solid var(--danger); }
+        .btn-danger:hover { background:var(--danger); color:#fff; }
+        .btn-warning { background:var(--surface); color:var(--warning); border:1px solid var(--warning); }
+        .btn-warning:hover { background:var(--warning); color:#fff; }
+        
+        .niveles-nav { display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap; }
+        .nivel-tab { flex:1; min-width:180px; padding:1.2rem; border:none; border-radius:var(--radius); cursor:pointer; text-align:center; transition:all 0.3s; position:relative; overflow:hidden; }
+        .nivel-tab::before { content:''; position:absolute; top:0; left:0; width:100%; height:4px; }
+        .nivel-tab.nivel-1 { background:var(--nivel1-bg); border:2px solid var(--nivel1); }
+        .nivel-tab.nivel-1::before { background:var(--nivel1); }
+        .nivel-tab.nivel-2 { background:var(--nivel2-bg); border:2px solid var(--nivel2); }
+        .nivel-tab.nivel-2::before { background:var(--nivel2); }
+        .nivel-tab.nivel-3 { background:var(--nivel3-bg); border:2px solid var(--nivel3); }
+        .nivel-tab.nivel-3::before { background:var(--nivel3); }
+        .nivel-tab.active { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.15); }
+        .nivel-numero { font-family:'Cinzel',serif; font-size:1.4rem; font-weight:700; display:block; }
+        .nivel-nombre { font-family:'Crimson Pro',serif; font-size:0.9rem; font-style:italic; }
+        
+        .cursos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.5rem; }
+        .curso-card { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); transition:all 0.3s; overflow:hidden; }
+        .curso-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.12); }
+        .curso-card-header { padding:1rem 1.5rem; color:#fff; display:flex; justify-content:space-between; align-items:center; }
+        .curso-card-body { padding:1.5rem; }
+        .curso-titulo { font-family:'Cinzel',serif; font-size:1.1rem; margin-bottom:0.5rem; }
+        .curso-desc { font-family:'Crimson Pro',serif; color:var(--text-light); font-size:0.95rem; margin-bottom:1rem; }
+        .progreso-bar { height:6px; background:#eee; border-radius:3px; margin:0.5rem 0; overflow:hidden; }
+        .progreso-fill { height:100%; border-radius:3px; transition:width 0.5s; }
+        
+        .draggable { transition:all 0.2s; }
+        .draggable[draggable="true"] { cursor:grab; }
+        .draggable.dragging { opacity:0.4; background:var(--gold-light) !important; }
+        .drag-over { border:2px dashed var(--gold) !important; background:#fdf8ed !important; }
+        .drag-handle { cursor:grab; color:#999; font-size:1.2rem; padding:0 0.3rem; user-select:none; }
+        .drag-handle:hover { color:var(--gold); }
+        .orden-controls { display:flex; gap:0.2rem; align-items:center; }
+        .orden-btn { width:28px; height:28px; border:1px solid var(--border); border-radius:4px; background:var(--surface); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.7rem; transition:all 0.15s; color:var(--text-light); }
+        .orden-btn:hover:not(:disabled) { background:var(--gold-light); border-color:var(--gold); color:var(--nivel2); }
+        .orden-btn:disabled { opacity:0.3; cursor:not-allowed; }
+        
+        .temas-lista { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
+        .tema-item { padding:1rem 1.5rem; border-bottom:1px solid var(--border); transition:background 0.2s; display:flex; align-items:center; gap:0.8rem; }
+        .tema-item:hover { background:#FAF9F6; }
+        .tema-item:last-child { border-bottom:none; }
+        .tema-numero { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0; }
+        .tema-completado { background:#d5f5e3; color:var(--success); }
+        .tema-pendiente { background:#f0f0f0; color:#999; }
+        .tema-info { flex:1; cursor:pointer; }
+        .tema-titulo { font-family:'Cinzel',serif; font-weight:600; }
+        .tema-pasos { font-size:0.85rem; color:var(--text-light); }
+        .tema-actions { display:flex; gap:0.3rem; align-items:center; }
+        
+        .tema-contenido { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); margin-bottom:2rem; }
+        .tema-contenido h2 { font-family:'Cinzel',serif; color:var(--nivel2); margin-bottom:1.5rem; }
+        .contenido-texto { font-family:'Crimson Pro',serif; font-size:var(--font-size-content); line-height:1.9; white-space:pre-wrap; transition:font-size 0.3s; }
+        .contenido-texto h2,.contenido-texto h3,.contenido-texto h4 { font-family:'Cinzel',serif; margin:1.2rem 0 0.6rem; }
+        .contenido-texto h2 { font-size:1.4rem; border-bottom:1px solid var(--gold); padding-bottom:0.3rem; }
+        .contenido-texto blockquote { border-left:4px solid var(--gold); padding:0.8rem 1.2rem; margin:1rem 0; background:#fdf8ed; font-style:italic; color:var(--gold-dark); border-radius:0 4px 4px 0; }
+        .contenido-texto ul,.contenido-texto ol { margin-left:1.5rem; margin-bottom:0.8rem; }
+        .contenido-texto strong { color:var(--nivel2); }
+        .contenido-texto em { color:var(--gold-dark); }
+        .contenido-texto hr { border:none; border-top:2px solid var(--gold); margin:1.5rem 0; opacity:0.5; }
+
+        .reading-controls { display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; padding:0.8rem 1rem; background:var(--bg); border-radius:var(--radius); flex-wrap:wrap; }
+        .font-size-btn { width:36px; height:36px; border-radius:50%; border:2px solid var(--border); background:var(--surface); cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; font-weight:700; color:var(--nivel2); }
+        .font-size-btn:hover { border-color:var(--gold); background:var(--gold-light); }
+        .font-size-indicator { font-family:'Cinzel',serif; font-weight:700; color:var(--nivel2); min-width:40px; text-align:center; }
+        
+        .pasos-section { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); }
+        .pasos-section h3 { font-family:'Cinzel',serif; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; }
+        .paso-item { display:flex; align-items:flex-start; gap:0.8rem; padding:1rem; border-radius:var(--radius); background:var(--bg); margin-bottom:0.5rem; border:1px solid var(--border); transition:all 0.2s; }
+        .paso-item.completado { background:#f0faf4; border-color:var(--success); }
+        .paso-checkbox { width:26px; height:26px; border-radius:50%; border:2px solid #ccc; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:all 0.3s; font-size:0.8rem; background:#fff; }
+        .paso-checkbox.checked { background:var(--success); border-color:var(--success); color:#fff; }
+        .paso-texto { flex:1; font-family:'Crimson Pro',serif; font-size:1.05rem; }
+        .paso-notas { width:100%; margin-top:0.5rem; padding:0.5rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:0.9rem; resize:vertical; min-height:40px; display:none; }
+        .paso-item.completado .paso-notas { display:block; }
+        .paso-actions { display:flex; gap:0.3rem; flex-shrink:0; align-items:center; }
+        
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:flex-start; padding:2rem; overflow-y:auto; backdrop-filter:blur(2px); }
+        .modal.active { display:flex; }
+        .modal-content { background:var(--bg); padding:2rem; border-radius:var(--radius); border:2px solid var(--gold); width:100%; max-width:900px; margin:auto; box-shadow:0 20px 40px rgba(0,0,0,0.3); }
+        .modal-content h2 { font-family:'Cinzel',serif; margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid var(--gold); text-align:center; }
+        .form-group { margin-bottom:1rem; }
+        .form-group label { display:block; margin-bottom:0.3rem; font-weight:600; font-size:0.85rem; text-transform:uppercase; color:var(--nivel2); }
+        .form-group input,.form-group select,.form-group textarea { width:100%; padding:0.7rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:1rem; }
+        .form-group textarea { min-height:120px; resize:vertical; }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+        .modal-actions { display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border); flex-wrap:wrap; }
+        
+        .editor-wrapper { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--surface); }
+        .editor-toolbar { display:flex; gap:0.2rem; padding:0.5rem; background:#f8f6f0; border-bottom:1px solid var(--border); flex-wrap:wrap; align-items:center; }
+        .editor-toolbar .tool-group { display:flex; gap:0.15rem; padding:0 0.5rem; border-right:1px solid var(--border); }
+        .editor-toolbar .tool-group:last-child { border-right:none; }
+        .tool-btn { width:34px; height:34px; border:1px solid transparent; border-radius:4px; background:transparent; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center; transition:all 0.15s; color:var(--text); }
+        .tool-btn:hover { background:#e8e4d8; border-color:var(--border); }
+        .tool-btn.tool-heading { font-family:'Cinzel',serif; font-weight:700; font-size:0.75rem; width:auto; padding:0 0.5rem; }
+        .editor-textarea { width:100%; min-height:300px; padding:1.5rem; border:none; font-family:'Crimson Pro',serif; font-size:1.05rem; line-height:1.8; resize:vertical; background:var(--surface); color:var(--text); }
+        .editor-textarea:focus { outline:none; }
+        .editor-textarea.fullscreen { position:fixed; top:0; left:0; width:100%; height:100%; z-index:5000; min-height:100vh; padding:5rem 2rem 2rem; font-size:1.2rem; }
+        .editor-preview { padding:1.5rem; min-height:150px; font-family:'Crimson Pro',serif; font-size:1.05rem; line-height:1.8; border-top:2px solid var(--border); background:#fdfcf8; display:none; }
+        .editor-tabs { display:flex; border-bottom:1px solid var(--border); }
+        .editor-tab { padding:0.6rem 1.2rem; cursor:pointer; font-weight:600; font-size:0.85rem; border:none; background:transparent; color:var(--text-light); transition:all 0.2s; }
+        .editor-tab.active { color:var(--nivel2); border-bottom:3px solid var(--gold); }
+        .editor-statusbar { display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0.8rem; background:#f8f6f0; border-top:1px solid var(--border); font-size:0.75rem; color:var(--text-light); }
+        
+        .login-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:3000; justify-content:center; align-items:center; }
+        .login-overlay.active { display:flex; }
+        .login-box { background:var(--bg); padding:2.5rem; border-radius:var(--radius); border:2px solid var(--gold); width:100%; max-width:380px; text-align:center; }
+        
+        .back-btn { margin-bottom:1.5rem; }
+        .empty-state { text-align:center; padding:2rem; color:var(--text-light); font-style:italic; }
+        .skeleton { background:linear-gradient(90deg,#eee 25%,#f5f5f5 50%,#eee 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:4px; height:100px; margin-bottom:1rem; }
         @keyframes shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
         .spinner { width:40px; height:40px; border:4px solid #ddd; border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; margin:2rem auto; }
         @keyframes spin { to { transform:rotate(360deg); } }
-        .toast { position:fixed; bottom:2rem; right:2rem; padding:1rem 2rem; border-radius:8px; color:#fff; z-index:9999; animation:slideIn 0.3s; }
+        
+        .toast { position:fixed; bottom:2rem; right:2rem; padding:1rem 2rem; border-radius:8px; color:#fff; z-index:9999; animation:slideIn 0.3s; font-weight:600; }
         .toast-success { background:var(--success); }
         .toast-error { background:var(--danger); }
         @keyframes slideIn { from { transform:translateX(100%); opacity:0; } }
+        
+        .modo-lectura { background:#1a1a1a; }
+        .modo-lectura .tema-contenido { background:#2a2a2a; color:#e0e0e0; border:1px solid #444; }
+        .modo-lectura .tema-contenido h2 { color:#F5D77A; }
+        .modo-lectura .contenido-texto { color:#d0d0d0; }
+        .modo-lectura .pasos-section { background:#2a2a2a; border:1px solid #444; }
+        .modo-lectura .paso-item { background:#333; border-color:#555; }
+        
+        .hidden { display:none !important; }
+        
+        @media(max-width:768px) {
+            .niveles-nav { flex-direction:column; }
+            .nivel-tab { min-width:auto; }
+            .form-row { grid-template-columns:1fr; }
+            .cursos-grid { grid-template-columns:1fr; }
+            .modal { padding:0.5rem; }
+            .paso-actions { flex-direction:column; }
+            .tema-contenido { padding:1rem; }
+        }
     </style>
 </head>
 <body>
 
-<div id="app">
-    <!-- Header -->
-    <header id="app-header"></header>
-    
-    <!-- Navegación de niveles -->
-    <nav id="nav-niveles"></nav>
-    
-    <!-- Contenido principal -->
-    <main id="main-content">
-        <div class="spinner"></div>
-    </main>
-</div>
-
-<!-- Modales -->
-<div id="modal-overlay" class="hidden" onclick="App.Modal.close()">
-    <div id="modal-container"></div>
+<div id="app" class="container">
+    <!-- Header (renderizado por JS) -->
 </div>
 
 <!-- Login -->
-<div id="login-overlay" class="hidden">
+<div class="login-overlay" id="loginOverlay">
     <div class="login-box">
         <h2>Acceso Admin</h2>
-        <input type="password" id="login-password" placeholder="Contraseña">
-        <div class="login-actions">
-            <button onclick="App.Auth.hideLogin()">Cancelar</button>
-            <button onclick="App.Auth.login()">Entrar</button>
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="loginPassword" placeholder="Ingresa la contraseña" onkeydown="if(event.key==='Enter')Auth.login()">
         </div>
-        <p id="login-error" class="hidden">Contraseña incorrecta</p>
+        <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem">
+            <button class="btn btn-secondary" onclick="Auth.hideLogin()">Cancelar</button>
+            <button class="btn btn-primary" onclick="Auth.login()">Entrar</button>
+        </div>
+        <p id="loginError" style="color:var(--danger);margin-top:0.8rem;display:none">Contraseña incorrecta</p>
     </div>
 </div>
 
-<!-- Toast container -->
-<div id="toast-container"></div>
+<!-- Modal -->
+<div class="modal" id="modalOverlay"><div class="modal-content" id="modalContent"></div></div>
+
+<!-- Toast -->
+<div id="toastContainer"></div>
 
 <script>
 // ============================================================
 // MÓDULO: Configuración
 // ============================================================
-const CONFIG = {
+const Config = {
     SUPABASE_URL: "https://cdabgazsrjkfcqzqeint.supabase.co",
     SUPABASE_KEY: "sb_publishable_gbS0u_HxiWdEuCANkRbGeQ_gKChZZiN",
-    ADMIN_PASS: "academia2025" // Temporal - mover a Supabase Auth
+    ADMIN_PASS: "academia2025",
+    HEADERS: function() {
+        return {
+            "Content-Type": "application/json",
+            "apikey": this.SUPABASE_KEY,
+            "Authorization": "Bearer " + this.SUPABASE_KEY
+        };
+    }
 };
 
 // ============================================================
-// MÓDULO: API Client
+// MÓDULO: API
 // ============================================================
 const API = {
-    headers: {
-        "Content-Type": "application/json",
-        "apikey": CONFIG.SUPABASE_KEY,
-        "Authorization": "Bearer " + CONFIG.SUPABASE_KEY
-    },
-    
     async request(path, method = "GET", body = null, prefer = null) {
-        const headers = {...this.headers};
+        const headers = Config.HEADERS();
         if (prefer) headers["Prefer"] = prefer;
-        
         const opts = { method, headers };
         if (body) opts.body = JSON.stringify(body);
-        
-        const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${path}`, opts);
-        
+        const res = await fetch(`${Config.SUPABASE_URL}/rest/v1/${path}`, opts);
         if (res.status === 204) return null;
         if (res.status === 200 && method === "DELETE") return null;
         if (res.ok) {
@@ -103,95 +241,77 @@ const API = {
         }
         throw new Error(await res.text());
     },
-    
-    // Métodos CRUD genéricos
-    async getAll(table, query = "*", order = null) {
-        let path = `${table}?select=${query}`;
+
+    getAll(table, order = null) {
+        let path = `${table}?select=*`;
         if (order) path += `&order=${order}`;
-        return (await this.request(path)) || [];
+        return this.request(path);
     },
-    
-    async getById(table, id, query = "*") {
-        const result = await this.request(`${table}?id=eq.${id}&select=${query}`);
-        return result?.[0] || null;
+
+    create(table, data) {
+        return this.request(table, "POST", data, "return=representation");
     },
-    
-    async create(table, data) {
-        return await this.request(table, "POST", data, "return=representation");
+
+    update(table, id, data) {
+        return this.request(`${table}?id=eq.${id}`, "PATCH", data, "return=minimal");
     },
-    
-    async update(table, id, data) {
-        return await this.request(`${table}?id=eq.${id}`, "PATCH", data, "return=minimal");
-    },
-    
-    async remove(table, id) {
-        return await this.request(`${table}?id=eq.${id}`, "DELETE");
+
+    remove(table, id) {
+        return this.request(`${table}?id=eq.${id}`, "DELETE");
     }
 };
 
 // ============================================================
-// MÓDULO: Store (Estado centralizado)
+// MÓDULO: Store (Estado Centralizado)
 // ============================================================
 const Store = {
-    state: {
-        isAdmin: false,
-        estudianteActual: null,
-        nivelActual: null,
-        cursoActual: null,
-        temaActual: null,
-        // Datos cacheados
-        niveles: [],
-        cursos: [],
-        temas: [],
-        pasos: [],
-        progreso: [],
-        estudiantes: [],
-        // UI
-        isLoading: false,
-        fontSize: 1.1,
-        modoOscuro: false
-    },
-    
-    // Getters
+    admin: false,
+    niveles: [],
+    cursos: [],
+    temas: [],
+    pasos: [],
+    progreso: [],
+    estudiantes: [],
+    nivelActual: null,
+    cursoActual: null,
+    temaActual: null,
+    estudianteActual: null,
+    fontSize: 1.1,
+    modoOscuro: false,
+
     get cursosNivel() {
-        return this.state.cursos
-            .filter(c => c.nivel_id === this.state.nivelActual?.id)
-            .sort((a, b) => (a.orden || 0) - (b.orden || 0));
+        return this.cursos.filter(c => c.nivel_id === this.nivelActual?.id).sort((a, b) => (a.orden || 0) - (b.orden || 0));
     },
-    
+
     get temasCurso() {
-        return this.state.temas
-            .filter(t => t.curso_id === this.state.cursoActual?.id)
-            .sort((a, b) => (a.orden || 0) - (b.orden || 0));
+        return this.temas.filter(t => t.curso_id === this.cursoActual?.id).sort((a, b) => (a.orden || 0) - (b.orden || 0));
     },
-    
+
     get pasosTema() {
-        return this.state.pasos
-            .filter(p => p.tema_id === this.state.temaActual?.id)
-            .sort((a, b) => (a.orden || 0) - (b.orden || 0));
+        return this.pasos.filter(p => p.tema_id === this.temaActual?.id).sort((a, b) => (a.orden || 0) - (b.orden || 0));
     },
-    
-    // Acciones
-    setState(key, value) {
-        this.state[key] = value;
+
+    getPct(curso) {
+        const temasCurso = this.temas.filter(t => t.curso_id === curso.id);
+        const totalPasos = this.pasos.filter(p => temasCurso.some(t => t.id === p.tema_id)).length;
+        if (totalPasos === 0) return 0;
+        const completados = this.progreso.filter(pr => pr.completado && this.pasos.some(p => p.id === pr.paso_id && temasCurso.some(t => t.id === p.tema_id))).length;
+        return Math.round((completados / totalPasos) * 100);
     },
-    
-    async loadData(table) {
-        const map = {
-            niveles: () => API.getAll("niveles", "*", "orden"),
-            cursos: () => API.getAll("cursos", "*", "orden"),
-            temas: () => API.getAll("temas", "*", "orden"),
-            pasos: () => API.getAll("pasos", "*", "orden"),
-            estudiantes: () => API.getAll("estudiantes", "*", "nombre"),
+
+    async load(table) {
+        const loaders = {
+            niveles: async () => { this.niveles = (await API.getAll("niveles", "orden")) || []; },
+            cursos: async () => { this.cursos = (await API.getAll("cursos", "orden")) || []; },
+            temas: async () => { this.temas = (await API.getAll("temas", "orden")) || []; },
+            pasos: async () => { this.pasos = (await API.getAll("pasos", "orden")) || []; },
+            estudiantes: async () => { this.estudiantes = (await API.getAll("estudiantes", "nombre")) || []; },
             progreso: async () => {
-                if (!this.state.estudianteActual) return [];
-                return await API.getAll("progreso", "*", `estudiante_id=eq.${this.state.estudianteActual.id}`);
+                if (!this.estudianteActual) { this.progreso = []; return; }
+                this.progreso = (await API.getAll(`progreso?estudiante_id=eq.${this.estudianteActual.id}`)) || [];
             }
         };
-        
-        if (map[table]) {
-            this.state[table] = await map[table]();
-        }
+        if (loaders[table]) await loaders[table]();
     }
 };
 
@@ -199,50 +319,25 @@ const Store = {
 // MÓDULO: UI Helpers
 // ============================================================
 const UI = {
-    // Templates
-    templates: {
-        emptyState(msg) {
-            return `<div class="empty-state">${msg}</div>`;
-        },
-        
-        skeleton(count = 3) {
-            return Array(count).fill('<div class="skeleton" style="height:100px;margin-bottom:1rem"></div>').join('');
-        },
-        
-        spinner() {
-            return '<div class="spinner"></div>';
-        },
-        
-        progresoBar(pct, color) {
-            return `<div class="progreso-bar"><div class="progreso-fill" style="width:${pct}%;background:${color}"></div></div>`;
-        }
-    },
-    
-    // Toast notifications
     toast(msg, type = "success") {
-        const container = document.getElementById("toast-container");
-        const toast = document.createElement("div");
-        toast.className = `toast toast-${type}`;
-        toast.textContent = msg;
-        container.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+        const t = document.createElement("div");
+        t.className = `toast toast-${type}`;
+        t.textContent = msg;
+        document.getElementById("toastContainer").appendChild(t);
+        setTimeout(() => { t.style.opacity = "0"; t.style.transition = "opacity 0.3s"; setTimeout(() => t.remove(), 300); }, 2500);
     },
-    
-    // Event Delegation
-    delegate(event, selector, handler) {
-        return function(e) {
-            const target = e.target.closest(selector);
-            if (target) handler.call(target, e, target);
-        };
-    },
-    
-    // Debounce
-    debounce(fn, delay = 300) {
+
+    spinner() { return '<div class="spinner"></div>'; },
+    empty(msg) { return `<div class="empty-state">${msg}</div>`; },
+    skeleton(n = 3) { return Array(n).fill('<div class="skeleton"></div>').join(""); },
+
+    debounce(fn, delay = 500) {
         let timeout;
-        return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => fn.apply(this, args), delay);
-        };
+        return function(...args) { clearTimeout(timeout); timeout = setTimeout(() => fn.apply(this, args), delay); };
+    },
+
+    delegate(event, selector, handler) {
+        return function(e) { const target = e.target.closest(selector); if (target) handler.call(target, e); };
     }
 };
 
@@ -250,207 +345,788 @@ const UI = {
 // MÓDULO: Auth
 // ============================================================
 const Auth = {
-    showLogin() {
-        document.getElementById("login-overlay").classList.remove("hidden");
-        document.getElementById("login-password").focus();
-    },
-    
-    hideLogin() {
-        document.getElementById("login-overlay").classList.add("hidden");
-        document.getElementById("login-password").value = "";
-    },
-    
-    async login() {
-        const password = document.getElementById("login-password").value;
-        
-        if (password === CONFIG.ADMIN_PASS) {
-            Store.setState("isAdmin", true);
+    showLogin() { document.getElementById("loginOverlay").classList.add("active"); document.getElementById("loginPassword").focus(); },
+    hideLogin() { document.getElementById("loginOverlay").classList.remove("active"); document.getElementById("loginPassword").value = ""; document.getElementById("loginError").style.display = "none"; },
+    login() {
+        if (document.getElementById("loginPassword").value === Config.ADMIN_PASS) {
+            Store.admin = true;
             this.hideLogin();
             UI.toast("✅ Acceso concedido");
             App.render();
         } else {
-            document.getElementById("login-error").classList.remove("hidden");
+            document.getElementById("loginError").style.display = "block";
         }
     },
-    
-    logout() {
-        Store.setState("isAdmin", false);
-        App.render();
-    }
+    logout() { Store.admin = false; App.render(); }
 };
 
 // ============================================================
 // MÓDULO: Modal
 // ============================================================
 const Modal = {
-    open(content) {
-        document.getElementById("modal-container").innerHTML = content;
-        document.getElementById("modal-overlay").classList.remove("hidden");
+    open(html) {
+        document.getElementById("modalContent").innerHTML = html;
+        document.getElementById("modalOverlay").classList.add("active");
     },
-    
     close() {
-        document.getElementById("modal-overlay").classList.add("hidden");
+        document.getElementById("modalOverlay").classList.remove("active");
     },
-    
-    // Templates de modales
+
+    // Templates de formularios
     cursoForm(curso = null) {
-        const isEdit = !!curso;
+        const edit = !!curso;
         return `
-            <div class="modal-content" onclick="event.stopPropagation()">
-                <h2>${isEdit ? 'Editar' : 'Nuevo'} Curso</h2>
-                <form id="curso-form">
-                    <input type="hidden" name="id" value="${curso?.id || ''}">
-                    <div class="form-group">
-                        <label>Nivel</label>
-                        <select name="nivel_id" required>
-                            ${Store.state.niveles.map(n => `
-                                <option value="${n.id}" ${Store.state.nivelActual?.id === n.id ? 'selected' : ''}>${n.nombre}</option>
-                            `).join('')}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Título</label>
-                        <input type="text" name="titulo" required value="${curso?.titulo || ''}">
-                    </div>
-                    <div class="form-group">
-                        <label>Descripción</label>
-                        <input type="text" name="descripcion" value="${curso?.descripcion || ''}">
-                    </div>
-                    <div class="modal-actions">
-                        <button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                </form>
-            </div>
+            <h2>${edit ? "Editar" : "Nuevo"} Curso</h2>
+            <form onsubmit="Modal.saveCurso(event, ${curso?.id || 'null'})">
+                <div class="form-group">
+                    <label>Nivel</label>
+                    <select id="mCursoNivel" required>
+                        ${Store.niveles.map(n => `<option value="${n.id}" ${!edit && Store.nivelActual?.id === n.id ? "selected" : edit && curso.nivel_id === n.id ? "selected" : ""}>${n.nombre}</option>`).join("")}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="mCursoTitulo" required value="${curso?.titulo || ''}">
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input type="text" id="mCursoDesc" value="${curso?.descripcion || ''}">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
         `;
+    },
+
+    async saveCurso(e, editId) {
+        e.preventDefault();
+        const data = {
+            nivel_id: parseInt(document.getElementById("mCursoNivel").value),
+            titulo: document.getElementById("mCursoTitulo").value,
+            descripcion: document.getElementById("mCursoDesc").value
+        };
+        if (!editId) data.orden = Store.cursos.filter(c => c.nivel_id === data.nivel_id).length;
+        try {
+            if (editId) await API.update("cursos", editId, data);
+            else await API.create("cursos", data);
+            Modal.close();
+            await Store.load("cursos");
+            App.renderCursos();
+            UI.toast(editId ? "✅ Curso actualizado" : "✅ Curso creado");
+        } catch(err) { UI.toast("Error: " + err.message, "error"); }
+    },
+
+    async deleteCurso(id) {
+        if (!confirm("¿Eliminar este curso y todo su contenido?")) return;
+        try {
+            await API.remove("cursos", id);
+            await Store.load("cursos");
+            App.renderCursos();
+            UI.toast("Curso eliminado", "error");
+        } catch(err) { UI.toast("Error: " + err.message, "error"); }
+    },
+
+    temaForm(tema = null) {
+        const edit = !!tema;
+        return `
+            <h2>${edit ? "Editar" : "Nuevo"} Tema</h2>
+            <form onsubmit="Modal.saveTema(event, ${tema?.id || 'null'})">
+                <div class="form-group">
+                    <label>Curso</label>
+                    <select id="mTemaCurso" required>
+                        ${Store.cursos.map(c => `<option value="${c.id}" ${!edit && Store.cursoActual?.id === c.id ? "selected" : edit && tema.curso_id === c.id ? "selected" : ""}>${c.titulo}</option>`).join("")}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="mTemaTitulo" required value="${tema?.titulo || ''}">
+                </div>
+                <div class="form-group">
+                    <label>Contenido</label>
+                    <textarea id="mTemaContenido">${tema?.contenido || ''}</textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        `;
+    },
+
+    async saveTema(e, editId) {
+        e.preventDefault();
+        const data = {
+            curso_id: parseInt(document.getElementById("mTemaCurso").value),
+            titulo: document.getElementById("mTemaTitulo").value,
+            contenido: document.getElementById("mTemaContenido").value
+        };
+        if (!editId) data.orden = Store.temas.filter(t => t.curso_id === data.curso_id).length;
+        try {
+            if (editId) await API.update("temas", editId, data);
+            else await API.create("temas", data);
+            Modal.close();
+            await Store.load("temas");
+            if (Store.temaActual) App.verTema(Store.temaActual.id);
+            else if (Store.cursoActual) App.renderTemas();
+            else App.renderCursos();
+            UI.toast(editId ? "✅ Tema actualizado" : "✅ Tema creado");
+        } catch(err) { UI.toast("Error: " + err.message, "error"); }
+    },
+
+    async deleteTema(id) {
+        if (!confirm("¿Eliminar este tema y sus pasos?")) return;
+        try {
+            await API.remove("temas", id);
+            await Store.load("temas");
+            App.renderTemas();
+            UI.toast("Tema eliminado", "error");
+        } catch(err) { UI.toast("Error: " + err.message, "error"); }
+    },
+
+    pasoForm(paso = null) {
+        const edit = !!paso;
+        return `
+            <h2>${edit ? "Editar" : "Nuevo"} Paso Práctico</h2>
+            <form onsubmit="Modal.savePaso(event, ${paso?.id || 'null'})">
+                <div class="form-group">
+                    <label>Tema</label>
+                    <select id="mPasoTema" required>
+                        ${Store.temas.map(t => `<option value="${t.id}" ${!edit && Store.temaActual?.id === t.id ? "selected" : edit && paso.tema_id === t.id ? "selected" : ""}>${t.titulo}</option>`).join("")}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Descripción del paso</label>
+                    <textarea id="mPasoDesc" required placeholder="Describe la acción práctica...">${paso?.descripcion || ''}</textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        `;
+    },
+
+    async savePaso(e, editId) {
+        e.preventDefault();
+        const temaId = parseInt(document.getElementById("mPasoTema").value);
+        const desc = document.getElementById("mPasoDesc").value.trim();
+        if (!temaId || !desc) { UI.toast("Completa todos los campos", "error"); return; }
+        const data = { tema_id: temaId, descripcion: desc };
+        if (!editId) data.orden = Store.pasos.filter(p => p.tema_id === temaId).length;
+        try {
+            if (editId) await API.update("pasos", editId, data);
+            else await API.create("pasos", data);
+            Modal.close();
+            await Store.load("pasos");
+            if (Store.temaActual) App.renderPasos();
+            else if (Store.cursoActual) App.renderTemas();
+            else App.renderCursos();
+            UI.toast(editId ? "✅ Paso actualizado" : "✅ Paso creado");
+        } catch(err) { UI.toast("Error: " + err.message, "error"); }
+    },
+
+    async deletePaso(id) {
+        if (!confirm("¿Eliminar este paso?")) return;
+        try {
+            await API.remove("pasos", id);
+            await Store.load("pasos");
+            if (Store.temaActual) App.renderPasos();
+            UI.toast("Paso eliminado", "error");
+        } catch(err) { UI.toast("Error: " + err.message, "error"); }
+    },
+
+    estudianteForm(est = null) {
+        const edit = !!est;
+        return `
+            <h2>${edit ? "Editar" : "Nuevo"} Estudiante</h2>
+            <form onsubmit="Modal.saveEstudiante(event, ${est?.id || 'null'})">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="mEstNombre" required value="${est?.nombre || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" id="mEstApellido" required value="${est?.apellido || ''}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="mEstEmail" value="${est?.email || ''}">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        `;
+    },
+
+    async saveEstudiante(e, editId) {
+        e.preventDefault();
+        const data = {
+            nombre: document.getElementById("mEstNombre").value,
+            apellido: document.getElementById("mEstApellido").value,
+            email: document.getElementById("mEstEmail").value
+        };
+        try {
+            if (editId) await API.update("estudiantes", editId, data);
+            else await API.create("estudiantes", data);
+            Modal.close();
+            await Store.load("estudiantes");
+            Modal.showEstudiantes();
+            UI.toast(editId ? "✅ Estudiante actualizado" : "✅ Estudiante creado");
+        } catch(err) { UI.toast("Error: " + err.message, "error"); }
+    },
+
+    async deleteEstudiante(id) {
+        if (!confirm("¿Eliminar este estudiante?")) return;
+        try {
+            await API.remove("estudiantes", id);
+            await Store.load("estudiantes");
+            Modal.showEstudiantes();
+            UI.toast("Estudiante eliminado", "error");
+        } catch(err) { UI.toast("Error: " + err.message, "error"); }
+    },
+
+    showEstudiantes() {
+        Modal.open(`
+            <h2>👥 Estudiantes</h2>
+            <button class="btn btn-primary btn-sm" onclick="Modal.estudianteForm()" style="margin-bottom:1rem">+ Nuevo Estudiante</button>
+            ${Store.estudiantes.length === 0 ? UI.empty("No hay estudiantes") : `
+                <table style="width:100%;border-collapse:collapse">
+                    <thead><tr style="background:var(--nivel2);color:var(--gold-light)">
+                        <th style="padding:0.5rem">Nombre</th><th style="padding:0.5rem">Email</th><th style="padding:0.5rem">Acciones</th>
+                    </tr></thead>
+                    <tbody>
+                        ${Store.estudiantes.map(e => `
+                            <tr>
+                                <td style="padding:0.5rem">${e.nombre} ${e.apellido}</td>
+                                <td style="padding:0.5rem">${e.email || '-'}</td>
+                                <td style="padding:0.5rem">
+                                    <button class="btn btn-warning btn-xs" onclick="Modal.estudianteForm(${JSON.stringify(e).replace(/"/g, '&quot;')})">✏️</button>
+                                    <button class="btn btn-danger btn-xs" onclick="Modal.deleteEstudiante(${e.id})">🗑️</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `}
+            <div class="modal-actions"><button class="btn btn-secondary" onclick="Modal.close()">Cerrar</button></div>
+        `);
     }
 };
 
 // ============================================================
-// MÓDULO: App (Controlador principal)
+// MÓDULO: Ordenamiento
+// ============================================================
+const Orden = {
+    getItems(type) {
+        if (type === "curso") return Store.cursosNivel;
+        if (type === "tema") return Store.temasCurso;
+        return Store.pasosTema;
+    },
+
+    async mover(type, id, direction) {
+        const items = this.getItems(type);
+        const idx = items.findIndex(i => i.id === id);
+        if (idx === -1) return;
+        const newIdx = idx + direction;
+        if (newIdx < 0 || newIdx >= items.length) return;
+        [items[idx], items[newIdx]] = [items[newIdx], items[idx]];
+        this.actualizarLocal(type, items);
+        this.refrescarVista(type);
+        this.guardarOrden(type, items);
+    },
+
+    async drop(type, fromId, toId) {
+        const items = this.getItems(type);
+        const fromIdx = items.findIndex(i => i.id === fromId);
+        const toIdx = items.findIndex(i => i.id === toId);
+        if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
+        const [moved] = items.splice(fromIdx, 1);
+        items.splice(toIdx, 0, moved);
+        this.actualizarLocal(type, items);
+        this.refrescarVista(type);
+        this.guardarOrden(type, items);
+    },
+
+    actualizarLocal(type, items) {
+        const table = type === "curso" ? "cursos" : type === "tema" ? "temas" : "pasos";
+        items.forEach((item, i) => { const found = Store[table].find(x => x.id === item.id); if (found) found.orden = i; });
+    },
+
+    refrescarVista(type) {
+        if (type === "curso") App.renderCursos();
+        else if (type === "tema") App.renderTemas();
+        else App.renderPasos();
+    },
+
+    async guardarOrden(type, items) {
+        const table = type === "curso" ? "cursos" : type === "tema" ? "temas" : "pasos";
+        try {
+            await Promise.all(items.map((item, i) => API.update(table, item.id, { orden: i })));
+        } catch(err) {
+            console.error("Error guardando orden:", err);
+        }
+    }
+};
+
+// ============================================================
+// MÓDULO: Drag & Drop Handlers
+// ============================================================
+const DnD = {
+    draggedItem: null,
+    draggedType: null,
+
+    start(e, id, type) {
+        this.draggedItem = id;
+        this.draggedType = type;
+        e.target.closest(".draggable")?.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+    },
+    end(e) {
+        e.target.closest(".draggable")?.classList.remove("dragging");
+        document.querySelectorAll(".drag-over").forEach(el => el.classList.remove("drag-over"));
+    },
+    over(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+        e.target.closest(".draggable")?.classList.add("drag-over");
+    },
+    leave(e) {
+        e.target.closest(".draggable")?.classList.remove("drag-over");
+    },
+    drop(e, targetId, type) {
+        e.preventDefault();
+        e.target.closest(".draggable")?.classList.remove("drag-over");
+        if (this.draggedItem && this.draggedItem !== targetId && this.draggedType === type) {
+            Orden.drop(type, this.draggedItem, targetId);
+        }
+    }
+};
+
+// ============================================================
+// MÓDULO: Markdown Parser
+// ============================================================
+const MD = {
+    parse(text) {
+        if (!text) return '<p style="color:#999;font-style:italic">Sin contenido</p>';
+        let html = text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+            .replace(/^&gt; (.*$)/gm,"<blockquote>$1</blockquote>")
+            .replace(/^#### (.*$)/gm,"<h4>$1</h4>").replace(/^### (.*$)/gm,"<h3>$1</h3>").replace(/^## (.*$)/gm,"<h2>$1</h2>")
+            .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\*(.*?)\*/g,"<em>$1</em>").replace(/_(.*?)_/g,"<u>$1</u>")
+            .replace(/^---$/gm,"<hr>").replace(/^- (.*$)/gm,"<li>$1</li>").replace(/^\d+\. (.*$)/gm,"<li>$1</li>")
+            .replace(/\n\n/g,"</p><p>").replace(/\n/g,"<br>");
+        return "<p>" + html + "</p>";
+    }
+};
+
+// ============================================================
+// MÓDULO: Editor
+// ============================================================
+const Editor = {
+    create(textareaId, initialValue = "") {
+        const textarea = document.getElementById(textareaId);
+        if (!textarea) return;
+        const wrapper = document.createElement("div");
+        wrapper.className = "editor-wrapper";
+        textarea.parentNode.insertBefore(wrapper, textarea);
+
+        wrapper.innerHTML = `
+            <div class="editor-toolbar">
+                <div class="tool-group">
+                    <button type="button" class="tool-btn" data-cmd="bold"><b>B</b></button>
+                    <button type="button" class="tool-btn" data-cmd="italic"><i>I</i></button>
+                    <button type="button" class="tool-btn" data-cmd="underline"><u>U</u></button>
+                </div>
+                <div class="tool-group">
+                    <button type="button" class="tool-btn tool-heading" data-cmd="h2">H2</button>
+                    <button type="button" class="tool-btn tool-heading" data-cmd="h3">H3</button>
+                </div>
+                <div class="tool-group">
+                    <button type="button" class="tool-btn" data-cmd="ul">•≡</button>
+                    <button type="button" class="tool-btn" data-cmd="ol">1≡</button>
+                    <button type="button" class="tool-btn" data-cmd="quote">❝</button>
+                    <button type="button" class="tool-btn" data-cmd="hr">—</button>
+                </div>
+                <div class="tool-group">
+                    <button type="button" class="tool-btn" data-cmd="preview">👁️</button>
+                    <button type="button" class="tool-btn" data-cmd="fullscreen">⛶</button>
+                </div>
+            </div>
+            <div class="editor-tabs">
+                <button type="button" class="editor-tab active" data-tab="edit">✏️ Editar</button>
+                <button type="button" class="editor-tab" data-tab="preview">👁️ Vista previa</button>
+            </div>
+            <textarea class="editor-textarea" id="${textareaId}_editor">${initialValue}</textarea>
+            <div class="editor-preview" id="${textareaId}_preview"></div>
+            <div class="editor-statusbar">
+                <span>**negrita** *cursiva* ## Título</span>
+                <span id="${textareaId}_count">0</span>
+            </div>
+        `;
+
+        textarea.style.display = "none";
+        const editorArea = document.getElementById(textareaId + "_editor");
+        const preview = document.getElementById(textareaId + "_preview");
+
+        function update() { textarea.value = editorArea.value; updateStatus(); updatePreview(); }
+        editorArea.addEventListener("input", update);
+
+        wrapper.querySelectorAll(".tool-btn").forEach(btn => {
+            btn.addEventListener("click", function(e) {
+                e.preventDefault();
+                Editor.command(this.dataset.cmd, editorArea, textarea, preview);
+            });
+        });
+
+        wrapper.querySelectorAll(".editor-tab").forEach(tab => {
+            tab.addEventListener("click", function() {
+                wrapper.querySelectorAll(".editor-tab").forEach(t => t.classList.remove("active"));
+                this.classList.add("active");
+                if (this.dataset.tab === "edit") { editorArea.style.display = ""; preview.style.display = "none"; }
+                else { editorArea.style.display = "none"; preview.style.display = ""; updatePreview(); }
+            });
+        });
+
+        function updateStatus() { document.getElementById(textareaId + "_count").textContent = editorArea.value.length + " caracteres"; }
+        function updatePreview() { preview.innerHTML = MD.parse(editorArea.value); }
+        update();
+    },
+
+    command(cmd, ta, textarea, preview) {
+        const start = ta.selectionStart, end = ta.selectionEnd, text = ta.value, sel = text.substring(start, end);
+        let rep = "", off = 0;
+        switch(cmd) {
+            case "bold": rep = `**${sel||"texto"}**`; off = sel ? 0 : -2; break;
+            case "italic": rep = `*${sel||"texto"}*`; off = sel ? 0 : -1; break;
+            case "underline": rep = `_${sel||"texto"}_`; off = sel ? 0 : -1; break;
+            case "h2": rep = `\n## ${sel||"Título"}\n`; break;
+            case "h3": rep = `\n### ${sel||"Título"}\n`; break;
+            case "ul": rep = sel ? sel.split("\n").map(l => `- ${l}`).join("\n") : "\n- Elemento\n- Elemento\n"; break;
+            case "ol": rep = sel ? sel.split("\n").map((l,i) => `${i+1}. ${l}`).join("\n") : "\n1. Primero\n2. Segundo\n"; break;
+            case "quote": rep = `\n> ${sel||"Cita"}\n`; break;
+            case "hr": rep = "\n---\n"; break;
+            case "preview": ta.closest(".editor-wrapper").querySelector('[data-tab="preview"]')?.click(); return;
+            case "fullscreen": ta.classList.toggle("fullscreen"); document.body.style.overflow = ta.classList.contains("fullscreen") ? "hidden" : ""; return;
+        }
+        ta.value = text.substring(0, start) + rep + text.substring(end);
+        ta.focus();
+        ta.selectionStart = sel ? start : start + rep.length + off;
+        ta.selectionEnd = sel ? start + rep.length : start + rep.length + off;
+        textarea.value = ta.value;
+        ta.dispatchEvent(new Event("input"));
+    }
+};
+
+// ============================================================
+// MÓDULO: App (Controlador Principal)
 // ============================================================
 const App = {
     async init() {
-        // Cargar datos iniciales
-        await Store.loadData("niveles");
-        await Store.loadData("cursos");
-        await Store.loadData("temas");
-        await Store.loadData("pasos");
-        await Store.loadData("estudiantes");
-        
-        // Seleccionar primer nivel
-        if (Store.state.niveles.length > 0) {
-            Store.setState("nivelActual", Store.state.niveles[0]);
+        await Store.load("niveles");
+        await Store.load("cursos");
+        await Store.load("temas");
+        await Store.load("pasos");
+        await Store.load("estudiantes");
+
+        if (Store.estudiantes.length > 0) {
+            Store.estudianteActual = Store.estudiantes[0];
+            await Store.load("progreso");
         }
-        
-        // Seleccionar primer estudiante
-        if (Store.state.estudiantes.length > 0) {
-            Store.setState("estudianteActual", Store.state.estudiantes[0]);
-            await Store.loadData("progreso");
-        }
-        
+        if (Store.niveles.length > 0) Store.nivelActual = Store.niveles[0];
+
         this.render();
-        this.setupEventDelegation();
+        this.setupListeners();
     },
-    
+
     render() {
-        this.renderHeader();
+        const app = document.getElementById("app");
+        app.innerHTML = this.headerHTML() + '<div class="niveles-nav" id="nivelesNav"></div><div id="mainContent"></div>';
         this.renderNivelesNav();
-        this.renderMainContent();
+        if (Store.nivelActual) this.renderCursos();
+        else document.getElementById("mainContent").innerHTML = UI.empty("🎓 Bienvenido a la Academia del Espíritu");
     },
-    
-    renderHeader() {
-        document.getElementById("app-header").innerHTML = `
-            <img src="logo.png" alt="Logo" class="logo">
-            <div class="header-text">
-                <h1>Academia del Espíritu</h1>
-                <p>Formación Teológica Apostólica</p>
-            </div>
-            <div class="header-actions">
-                ${Store.state.isAdmin ? '<span class="admin-badge">Admin</span>' : ''}
-                ${Store.state.isAdmin 
-                    ? '<button class="btn btn-sm btn-danger" onclick="Auth.logout()">Salir</button>'
-                    : '<button class="btn btn-sm btn-secondary" onclick="Auth.showLogin()">Acceso Admin</button>'}
-            </div>
+
+    headerHTML() {
+        return `
+            <header>
+                <div class="header-text">
+                    <h1>Academia del Espíritu</h1>
+                    <p>Formación Teológica Apostólica</p>
+                </div>
+                <div class="header-actions">
+                    ${Store.admin ? '<span class="admin-badge">Admin</span>' : ''}
+                    <select id="selEstudiante" style="padding:0.3rem;border-radius:4px;border:1px solid var(--border);font-size:0.85rem">
+                        <option value="">Estudiante...</option>
+                        ${Store.estudiantes.map(e => `<option value="${e.id}" ${Store.estudianteActual?.id === e.id ? "selected" : ""}>${e.nombre} ${e.apellido}</option>`).join("")}
+                    </select>
+                    ${Store.admin
+                        ? '<button class="btn btn-sm btn-danger" onclick="Auth.logout()">Salir</button>'
+                        : '<button class="btn btn-sm btn-secondary" onclick="Auth.showLogin()">Acceso Admin</button>'}
+                </div>
+            </header>
         `;
     },
-    
+
     renderNivelesNav() {
-        document.getElementById("nav-niveles").innerHTML = Store.state.niveles.map(n => `
-            <button class="nivel-tab nivel-${n.orden} ${Store.state.nivelActual?.id === n.id ? 'active' : ''}"
-                    onclick="App.selectNivel(${n.id})">
+        document.getElementById("nivelesNav").innerHTML = Store.niveles.map(n => `
+            <button class="nivel-tab nivel-${n.orden} ${Store.nivelActual?.id === n.id ? "active" : ""}" onclick="App.selectNivel(${n.id})">
                 <span class="nivel-numero" style="color:${n.color}">${n.nombre}</span>
                 <span class="nivel-nombre">${n.descripcion || ''}</span>
             </button>
-        `).join('');
+        `).join("");
     },
-    
-    renderMainContent() {
-        const main = document.getElementById("main-content");
-        
-        if (!Store.state.nivelActual) {
-            main.innerHTML = UI.templates.emptyState("🎓 Bienvenido a la Academia del Espíritu");
-            return;
-        }
-        
-        if (!Store.state.cursosNivel.length) {
-            main.innerHTML = UI.templates.emptyState("No hay cursos en este nivel aún.");
-            return;
-        }
-        
-        main.innerHTML = `
-            <h2>📚 Cursos de ${Store.state.nivelActual.nombre}</h2>
-            <div class="cursos-grid">
-                ${Store.state.cursosNivel.map(curso => this.cursoCard(curso)).join('')}
-            </div>
-        `;
-    },
-    
-    cursoCard(curso) {
-        const temasCurso = Store.state.temas.filter(t => t.curso_id === curso.id);
-        const color = Store.state.nivelActual.color;
-        
-        return `
-            <div class="curso-card">
-                <div class="curso-card-header" style="background:${color}">
-                    <span>${temasCurso.length} temas</span>
-                </div>
-                <div class="curso-card-body">
-                    <div class="curso-titulo">${curso.titulo}</div>
-                    <div class="curso-desc">${curso.descripcion || ''}</div>
-                    <button class="btn btn-primary btn-sm" onclick="App.verCurso(${curso.id})">📖 Ver Temas</button>
-                </div>
-            </div>
-        `;
-    },
-    
+
     async selectNivel(id) {
-        Store.setState("nivelActual", Store.state.niveles.find(n => n.id === id));
-        Store.setState("cursoActual", null);
-        Store.setState("temaActual", null);
-        await Store.loadData("cursos");
-        this.render();
+        Store.nivelActual = Store.niveles.find(n => n.id === id);
+        Store.cursoActual = null;
+        Store.temaActual = null;
+        await Store.load("cursos");
+        this.renderCursos();
     },
-    
+
+    async renderCursos() {
+        if (!Store.nivelActual) return;
+        const main = document.getElementById("mainContent");
+        const color = Store.nivelActual.color;
+        const cursos = Store.cursosNivel;
+
+        main.innerHTML = `
+            <h2 style="font-family:'Cinzel',serif;color:${color};margin-bottom:1rem">📚 Cursos de ${Store.nivelActual.nombre}</h2>
+            ${Store.admin ? '<div style="margin-bottom:1rem"><button class="btn btn-primary btn-sm" onclick="Modal.open(Modal.cursoForm())">+ Nuevo Curso</button> <button class="btn btn-secondary btn-sm" onclick="Modal.showEstudiantes()">👥 Estudiantes</button></div>' : ''}
+            ${cursos.length === 0 ? UI.empty("No hay cursos en este nivel") : `
+                <div class="cursos-grid">
+                    ${cursos.map((c, i) => {
+                        const pct = Store.getPct(c);
+                        return `
+                            <div class="curso-card draggable" draggable="${Store.admin}" ondragstart="${Store.admin ? `DnD.start(event,${c.id},'curso')` : ''}" ondragend="DnD.end(event)" ondragover="${Store.admin ? 'DnD.over(event)' : ''}" ondragleave="${Store.admin ? 'DnD.leave(event)' : ''}" ondrop="${Store.admin ? `DnD.drop(event,${c.id},'curso')` : ''}">
+                                <div class="curso-card-header" style="background:${color}">
+                                    <span>${Store.admin ? '<span class="drag-handle">⋮⋮</span> ' : ''}${Store.temas.filter(t => t.curso_id === c.id).length} temas</span>
+                                </div>
+                                <div class="curso-card-body">
+                                    <div class="curso-titulo">${c.titulo}</div>
+                                    <div class="curso-desc">${c.descripcion || ''}</div>
+                                    <div class="progreso-bar"><div class="progreso-fill" style="width:${pct}%;background:${color}"></div></div>
+                                    <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem">${pct}% completado</div>
+                                    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center">
+                                        <button class="btn btn-primary btn-sm" onclick="App.verCurso(${c.id})">📖 Ver Temas</button>
+                                        ${Store.admin ? `
+                                            <div class="orden-controls">
+                                                <button class="orden-btn" onclick="Orden.mover('curso',${c.id},-1)" ${i === 0 ? "disabled" : ""}>▲</button>
+                                                <button class="orden-btn" onclick="Orden.mover('curso',${c.id},1)" ${i === cursos.length - 1 ? "disabled" : ""}>▼</button>
+                                            </div>
+                                            <button class="btn btn-warning btn-sm" onclick="Modal.open(Modal.cursoForm(${JSON.stringify(c).replace(/"/g, '&quot;')}))">✏️</button>
+                                            <button class="btn btn-danger btn-sm" onclick="Modal.deleteCurso(${c.id})">🗑️</button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join("")}
+                </div>
+            `}
+        `;
+    },
+
     async verCurso(id) {
-        Store.setState("cursoActual", Store.state.cursos.find(c => c.id === id));
-        Store.setState("temaActual", null);
-        await Store.loadData("temas");
-        await Store.loadData("pasos");
-        this.render();
+        Store.cursoActual = Store.cursos.find(c => c.id === id);
+        Store.temaActual = null;
+        await Promise.all([Store.load("temas"), Store.load("pasos"), Store.load("progreso")]);
+        this.renderTemas();
     },
-    
-    setupEventDelegation() {
-        // Usar event delegation para formularios y clicks dinámicos
-        document.addEventListener("submit", UI.delegate("form", async (e, form) => {
-            e.preventDefault();
-            // Lógica de guardado según el tipo de formulario
-        }));
+
+    renderTemas() {
+        if (!Store.cursoActual || !Store.nivelActual) return;
+        const main = document.getElementById("mainContent");
+        const color = Store.nivelActual.color;
+        const temas = Store.temasCurso;
+
+        main.innerHTML = `
+            <button class="btn btn-secondary back-btn" onclick="App.renderCursos()">← Volver a Cursos</button>
+            <h2 style="font-family:'Cinzel',serif;color:${color};margin:1rem 0">📖 ${Store.cursoActual.titulo}</h2>
+            ${Store.admin ? '<button class="btn btn-primary btn-sm" onclick="Modal.open(Modal.temaForm())" style="margin-bottom:1rem">+ Agregar Tema</button>' : ''}
+            ${temas.length === 0 ? UI.empty("No hay temas") : `
+                <div class="temas-lista">
+                    ${temas.map((t, i) => {
+                        const pasosTema = Store.pasos.filter(p => p.tema_id === t.id);
+                        const completados = Store.progreso.filter(pr => pr.completado && pasosTema.some(p => p.id === pr.paso_id)).length;
+                        const allDone = pasosTema.length > 0 && completados === pasosTema.length;
+                        return `
+                            <div class="tema-item draggable" draggable="${Store.admin}" ondragstart="${Store.admin ? `DnD.start(event,${t.id},'tema')` : ''}" ondragend="DnD.end(event)" ondragover="${Store.admin ? 'DnD.over(event)' : ''}" ondragleave="${Store.admin ? 'DnD.leave(event)' : ''}" ondrop="${Store.admin ? `DnD.drop(event,${t.id},'tema')` : ''}">
+                                ${Store.admin ? '<span class="drag-handle">⋮⋮</span>' : ''}
+                                <div class="tema-numero ${allDone ? 'tema-completado' : 'tema-pendiente'}">${allDone ? '✓' : i + 1}</div>
+                                <div class="tema-info" onclick="App.verTema(${t.id})">
+                                    <div class="tema-titulo">${t.titulo}</div>
+                                    <div class="tema-pasos">${pasosTema.length} pasos · ${completados} completados</div>
+                                </div>
+                                ${Store.admin ? `
+                                    <div class="tema-actions">
+                                        <div class="orden-controls">
+                                            <button class="orden-btn" onclick="event.stopPropagation();Orden.mover('tema',${t.id},-1)" ${i === 0 ? "disabled" : ""}>▲</button>
+                                            <button class="orden-btn" onclick="event.stopPropagation();Orden.mover('tema',${t.id},1)" ${i === temas.length - 1 ? "disabled" : ""}>▼</button>
+                                        </div>
+                                        <button class="btn btn-warning btn-xs" onclick="event.stopPropagation();Modal.open(Modal.temaForm(${JSON.stringify(t).replace(/"/g, '&quot;')}))">✏️</button>
+                                        <button class="btn btn-danger btn-xs" onclick="event.stopPropagation();Modal.deleteTema(${t.id})">🗑️</button>
+                                    </div>
+                                ` : ''}
+                                <div style="cursor:pointer;font-size:1.2rem" onclick="App.verTema(${t.id})">${allDone ? '✅' : '▶️'}</div>
+                            </div>
+                        `;
+                    }).join("")}
+                </div>
+            `}
+        `;
+    },
+
+    async verTema(id) {
+        Store.temaActual = Store.temas.find(t => t.id === id);
+        await Promise.all([Store.load("pasos"), Store.load("progreso")]);
+        this.renderTemaDetalle();
+    },
+
+    renderTemaDetalle() {
+        if (!Store.temaActual || !Store.nivelActual) return;
+        const main = document.getElementById("mainContent");
+        const color = Store.nivelActual.color;
+        const pasos = Store.pasosTema;
+
+        main.innerHTML = `
+            <button class="btn btn-secondary back-btn" onclick="App.verCurso(${Store.temaActual.curso_id})">← Volver a Temas</button>
+            <div class="reading-controls">
+                <span>🔤</span>
+                <button class="font-size-btn" onclick="App.changeFont(-1)">A-</button>
+                <span class="font-size-indicator">${Store.fontSize.toFixed(1)}rem</span>
+                <button class="font-size-btn" onclick="App.changeFont(1)">A+</button>
+                <span style="margin-left:1rem">🎨</span>
+                <button class="btn btn-sm btn-secondary" onclick="App.toggleDarkMode()">${Store.modoOscuro ? '☀️' : '🌙'}</button>
+            </div>
+            <div class="tema-contenido">
+                <span style="display:inline-block;background:${color};color:#fff;padding:0.2rem 0.6rem;border-radius:3px;font-size:0.75rem;margin-bottom:1rem">${Store.nivelActual.nombre}</span>
+                <h2>${Store.temaActual.titulo}</h2>
+                <div class="contenido-texto">${MD.parse(Store.temaActual.contenido || '')}</div>
+            </div>
+            <div class="pasos-section">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                    <h3>✋ Pasos Prácticos (${pasos.length})</h3>
+                    ${Store.admin ? `<button class="btn btn-primary btn-sm" onclick="Modal.open(Modal.pasoForm())">+ Agregar Paso</button>` : ''}
+                </div>
+                ${this.pasosHTML(pasos)}
+            </div>
+        `;
+
+        if (Store.modoOscuro) document.body.classList.add("modo-lectura");
+        document.documentElement.style.setProperty('--font-size-content', Store.fontSize + 'rem');
+    },
+
+    pasosHTML(pasos) {
+        if (pasos.length === 0) return UI.empty("No hay pasos prácticos");
+        return pasos.map((p, i) => {
+            const prog = Store.progreso.find(pr => pr.paso_id === p.id) || { completado: false, notas: '' };
+            return `
+                <div class="paso-item ${prog.completado ? 'completado' : ''} draggable" draggable="${Store.admin}" ondragstart="${Store.admin ? `DnD.start(event,${p.id},'paso')` : ''}" ondragend="DnD.end(event)" ondragover="${Store.admin ? 'DnD.over(event)' : ''}" ondragleave="${Store.admin ? 'DnD.leave(event)' : ''}" ondrop="${Store.admin ? `DnD.drop(event,${p.id},'paso')` : ''}">
+                    ${Store.admin ? '<span class="drag-handle">⋮⋮</span>' : ''}
+                    <div class="paso-checkbox ${prog.completado ? 'checked' : ''}" onclick="App.togglePaso(${p.id}, this)">${prog.completado ? '✓' : ''}</div>
+                    <div style="flex:1">
+                        <div class="paso-texto">${p.descripcion}</div>
+                        <textarea class="paso-notas" placeholder="Tus notas..." onchange="App.saveNotas(${p.id}, this.value)" style="${prog.completado ? 'display:block' : 'display:none'}">${prog.notas || ''}</textarea>
+                    </div>
+                    ${Store.admin ? `
+                        <div class="paso-actions">
+                            <div class="orden-controls">
+                                <button class="orden-btn" onclick="event.stopPropagation();Orden.mover('paso',${p.id},-1)" ${i === 0 ? "disabled" : ""}>▲</button>
+                                <button class="orden-btn" onclick="event.stopPropagation();Orden.mover('paso',${p.id},1)" ${i === pasos.length - 1 ? "disabled" : ""}>▼</button>
+                            </div>
+                            <button class="btn btn-warning btn-xs" onclick="event.stopPropagation();Modal.open(Modal.pasoForm(${JSON.stringify(p).replace(/"/g, '&quot;')}))">✏️</button>
+                            <button class="btn btn-danger btn-xs" onclick="event.stopPropagation();Modal.deletePaso(${p.id})">🗑️</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join("");
+    },
+
+    renderPasos() {
+        if (!Store.temaActual) return;
+        const pasos = Store.pasosTema;
+        const container = document.getElementById("pasosContainer") || document.querySelector(".pasos-section div:last-child");
+        if (container) {
+            container.innerHTML = this.pasosHTML(pasos);
+        }
+    },
+
+    async togglePaso(pasoId, checkboxEl) {
+        if (!Store.estudianteActual) {
+            if (Store.estudiantes.length === 0) {
+                await API.create("estudiantes", { nombre: "Estudiante", apellido: "Demo", email: "demo@academia.com" });
+                await Store.load("estudiantes");
+            }
+            Store.estudianteActual = Store.estudiantes[0];
+            await Store.load("progreso");
+        }
+        const existing = Store.progreso.find(pr => pr.paso_id === pasoId);
+        const nuevoEstado = !(existing && existing.completado);
+        if (existing) {
+            await API.update("progreso", existing.id, { completado: nuevoEstado, fecha_completado: nuevoEstado ? new Date().toISOString() : null });
+            existing.completado = nuevoEstado;
+        } else {
+            const res = await API.create("progreso", { estudiante_id: Store.estudianteActual.id, paso_id: pasoId, completado: nuevoEstado, fecha_completado: nuevoEstado ? new Date().toISOString() : null, notas: "" });
+            if (res && res[0]) Store.progreso.push(res[0]);
+        }
+        checkboxEl.classList.toggle("checked", nuevoEstado);
+        checkboxEl.textContent = nuevoEstado ? "✓" : "";
+        const item = checkboxEl.closest(".paso-item");
+        item.classList.toggle("completado", nuevoEstado);
+        const notas = item.querySelector(".paso-notas");
+        if (notas) notas.style.display = nuevoEstado ? "block" : "none";
+        UI.toast(nuevoEstado ? "✅ ¡Paso completado!" : "Paso desmarcado");
+    },
+
+    saveNotas: UI.debounce(async function(pasoId, notas) {
+        if (!Store.estudianteActual) return;
+        const existing = Store.progreso.find(pr => pr.paso_id === pasoId);
+        if (existing) await API.update("progreso", existing.id, { notas });
+    }, 500),
+
+    changeFont(direction) {
+        const sizes = [0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6];
+        let idx = sizes.indexOf(Store.fontSize);
+        if (idx === -1) idx = 2;
+        idx = Math.max(0, Math.min(sizes.length - 1, idx + direction));
+        Store.fontSize = sizes[idx];
+        document.documentElement.style.setProperty('--font-size-content', Store.fontSize + 'rem');
+        const ind = document.querySelector(".font-size-indicator");
+        if (ind) ind.textContent = Store.fontSize.toFixed(1) + 'rem';
+    },
+
+    toggleDarkMode() {
+        Store.modoOscuro = !Store.modoOscuro;
+        document.body.classList.toggle("modo-lectura", Store.modoOscuro);
+    },
+
+    setupListeners() {
+        document.getElementById("modalOverlay").addEventListener("click", function(e) {
+            if (e.target === this) Modal.close();
+        });
+
+        document.addEventListener("change", function(e) {
+            if (e.target.id === "selEstudiante") {
+                Store.estudianteActual = Store.estudiantes.find(es => es.id === parseInt(e.target.value)) || null;
+                Store.load("progreso").then(() => {
+                    if (Store.temaActual) App.renderTemaDetalle();
+                    else if (Store.cursoActual) App.renderTemas();
+                    else App.renderCursos();
+                });
+            }
+        });
     }
 };
 
 // ============================================================
-// INICIAR APLICACIÓN
+// INICIAR
 // ============================================================
 document.addEventListener("DOMContentLoaded", () => App.init());
 </script>
