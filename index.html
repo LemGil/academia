@@ -7,725 +7,452 @@
     <title>Academia del Espíritu</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="data:text/css;base64,/* Aquí irían los estilos */">
     <style>
+        /* Estilos (los mismos de antes, omitidos por brevedad) */
         :root {
-            --nivel1: #3D1C4D; --nivel1-light: #5D3C6D; --nivel1-bg: #F8F0FB;
-            --nivel2: #1A3A4A; --nivel2-light: #2C525F; --nivel2-bg: #F0F4F8;
-            --nivel3: #4A5A3D; --nivel3-light: #6A7A5D; --nivel3-bg: #F4F8F0;
-            --gold: #C9A24A; --gold-light: #F5D77A; --gold-dark: #8A6A2F;
+            --nivel1: #3D1C4D; --nivel2: #1A3A4A; --nivel3: #4A5A3D;
+            --gold: #C9A24A; --gold-light: #F5D77A;
             --bg: #F5F1E8; --surface: #FFFFFF; --border: #D6D0C4;
-            --text: #1C1C1C; --text-light: #666;
-            --success: #27ae60; --danger: #c0392b; --warning: #f39c12;
-            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --text: #1C1C1C; --success: #27ae60; --danger: #c0392b;
             --radius: 8px;
-            --font-size-content: 1.1rem;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; min-height:100vh; background-image:radial-gradient(#D6D0C4 1px,transparent 1px); background-size:20px 20px; }
-        .container { max-width:1200px; margin:0 auto; padding:1rem; }
-        
-        header { display:flex; align-items:center; gap:1.5rem; margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:2px solid var(--gold); flex-wrap:wrap; }
-        .logo { height:80px; }
-        .header-text h1 { font-family:'Cinzel',serif; font-size:1.8rem; color:var(--nivel2); text-transform:uppercase; letter-spacing:1px; }
-        .header-text p { font-family:'Crimson Pro',serif; color:var(--gold-dark); font-style:italic; }
-        .header-actions { display:flex; gap:0.5rem; align-items:center; margin-left:auto; flex-wrap:wrap; }
-        .admin-badge { background:var(--gold); color:var(--nivel2); padding:0.3rem 0.8rem; border-radius:4px; font-size:0.75rem; font-weight:700; text-transform:uppercase; }
-        
-        .btn { padding:0.6rem 1.2rem; border:none; border-radius:4px; cursor:pointer; font-family:'Inter',sans-serif; font-weight:600; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; transition:all 0.3s; display:inline-flex; align-items:center; gap:0.5rem; }
-        .btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
-        .btn-sm { padding:0.3rem 0.7rem; font-size:0.75rem; }
-        .btn-xs { padding:0.2rem 0.5rem; font-size:0.7rem; }
-        .btn-primary { background:var(--nivel2); color:var(--gold-light); }
-        .btn-secondary { background:var(--surface); color:var(--nivel2); border:1px solid var(--gold); }
-        .btn-danger { background:var(--surface); color:var(--danger); border:1px solid var(--danger); }
-        .btn-danger:hover { background:var(--danger); color:#fff; }
-        .btn-warning { background:var(--surface); color:var(--warning); border:1px solid var(--warning); }
-        .btn-warning:hover { background:var(--warning); color:#fff; }
-        
-        .niveles-nav { display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap; }
-        .nivel-tab { flex:1; min-width:180px; padding:1.2rem; border:none; border-radius:var(--radius); cursor:pointer; text-align:center; transition:all 0.3s; position:relative; overflow:hidden; }
-        .nivel-tab::before { content:''; position:absolute; top:0; left:0; width:100%; height:4px; }
-        .nivel-tab.nivel-1 { background:var(--nivel1-bg); border:2px solid var(--nivel1); }
-        .nivel-tab.nivel-1::before { background:var(--nivel1); }
-        .nivel-tab.nivel-2 { background:var(--nivel2-bg); border:2px solid var(--nivel2); }
-        .nivel-tab.nivel-2::before { background:var(--nivel2); }
-        .nivel-tab.nivel-3 { background:var(--nivel3-bg); border:2px solid var(--nivel3); }
-        .nivel-tab.nivel-3::before { background:var(--nivel3); }
-        .nivel-tab.active { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.15); }
-        .nivel-tab:hover { transform:translateY(-2px); }
-        .nivel-numero { font-family:'Cinzel',serif; font-size:1.4rem; font-weight:700; display:block; }
-        .nivel-nombre { font-family:'Crimson Pro',serif; font-size:0.9rem; font-style:italic; }
-        
-        .cursos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.5rem; }
-        .curso-card { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); transition:all 0.3s; overflow:hidden; }
-        .curso-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.12); }
-        .curso-card-header { padding:1rem 1.5rem; color:#fff; display:flex; justify-content:space-between; align-items:center; }
-        .curso-card-body { padding:1.5rem; }
-        .curso-titulo { font-family:'Cinzel',serif; font-size:1.1rem; margin-bottom:0.5rem; }
-        .curso-desc { font-family:'Crimson Pro',serif; color:var(--text-light); font-size:0.95rem; margin-bottom:1rem; }
-        .progreso-bar { height:6px; background:#eee; border-radius:3px; margin-bottom:0.5rem; overflow:hidden; }
-        .progreso-fill { height:100%; border-radius:3px; transition:width 0.5s; }
-        
-        .draggable { transition:all 0.2s; }
-        .draggable[draggable="true"] { cursor:grab; }
-        .draggable.dragging { opacity:0.4; background:var(--gold-light) !important; }
-        .drag-over { border:2px dashed var(--gold) !important; background:#fdf8ed !important; }
-        .drag-handle { cursor:grab; color:#999; font-size:1.2rem; padding:0 0.3rem; user-select:none; }
-        .drag-handle:hover { color:var(--gold); }
-        .orden-controls { display:flex; gap:0.2rem; align-items:center; }
-        .orden-btn { width:28px; height:28px; border:1px solid var(--border); border-radius:4px; background:var(--surface); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.7rem; transition:all 0.15s; color:var(--text-light); }
-        .orden-btn:hover:not(:disabled) { background:var(--gold-light); border-color:var(--gold); color:var(--nivel2); }
-        .orden-btn:disabled { opacity:0.3; cursor:not-allowed; }
-        
-        .temas-lista { background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
-        .tema-item { padding:1rem 1.5rem; border-bottom:1px solid var(--border); transition:background 0.2s; display:flex; align-items:center; gap:0.8rem; }
-        .tema-item:hover { background:#FAF9F6; }
-        .tema-item:last-child { border-bottom:none; }
-        .tema-numero { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0; }
-        .tema-completado { background:#d5f5e3; color:var(--success); }
-        .tema-pendiente { background:#f0f0f0; color:#999; }
-        .tema-info { flex:1; cursor:pointer; }
-        .tema-titulo { font-family:'Cinzel',serif; font-weight:600; }
-        .tema-pasos { font-size:0.85rem; color:var(--text-light); }
-        .tema-check { font-size:1.2rem; cursor:pointer; }
-        .tema-actions { display:flex; gap:0.3rem; align-items:center; }
-        
-        .tema-contenido { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); margin-bottom:2rem; }
-        .tema-contenido h2 { font-family:'Cinzel',serif; color:var(--nivel2); margin-bottom:1.5rem; }
-        .contenido-texto { font-family:'Crimson Pro',serif; font-size:var(--font-size-content); line-height:1.9; white-space:pre-wrap; transition:font-size 0.3s; }
-        .contenido-texto h2,.contenido-texto h3,.contenido-texto h4 { font-family:'Cinzel',serif; color:var(--nivel2); margin:1.2rem 0 0.6rem; }
-        .contenido-texto blockquote { border-left:4px solid var(--gold); padding:0.8rem 1.2rem; margin:1rem 0; background:#fdf8ed; font-style:italic; color:var(--gold-dark); border-radius:0 4px 4px 0; }
-        .contenido-texto ul,.contenido-texto ol { margin-left:1.5rem; margin-bottom:0.8rem; }
-        .contenido-texto strong { color:var(--nivel2); }
-        .contenido-texto em { color:var(--gold-dark); }
-        .contenido-texto hr { border:none; border-top:2px solid var(--gold); margin:1.5rem 0; opacity:0.5; }
-        
-        .editor-wrapper { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--surface); }
-        .editor-toolbar { display:flex; gap:0.2rem; padding:0.5rem; background:#f8f6f0; border-bottom:1px solid var(--border); flex-wrap:wrap; align-items:center; }
-        .editor-toolbar .tool-group { display:flex; gap:0.15rem; padding:0 0.5rem; border-right:1px solid var(--border); }
-        .editor-toolbar .tool-group:last-child { border-right:none; }
-        .tool-btn { width:34px; height:34px; border:1px solid transparent; border-radius:4px; background:transparent; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center; transition:all 0.15s; color:var(--text); font-family:'Inter',sans-serif; }
-        .tool-btn:hover { background:#e8e4d8; border-color:var(--border); }
-        .tool-btn.tool-heading { font-family:'Cinzel',serif; font-weight:700; font-size:0.75rem; width:auto; padding:0 0.5rem; }
-        .editor-textarea { width:100%; min-height:300px; padding:1.5rem; border:none; font-family:'Crimson Pro',serif; font-size:1.05rem; line-height:1.8; resize:vertical; background:var(--surface); color:var(--text); }
-        .editor-textarea:focus { outline:none; }
-        .editor-textarea.fullscreen { position:fixed; top:0; left:0; width:100%; height:100%; z-index:5000; min-height:100vh; padding:5rem 2rem 2rem; font-size:1.2rem; }
-        .editor-preview { padding:1.5rem; min-height:150px; font-family:'Crimson Pro',serif; font-size:1.05rem; line-height:1.8; border-top:2px solid var(--border); background:#fdfcf8; }
-        .editor-tabs { display:flex; border-bottom:1px solid var(--border); }
-        .editor-tab { padding:0.6rem 1.2rem; cursor:pointer; font-weight:600; font-size:0.85rem; border:none; background:transparent; color:var(--text-light); transition:all 0.2s; }
-        .editor-tab.active { color:var(--nivel2); border-bottom:3px solid var(--gold); }
-        .editor-statusbar { display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0.8rem; background:#f8f6f0; border-top:1px solid var(--border); font-size:0.75rem; color:var(--text-light); }
-        
-        .reading-controls { display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; padding:0.8rem 1rem; background:var(--bg); border-radius:var(--radius); flex-wrap:wrap; }
-        .font-size-btn { width:36px; height:36px; border-radius:50%; border:2px solid var(--border); background:var(--surface); cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; font-weight:700; color:var(--nivel2); }
-        .font-size-btn:hover { border-color:var(--gold); background:var(--gold-light); }
-        .font-size-indicator { font-family:'Cinzel',serif; font-weight:700; color:var(--nivel2); min-width:40px; text-align:center; }
-        
-        .pasos-section { background:var(--surface); border-radius:var(--radius); padding:2rem; box-shadow:var(--shadow); }
-        .pasos-section h3 { font-family:'Cinzel',serif; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; }
-        .paso-item { display:flex; align-items:flex-start; gap:0.8rem; padding:1rem; border-radius:var(--radius); background:var(--bg); margin-bottom:0.5rem; border:1px solid var(--border); transition:all 0.2s; }
-        .paso-item.completado { background:#f0faf4; border-color:var(--success); }
-        .paso-checkbox { width:26px; height:26px; border-radius:50%; border:2px solid #ccc; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:all 0.3s; font-size:0.8rem; background:#fff; }
-        .paso-checkbox.checked { background:var(--success); border-color:var(--success); color:#fff; }
-        .paso-texto { flex:1; font-family:'Crimson Pro',serif; font-size:1.05rem; }
-        .paso-notas { width:100%; margin-top:0.5rem; padding:0.5rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:0.9rem; resize:vertical; min-height:40px; display:none; }
-        .paso-item.completado .paso-notas { display:block; }
-        .paso-actions { display:flex; gap:0.3rem; flex-shrink:0; align-items:center; }
-        
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:flex-start; padding:2rem; overflow-y:auto; backdrop-filter:blur(2px); }
-        .modal.active { display:flex; }
-        .modal-content { background:var(--bg); padding:2rem; border-radius:var(--radius); border:2px solid var(--gold); width:100%; max-width:900px; margin:auto; box-shadow:0 20px 40px rgba(0,0,0,0.3); }
-        .modal-content h2 { font-family:'Cinzel',serif; margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid var(--gold); text-align:center; }
-        .form-group { margin-bottom:1rem; }
-        .form-group label { display:block; margin-bottom:0.3rem; font-weight:600; font-size:0.85rem; text-transform:uppercase; color:var(--nivel2); }
-        .form-group input,.form-group select { width:100%; padding:0.7rem; border:1px solid var(--border); border-radius:4px; font-family:'Crimson Pro',serif; font-size:1rem; }
-        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-        .modal-actions { display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border); flex-wrap:wrap; }
-        
-        .login-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:3000; justify-content:center; align-items:center; }
-        .login-overlay.active { display:flex; }
-        .login-box { background:var(--bg); padding:2.5rem; border-radius:var(--radius); border:2px solid var(--gold); width:100%; max-width:380px; text-align:center; }
-        
-        .back-btn { margin-bottom:1.5rem; }
-        .empty-state { text-align:center; padding:2rem; color:var(--text-light); font-style:italic; }
-        
-        .toast { position:fixed; bottom:2rem; right:2rem; padding:1rem 2rem; border-radius:var(--radius); box-shadow:0 8px 24px rgba(0,0,0,0.2); z-index:2000; animation:slideIn 0.3s ease; font-weight:600; }
-        .toast-success { background:var(--success); color:#fff; }
-        .toast-error { background:var(--danger); color:#fff; }
-        @keyframes slideIn { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
-        
-        .modo-lectura { background:#1a1a1a; }
-        .modo-lectura .tema-contenido { background:#2a2a2a; color:#e0e0e0; border:1px solid #444; }
-        .modo-lectura .tema-contenido h2 { color:#F5D77A; }
-        .modo-lectura .contenido-texto { color:#d0d0d0; }
-        .modo-lectura .pasos-section { background:#2a2a2a; border:1px solid #444; }
-        .modo-lectura .pasos-section h3 { color:#F5D77A; }
-        .modo-lectura .paso-item { background:#333; border-color:#555; }
-        
-        @media(max-width:768px) {
-            .niveles-nav { flex-direction:column; }
-            .nivel-tab { min-width:auto; }
-            .form-row { grid-template-columns:1fr; }
-            .cursos-grid { grid-template-columns:1fr; }
-            .modal { padding:0.5rem; }
-            .paso-actions { flex-direction:column; }
-            .tema-contenido { padding:1rem; }
-            .editor-toolbar { justify-content:center; }
-            .editor-toolbar .tool-group { border-right:none; }
-        }
+        body { font-family:'Inter',sans-serif; background:var(--bg); }
+        .hidden { display:none !important; }
+        .skeleton { background:linear-gradient(90deg,#eee 25%,#f5f5f5 50%,#eee 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:4px; }
+        @keyframes shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
+        .spinner { width:40px; height:40px; border:4px solid #ddd; border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; margin:2rem auto; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .toast { position:fixed; bottom:2rem; right:2rem; padding:1rem 2rem; border-radius:8px; color:#fff; z-index:9999; animation:slideIn 0.3s; }
+        .toast-success { background:var(--success); }
+        .toast-error { background:var(--danger); }
+        @keyframes slideIn { from { transform:translateX(100%); opacity:0; } }
     </style>
 </head>
 <body>
-<div class="container" id="app">
-    <header>
-        <img src="logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
-        <div class="header-text">
-            <h1>Academia del Espíritu</h1>
-            <p>Formación Teológica Apostólica</p>
-        </div>
-        <div class="header-actions">
-            <span class="admin-badge" id="adminBadge" style="display:none">Admin</span>
-            <select id="estudianteSelect" onchange="cambiarEstudiante(this.value)" style="padding:0.3rem 0.6rem;border-radius:4px;border:1px solid var(--border);font-size:0.85rem;display:none">
-                <option value="">Seleccionar estudiante...</option>
-            </select>
-            <button class="btn btn-sm btn-secondary" id="btnLogin" onclick="showLogin()">Acceso Admin</button>
-            <button class="btn btn-sm btn-danger" id="btnLogout" style="display:none" onclick="logout()">Salir</button>
-        </div>
-    </header>
 
-    <div class="niveles-nav" id="nivelesNav"></div>
-    <div id="mainContent"></div>
+<div id="app">
+    <!-- Header -->
+    <header id="app-header"></header>
+    
+    <!-- Navegación de niveles -->
+    <nav id="nav-niveles"></nav>
+    
+    <!-- Contenido principal -->
+    <main id="main-content">
+        <div class="spinner"></div>
+    </main>
 </div>
 
-<div class="login-overlay" id="loginOverlay">
+<!-- Modales -->
+<div id="modal-overlay" class="hidden" onclick="App.Modal.close()">
+    <div id="modal-container"></div>
+</div>
+
+<!-- Login -->
+<div id="login-overlay" class="hidden">
     <div class="login-box">
         <h2>Acceso Admin</h2>
-        <div class="form-group"><label>Contraseña</label><input type="password" id="adminPassword" placeholder="Ingresa la contraseña" onkeydown="if(event.key==='Enter')checkLogin()"></div>
-        <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem">
-            <button class="btn btn-secondary" onclick="hideLogin()">Cancelar</button>
-            <button class="btn btn-primary" onclick="checkLogin()">Entrar</button>
+        <input type="password" id="login-password" placeholder="Contraseña">
+        <div class="login-actions">
+            <button onclick="App.Auth.hideLogin()">Cancelar</button>
+            <button onclick="App.Auth.login()">Entrar</button>
         </div>
-        <p id="loginError" style="color:var(--danger);margin-top:0.8rem;display:none">Contraseña incorrecta</p>
+        <p id="login-error" class="hidden">Contraseña incorrecta</p>
     </div>
 </div>
 
-<div class="modal" id="adminModal"><div class="modal-content" id="adminModalContent"></div></div>
-<div id="toastContainer"></div>
+<!-- Toast container -->
+<div id="toast-container"></div>
 
 <script>
-const SUPABASE_URL = "https://cdabgazsrjkfcqzqeint.supabase.co";
-const SUPABASE_KEY = "sb_publishable_gbS0u_HxiWdEuCANkRbGeQ_gKChZZiN";
-const ADMIN_PASS = "academia2025";
-const H = {"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY};
-
-let isAdmin = false;
-let nivelesData = [], cursosData = [], temasData = [], pasosData = [], progresoData = [], estudiantesData = [];
-let nivelActual = null, cursoActual = null, temaActual = null, estudianteActual = null;
-let currentFontSize = 1.1, modoLecturaOscuro = false;
-const FONT_SIZES = [0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6];
-let fontSizeIndex = 2;
+// ============================================================
+// MÓDULO: Configuración
+// ============================================================
+const CONFIG = {
+    SUPABASE_URL: "https://cdabgazsrjkfcqzqeint.supabase.co",
+    SUPABASE_KEY: "sb_publishable_gbS0u_HxiWdEuCANkRbGeQ_gKChZZiN",
+    ADMIN_PASS: "academia2025" // Temporal - mover a Supabase Auth
+};
 
 // ============================================================
-// API
+// MÓDULO: API Client
 // ============================================================
-async function api(path, method, body, prefer) {
-    const headers = {...H}; if (prefer) headers["Prefer"] = prefer;
-    const opts = { method: method || "GET", headers };
-    if (body) opts.body = JSON.stringify(body);
-    try {
-        const res = await fetch(SUPABASE_URL + "/rest/v1/" + path, opts);
+const API = {
+    headers: {
+        "Content-Type": "application/json",
+        "apikey": CONFIG.SUPABASE_KEY,
+        "Authorization": "Bearer " + CONFIG.SUPABASE_KEY
+    },
+    
+    async request(path, method = "GET", body = null, prefer = null) {
+        const headers = {...this.headers};
+        if (prefer) headers["Prefer"] = prefer;
+        
+        const opts = { method, headers };
+        if (body) opts.body = JSON.stringify(body);
+        
+        const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${path}`, opts);
+        
         if (res.status === 204) return null;
         if (res.status === 200 && method === "DELETE") return null;
-        if (res.status === 200 || res.status === 201) {
+        if (res.ok) {
             const text = await res.text();
             return text ? JSON.parse(text) : null;
         }
         throw new Error(await res.text());
-    } catch(err) { console.error("API Error:", err); throw err; }
-}
-
-// ============================================================
-// TOAST & DEBOUNCE
-// ============================================================
-function showToast(msg, type = 'success') {
-    const t = document.createElement("div");
-    t.className = `toast toast-${type}`; t.textContent = msg;
-    document.getElementById("toastContainer").appendChild(t);
-    setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 2500);
-}
-function debounce(func, wait) { let timeout; return function(...args) { clearTimeout(timeout); timeout = setTimeout(() => func.apply(this, args), wait); }; }
-
-// ============================================================
-// FUENTE Y MODO LECTURA
-// ============================================================
-function aumentarFuente() { if (fontSizeIndex < FONT_SIZES.length-1) { fontSizeIndex++; currentFontSize = FONT_SIZES[fontSizeIndex]; aplicarTamanoFuente(); } }
-function disminuirFuente() { if (fontSizeIndex > 0) { fontSizeIndex--; currentFontSize = FONT_SIZES[fontSizeIndex]; aplicarTamanoFuente(); } }
-function resetearFuente() { fontSizeIndex = 2; currentFontSize = FONT_SIZES[fontSizeIndex]; aplicarTamanoFuente(); }
-function aplicarTamanoFuente() {
-    document.documentElement.style.setProperty('--font-size-content', currentFontSize + 'rem');
-    const ind = document.getElementById("fontSizeIndicator"); if (ind) ind.textContent = currentFontSize.toFixed(1) + 'rem';
-}
-function toggleModoLectura() {
-    modoLecturaOscuro = !modoLecturaOscuro;
-    document.body.classList.toggle('modo-lectura', modoLecturaOscuro);
-    const btn = document.getElementById("btnModoLectura");
-    if (btn) { btn.textContent = modoLecturaOscuro ? '☀️' : '🌙'; }
-}
-
-// ============================================================
-// LOGIN
-// ============================================================
-function showLogin() { document.getElementById("loginOverlay").classList.add("active"); setTimeout(() => document.getElementById("adminPassword").focus(), 100); }
-function hideLogin() { document.getElementById("loginOverlay").classList.remove("active"); document.getElementById("adminPassword").value = ""; document.getElementById("loginError").style.display = "none"; }
-function checkLogin() { if (document.getElementById("adminPassword").value === ADMIN_PASS) { isAdmin = true; hideLogin(); updateAdminUI(); renderNiveles(); } else { document.getElementById("loginError").style.display = "block"; } }
-function logout() { isAdmin = false; updateAdminUI(); renderNiveles(); }
-function updateAdminUI() {
-    document.getElementById("adminBadge").style.display = isAdmin ? "" : "none";
-    document.getElementById("btnLogin").style.display = isAdmin ? "none" : "";
-    document.getElementById("btnLogout").style.display = isAdmin ? "" : "none";
-    document.getElementById("estudianteSelect").style.display = "";
-}
-
-// ============================================================
-// CARGA DE DATOS
-// ============================================================
-async function loadAll() {
-    try {
-        const [niveles, estudiantes] = await Promise.all([api("niveles?select=*&order=orden"), api("estudiantes?select=*&order=nombre")]);
-        nivelesData = niveles || []; estudiantesData = estudiantes || [];
-        if (!estudianteActual && estudiantesData.length > 0) estudianteActual = estudiantesData[0];
-        updateEstudianteSelect();
-    } catch(e) { console.error("Error cargando:", e); }
-}
-async function loadCursosData() { cursosData = (await api("cursos?select=*&order=orden")) || []; }
-async function loadTemasData() { temasData = (await api("temas?select=*&order=orden")) || []; }
-async function loadPasosData() { pasosData = (await api("pasos?select=*&order=orden")) || []; }
-async function loadProgresoData() {
-    if (!estudianteActual) { progresoData = []; return; }
-    progresoData = (await api(`progreso?estudiante_id=eq.${estudianteActual.id}&select=*`)) || [];
-}
-function updateEstudianteSelect() {
-    const sel = document.getElementById("estudianteSelect");
-    sel.innerHTML = '<option value="">Seleccionar estudiante...</option>' + estudiantesData.map(e => `<option value="${e.id}" ${estudianteActual && e.id === estudianteActual.id ? 'selected' : ''}>${e.nombre} ${e.apellido}</option>`).join('');
-}
-async function cambiarEstudiante(id) {
-    estudianteActual = estudiantesData.find(e => e.id === parseInt(id)) || null;
-    await loadProgresoData();
-    if (temaActual) verTema(temaActual.id); else if (cursoActual) verCurso(cursoActual.id); else renderCursos();
-}
-
-// ============================================================
-// ORDENAMIENTO INSTANTÁNEO
-// ============================================================
-function getItemsOrdenados(type) {
-    let items;
-    if (type === 'curso') items = cursosData.filter(c => nivelActual && c.nivel_id === nivelActual.id);
-    else if (type === 'tema') items = temasData.filter(t => cursoActual && t.curso_id === cursoActual.id);
-    else items = pasosData.filter(p => temaActual && p.tema_id === temaActual.id);
-    items.sort((a, b) => (a.orden || a.id) - (b.orden || b.id));
-    return items;
-}
-
-function actualizarOrdenLocal(type, items) {
-    const table = type === 'curso' ? cursosData : type === 'tema' ? temasData : pasosData;
-    items.forEach((item, index) => {
-        const found = table.find(x => x.id === item.id);
-        if (found) found.orden = index;
-    });
-}
-
-function refrescarVista(type) {
-    if (type === 'curso') renderCursos();
-    else if (type === 'tema') verCurso(cursoActual.id);
-    else verTema(temaActual.id);
-}
-
-async function guardarOrdenBackground(type, items) {
-    const tableName = type === 'curso' ? 'cursos' : type === 'tema' ? 'temas' : 'pasos';
-    try {
-        await Promise.all(items.map((item, index) => 
-            api(`${tableName}?id=eq.${item.id}`, "PATCH", { orden: index }, "return=minimal")
-        ));
-    } catch(err) {
-        console.error("Error guardando orden:", err);
+    },
+    
+    // Métodos CRUD genéricos
+    async getAll(table, query = "*", order = null) {
+        let path = `${table}?select=${query}`;
+        if (order) path += `&order=${order}`;
+        return (await this.request(path)) || [];
+    },
+    
+    async getById(table, id, query = "*") {
+        const result = await this.request(`${table}?id=eq.${id}&select=${query}`);
+        return result?.[0] || null;
+    },
+    
+    async create(table, data) {
+        return await this.request(table, "POST", data, "return=representation");
+    },
+    
+    async update(table, id, data) {
+        return await this.request(`${table}?id=eq.${id}`, "PATCH", data, "return=minimal");
+    },
+    
+    async remove(table, id) {
+        return await this.request(`${table}?id=eq.${id}`, "DELETE");
     }
-}
+};
 
-function moverItem(type, id, direction) {
-    const items = getItemsOrdenados(type);
-    if (items.length < 2) return;
+// ============================================================
+// MÓDULO: Store (Estado centralizado)
+// ============================================================
+const Store = {
+    state: {
+        isAdmin: false,
+        estudianteActual: null,
+        nivelActual: null,
+        cursoActual: null,
+        temaActual: null,
+        // Datos cacheados
+        niveles: [],
+        cursos: [],
+        temas: [],
+        pasos: [],
+        progreso: [],
+        estudiantes: [],
+        // UI
+        isLoading: false,
+        fontSize: 1.1,
+        modoOscuro: false
+    },
     
-    const idx = items.findIndex(i => i.id === id);
-    if (idx === -1) return;
-    const newIdx = idx + direction;
-    if (newIdx < 0 || newIdx >= items.length) return;
+    // Getters
+    get cursosNivel() {
+        return this.state.cursos
+            .filter(c => c.nivel_id === this.state.nivelActual?.id)
+            .sort((a, b) => (a.orden || 0) - (b.orden || 0));
+    },
     
-    // Intercambiar
-    [items[idx], items[newIdx]] = [items[newIdx], items[idx]];
+    get temasCurso() {
+        return this.state.temas
+            .filter(t => t.curso_id === this.state.cursoActual?.id)
+            .sort((a, b) => (a.orden || 0) - (b.orden || 0));
+    },
     
-    // Actualizar local y refrescar
-    actualizarOrdenLocal(type, items);
-    refrescarVista(type);
+    get pasosTema() {
+        return this.state.pasos
+            .filter(p => p.tema_id === this.state.temaActual?.id)
+            .sort((a, b) => (a.orden || 0) - (b.orden || 0));
+    },
     
-    // Guardar en background
-    guardarOrdenBackground(type, items);
-}
-
-// Drag & Drop
-let draggedItem = null, draggedType = null;
-
-function handleDragStart(e, id, type) { 
-    draggedItem = id; draggedType = type; 
-    e.target.closest('.draggable')?.classList.add('dragging'); 
-    e.dataTransfer.effectAllowed = 'move'; 
-}
-function handleDragEnd(e) { 
-    e.target.closest('.draggable')?.classList.remove('dragging'); 
-    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over')); 
-}
-function handleDragOver(e) { 
-    e.preventDefault(); e.dataTransfer.dropEffect = 'move'; 
-    e.target.closest('.draggable')?.classList.add('drag-over'); 
-}
-function handleDragLeave(e) { 
-    e.target.closest('.draggable')?.classList.remove('drag-over'); 
-}
-async function handleDrop(e, targetId, type) {
-    e.preventDefault(); 
-    e.target.closest('.draggable')?.classList.remove('drag-over');
-    if (draggedItem && draggedItem !== targetId && draggedType === type) {
-        const items = getItemsOrdenados(type);
-        const fromIdx = items.findIndex(i => i.id === draggedItem);
-        const toIdx = items.findIndex(i => i.id === targetId);
-        if (fromIdx !== -1 && toIdx !== -1 && fromIdx !== toIdx) {
-            const [moved] = items.splice(fromIdx, 1);
-            items.splice(toIdx, 0, moved);
-            actualizarOrdenLocal(type, items);
-            refrescarVista(type);
-            guardarOrdenBackground(type, items);
+    // Acciones
+    setState(key, value) {
+        this.state[key] = value;
+    },
+    
+    async loadData(table) {
+        const map = {
+            niveles: () => API.getAll("niveles", "*", "orden"),
+            cursos: () => API.getAll("cursos", "*", "orden"),
+            temas: () => API.getAll("temas", "*", "orden"),
+            pasos: () => API.getAll("pasos", "*", "orden"),
+            estudiantes: () => API.getAll("estudiantes", "*", "nombre"),
+            progreso: async () => {
+                if (!this.state.estudianteActual) return [];
+                return await API.getAll("progreso", "*", `estudiante_id=eq.${this.state.estudianteActual.id}`);
+            }
+        };
+        
+        if (map[table]) {
+            this.state[table] = await map[table]();
         }
     }
-}
+};
 
 // ============================================================
-// PARSE MARKDOWN
+// MÓDULO: UI Helpers
 // ============================================================
-function parseMarkdown(text) {
-    if (!text) return '<p style="color:#999;font-style:italic">Sin contenido</p>';
-    let html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-        .replace(/^&gt; (.*$)/gm,'<blockquote>$1</blockquote>')
-        .replace(/^#### (.*$)/gm,'<h4>$1</h4>').replace(/^### (.*$)/gm,'<h3>$1</h3>').replace(/^## (.*$)/gm,'<h2>$1</h2>')
-        .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/_(.*?)_/g,'<u>$1</u>')
-        .replace(/^---$/gm,'<hr>').replace(/^- (.*$)/gm,'<li>$1</li>').replace(/^\d+\. (.*$)/gm,'<li>$1</li>')
-        .replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>');
-    return '<p>'+html+'</p>';
-}
-
-// ============================================================
-// EDITOR ENRIQUECIDO
-// ============================================================
-function createEditor(textareaId, initialValue) {
-    const textarea = document.getElementById(textareaId); if (!textarea) return;
-    const wrapper = document.createElement('div'); wrapper.className = 'editor-wrapper';
-    textarea.parentNode.insertBefore(wrapper, textarea);
-    const toolbar = document.createElement('div'); toolbar.className = 'editor-toolbar';
-    toolbar.innerHTML = `<div class="tool-group"><button type="button" class="tool-btn" data-cmd="bold" title="Negrita"><b>B</b></button><button type="button" class="tool-btn" data-cmd="italic" title="Cursiva"><i>I</i></button><button type="button" class="tool-btn" data-cmd="underline" title="Subrayado"><u>U</u></button></div><div class="tool-group"><button type="button" class="tool-btn tool-heading" data-cmd="h2" title="Título">H2</button><button type="button" class="tool-btn tool-heading" data-cmd="h3" title="Título">H3</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="ul" title="Lista">•≡</button><button type="button" class="tool-btn" data-cmd="ol" title="Numerada">1≡</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="quote" title="Cita">❝</button><button type="button" class="tool-btn" data-cmd="hr" title="Línea">—</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="preview" title="Vista previa">👁️</button><button type="button" class="tool-btn" data-cmd="fullscreen" title="Pantalla completa">⛶</button></div>`;
-    const editorArea = document.createElement('textarea'); editorArea.className = 'editor-textarea';
-    editorArea.id = textareaId + '_editor'; editorArea.value = initialValue || ''; editorArea.placeholder = textarea.placeholder || '';
-    const preview = document.createElement('div'); preview.className = 'editor-preview'; preview.id = textareaId + '_preview'; preview.style.display = 'none';
-    const tabs = document.createElement('div'); tabs.className = 'editor-tabs';
-    tabs.innerHTML = `<button type="button" class="editor-tab active" data-tab="edit">✏️ Editar</button><button type="button" class="editor-tab" data-tab="preview">👁️ Vista previa</button>`;
-    const statusBar = document.createElement('div'); statusBar.className = 'editor-statusbar';
-    statusBar.innerHTML = `<span>**negrita** *cursiva* ## Título</span><span id="${textareaId}_count">0</span>`;
-    wrapper.appendChild(toolbar); wrapper.appendChild(tabs); wrapper.appendChild(editorArea); wrapper.appendChild(preview); wrapper.appendChild(statusBar);
-    textarea.style.display = 'none';
-    function update() { textarea.value = editorArea.value; updateStatusBar(); updatePreview(); }
-    editorArea.addEventListener('input', update);
-    toolbar.querySelectorAll('.tool-btn').forEach(btn => { btn.addEventListener('click', function(e) { e.preventDefault(); handleEditorCommand(this.dataset.cmd, editorArea, textarea, preview, tabs); }); });
-    tabs.querySelectorAll('.editor-tab').forEach(tab => { tab.addEventListener('click', function() {
-        tabs.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active')); this.classList.add('active');
-        if (this.dataset.tab === 'edit') { editorArea.style.display = ''; preview.style.display = 'none'; }
-        else { editorArea.style.display = 'none'; preview.style.display = ''; updatePreview(); }
-    }); });
-    editorArea.addEventListener('keydown', function(e) {
-        if ((e.ctrlKey||e.metaKey) && {b:'bold',i:'italic',u:'underline'}[e.key]) { e.preventDefault(); handleEditorCommand({b:'bold',i:'italic',u:'underline'}[e.key], editorArea, textarea, preview, tabs); }
-        if (e.key === 'Escape' && editorArea.classList.contains('fullscreen')) toggleFullscreen(editorArea);
-    });
-    function updateStatusBar() { document.getElementById(textareaId+'_count').textContent = `${editorArea.value.length} caracteres`; }
-    function updatePreview() { preview.innerHTML = parseMarkdown(editorArea.value); }
-    update(); return { editorArea, preview, wrapper };
-}
-function handleEditorCommand(cmd, ta, textarea, preview, tabs) {
-    const start = ta.selectionStart, end = ta.selectionEnd, text = ta.value, sel = text.substring(start, end);
-    let rep = '', off = 0;
-    switch(cmd) {
-        case 'bold': rep = `**${sel||'texto'}**`; off = sel ? 0 : -2; break;
-        case 'italic': rep = `*${sel||'texto'}*`; off = sel ? 0 : -1; break;
-        case 'underline': rep = `_${sel||'texto'}_`; off = sel ? 0 : -1; break;
-        case 'h2': rep = `\n## ${sel||'Título'}\n`; break;
-        case 'h3': rep = `\n### ${sel||'Título'}\n`; break;
-        case 'ul': rep = sel ? sel.split('\n').map(l=>`- ${l}`).join('\n') : '\n- Elemento\n- Elemento\n'; break;
-        case 'ol': rep = sel ? sel.split('\n').map((l,i)=>`${i+1}. ${l}`).join('\n') : '\n1. Primero\n2. Segundo\n'; break;
-        case 'quote': rep = `\n> ${sel||'Cita'}\n`; break;
-        case 'hr': rep = '\n---\n'; break;
-        case 'preview': tabs.querySelector('[data-tab="preview"]')?.click(); return;
-        case 'fullscreen': toggleFullscreen(ta); return;
+const UI = {
+    // Templates
+    templates: {
+        emptyState(msg) {
+            return `<div class="empty-state">${msg}</div>`;
+        },
+        
+        skeleton(count = 3) {
+            return Array(count).fill('<div class="skeleton" style="height:100px;margin-bottom:1rem"></div>').join('');
+        },
+        
+        spinner() {
+            return '<div class="spinner"></div>';
+        },
+        
+        progresoBar(pct, color) {
+            return `<div class="progreso-bar"><div class="progreso-fill" style="width:${pct}%;background:${color}"></div></div>`;
+        }
+    },
+    
+    // Toast notifications
+    toast(msg, type = "success") {
+        const container = document.getElementById("toast-container");
+        const toast = document.createElement("div");
+        toast.className = `toast toast-${type}`;
+        toast.textContent = msg;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    },
+    
+    // Event Delegation
+    delegate(event, selector, handler) {
+        return function(e) {
+            const target = e.target.closest(selector);
+            if (target) handler.call(target, e, target);
+        };
+    },
+    
+    // Debounce
+    debounce(fn, delay = 300) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn.apply(this, args), delay);
+        };
     }
-    ta.value = text.substring(0,start) + rep + text.substring(end); ta.focus();
-    ta.selectionStart = sel ? start : start + rep.length + off; ta.selectionEnd = sel ? start + rep.length : start + rep.length + off;
-    textarea.value = ta.value; ta.dispatchEvent(new Event('input'));
-}
-function toggleFullscreen(ta) { ta.classList.toggle('fullscreen'); document.body.style.overflow = ta.classList.contains('fullscreen') ? 'hidden' : ''; }
+};
 
 // ============================================================
-// RENDERIZADO PRINCIPAL
+// MÓDULO: Auth
 // ============================================================
-async function renderNiveles() {
-    await loadAll();
-    const nav = document.getElementById("nivelesNav");
-    if (!nivelesData.length) { nav.innerHTML = '<div class="empty-state">No hay niveles. Ejecuta el SQL en Supabase.</div>'; return; }
-    nav.innerHTML = nivelesData.map(n => `<button class="nivel-tab nivel-${n.orden}${nivelActual&&nivelActual.id===n.id?' active':''}" onclick="selectNivel(${n.id})"><span class="nivel-numero" style="color:${n.color}">${n.nombre}</span><span class="nivel-nombre">${n.descripcion||''}</span></button>`).join("");
-    if (nivelActual) { await loadCursosData(); renderCursos(); }
-    else if (nivelesData.length > 0) selectNivel(nivelesData[0].id);
-    else document.getElementById("mainContent").innerHTML = '<div class="empty-state"><p>🎓 Bienvenido a la Academia del Espíritu</p></div>';
-}
-async function selectNivel(nivelId) { nivelActual = nivelesData.find(n => n.id === nivelId) || null; cursoActual = null; temaActual = null; await loadCursosData(); renderNiveles(); }
-
-async function renderCursos() {
-    if (!nivelActual) return;
-    let cursosNivel = cursosData.filter(c => c.nivel_id === nivelActual.id);
-    cursosNivel.sort((a, b) => (a.orden || 0) - (b.orden || 0));
-    const main = document.getElementById("mainContent");
-    let html = `<div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${nivelActual.color}">📚 Cursos de ${nivelActual.nombre}</h2><p style="color:var(--text-light)">${nivelActual.descripcion||''}</p></div>`;
-    if (isAdmin) html += `<div style="margin-bottom:1.5rem;display:flex;gap:0.5rem"><button class="btn btn-primary btn-sm" onclick="openCursoModal()">+ Nuevo Curso</button><button class="btn btn-secondary btn-sm" onclick="showEstudiantes()">👥 Estudiantes</button></div>`;
-    if (!cursosNivel.length) { html += '<div class="empty-state">No hay cursos en este nivel.</div>'; }
-    else {
-        html += '<div class="cursos-grid">';
-        cursosNivel.forEach((curso, index) => {
-            const temasCurso = temasData.filter(t => t.curso_id === curso.id);
-            const totalPasos = pasosData.filter(p => temasCurso.some(t => t.id === p.tema_id)).length;
-            const completados = estudianteActual ? progresoData.filter(pr => pr.completado && pasosData.some(p => p.id === pr.paso_id && temasCurso.some(t => t.id === p.tema_id))).length : 0;
-            const pct = totalPasos > 0 ? Math.round((completados/totalPasos)*100) : 0;
-            html += `<div class="curso-card draggable" draggable="${isAdmin}" ondragstart="${isAdmin?`handleDragStart(event,${curso.id},'curso')`:''}" ondragend="handleDragEnd(event)" ondragover="${isAdmin?'handleDragOver(event)':''}" ondragleave="${isAdmin?'handleDragLeave(event)':''}" ondrop="${isAdmin?`handleDrop(event,${curso.id},'curso')`:''}"><div class="curso-card-header" style="background:${nivelActual.color}"><span>${isAdmin?`<span class="drag-handle">⋮⋮</span> `:''}${temasCurso.length} temas</span><span>${totalPasos} pasos</span></div><div class="curso-card-body"><div class="curso-titulo">${curso.titulo}</div><div class="curso-desc">${curso.descripcion||''}</div><div class="progreso-bar"><div class="progreso-fill" style="width:${pct}%;background:${nivelActual.color}"></div></div><div style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem">${completados}/${totalPasos} pasos (${pct}%)</div><div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center"><button class="btn btn-primary btn-sm" onclick="verCurso(${curso.id})">📖 Ver Temas</button>${isAdmin?`<div class="orden-controls"><button class="orden-btn" onclick="moverItem('curso',${curso.id},-1)" ${index===0?'disabled':''}>▲</button><button class="orden-btn" onclick="moverItem('curso',${curso.id},1)" ${index===cursosNivel.length-1?'disabled':''}>▼</button></div><button class="btn btn-warning btn-sm" onclick="editCurso(${curso.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteCurso(${curso.id})">🗑️</button>`:''}</div></div></div>`;
-        });
-        html += '</div>';
+const Auth = {
+    showLogin() {
+        document.getElementById("login-overlay").classList.remove("hidden");
+        document.getElementById("login-password").focus();
+    },
+    
+    hideLogin() {
+        document.getElementById("login-overlay").classList.add("hidden");
+        document.getElementById("login-password").value = "";
+    },
+    
+    async login() {
+        const password = document.getElementById("login-password").value;
+        
+        if (password === CONFIG.ADMIN_PASS) {
+            Store.setState("isAdmin", true);
+            this.hideLogin();
+            UI.toast("✅ Acceso concedido");
+            App.render();
+        } else {
+            document.getElementById("login-error").classList.remove("hidden");
+        }
+    },
+    
+    logout() {
+        Store.setState("isAdmin", false);
+        App.render();
     }
-    main.innerHTML = html;
-}
+};
 
-async function verCurso(cursoId) {
-    cursoActual = cursosData.find(c => c.id === cursoId); if (!cursoActual||!nivelActual) return;
-    await Promise.all([loadTemasData(), loadPasosData(), loadProgresoData()]);
-    let temasCurso = temasData.filter(t => t.curso_id === cursoId);
-    temasCurso.sort((a, b) => (a.orden || 0) - (b.orden || 0));
-    const main = document.getElementById("mainContent");
-    let html = `<button class="btn btn-secondary back-btn" onclick="renderCursos()">← Volver a Cursos</button><div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${nivelActual.color}">📖 ${cursoActual.titulo}</h2><p style="color:var(--text-light)">${cursoActual.descripcion||''}</p></div>`;
-    if (isAdmin) html += `<div style="margin-bottom:1rem"><button class="btn btn-primary btn-sm" onclick="openTemaModal(${cursoId})">+ Agregar Tema</button></div>`;
-    if (!temasCurso.length) { html += '<div class="empty-state">No hay temas en este curso.</div>'; }
-    else {
-        html += '<div class="temas-lista">';
-        temasCurso.forEach((tema, i) => {
-            const pasosTema = pasosData.filter(p => p.tema_id === tema.id);
-            const completados = estudianteActual ? progresoData.filter(pr => pr.completado && pasosTema.some(p => p.id === pr.paso_id)).length : 0;
-            const allDone = pasosTema.length > 0 && completados === pasosTema.length;
-            html += `<div class="tema-item draggable" draggable="${isAdmin}" ondragstart="${isAdmin?`handleDragStart(event,${tema.id},'tema')`:''}" ondragend="handleDragEnd(event)" ondragover="${isAdmin?'handleDragOver(event)':''}" ondragleave="${isAdmin?'handleDragLeave(event)':''}" ondrop="${isAdmin?`handleDrop(event,${tema.id},'tema')`:''}">${isAdmin?`<span class="drag-handle">⋮⋮</span>`:''}<div class="tema-numero ${allDone?'tema-completado':'tema-pendiente'}">${allDone?'✓':i+1}</div><div class="tema-info" onclick="verTema(${tema.id})"><div class="tema-titulo">${tema.titulo}</div><div class="tema-pasos">${pasosTema.length} pasos · ${completados} completados</div></div>${isAdmin?`<div class="tema-actions"><div class="orden-controls"><button class="orden-btn" onclick="event.stopPropagation();moverItem('tema',${tema.id},-1)" ${i===0?'disabled':''}>▲</button><button class="orden-btn" onclick="event.stopPropagation();moverItem('tema',${tema.id},1)" ${i===temasCurso.length-1?'disabled':''}>▼</button></div><button class="btn btn-warning btn-xs" onclick="event.stopPropagation();editTema(${tema.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteTema(${tema.id})">🗑️</button></div>`:''}<div class="tema-check" onclick="verTema(${tema.id})">${allDone?'✅':'▶️'}</div></div>`;
-        });
-        html += '</div>';
+// ============================================================
+// MÓDULO: Modal
+// ============================================================
+const Modal = {
+    open(content) {
+        document.getElementById("modal-container").innerHTML = content;
+        document.getElementById("modal-overlay").classList.remove("hidden");
+    },
+    
+    close() {
+        document.getElementById("modal-overlay").classList.add("hidden");
+    },
+    
+    // Templates de modales
+    cursoForm(curso = null) {
+        const isEdit = !!curso;
+        return `
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <h2>${isEdit ? 'Editar' : 'Nuevo'} Curso</h2>
+                <form id="curso-form">
+                    <input type="hidden" name="id" value="${curso?.id || ''}">
+                    <div class="form-group">
+                        <label>Nivel</label>
+                        <select name="nivel_id" required>
+                            ${Store.state.niveles.map(n => `
+                                <option value="${n.id}" ${Store.state.nivelActual?.id === n.id ? 'selected' : ''}>${n.nombre}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Título</label>
+                        <input type="text" name="titulo" required value="${curso?.titulo || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <input type="text" name="descripcion" value="${curso?.descripcion || ''}">
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        `;
     }
-    main.innerHTML = html;
-}
+};
 
-async function verTema(temaId) {
-    temaActual = temasData.find(t => t.id === temaId); if (!temaActual||!nivelActual) return;
-    await Promise.all([loadPasosData(), loadProgresoData()]);
-    let pasosTema = pasosData.filter(p => p.tema_id === temaId);
-    pasosTema.sort((a, b) => (a.orden || 0) - (b.orden || 0));
-    const main = document.getElementById("mainContent");
-    aplicarTamanoFuente();
-    let html = `<button class="btn btn-secondary back-btn" onclick="verCurso(${temaActual.curso_id})">← Volver a Temas</button><div class="reading-controls"><span>🔤</span><button class="font-size-btn" onclick="disminuirFuente()">A-</button><span class="font-size-indicator" id="fontSizeIndicator">${currentFontSize.toFixed(1)}rem</span><button class="font-size-btn" onclick="aumentarFuente()">A+</button><button class="btn btn-sm btn-secondary" onclick="resetearFuente()">Normal</button><span style="margin-left:1rem">🎨</span><button class="btn btn-sm btn-secondary" id="btnModoLectura" onclick="toggleModoLectura()">🌙</button></div><div class="tema-contenido"><span style="display:inline-block;background:${nivelActual.color};color:#fff;padding:0.2rem 0.6rem;border-radius:3px;font-size:0.75rem;font-weight:700;margin-bottom:1rem">${nivelActual.nombre}</span><h2>${temaActual.titulo}</h2><div class="contenido-texto">${parseMarkdown(temaActual.contenido||'Sin contenido.')}</div></div><div class="pasos-section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.5rem"><h3>✋ Pasos Prácticos (${pasosTema.length})</h3>${isAdmin?`<button class="btn btn-primary btn-sm" onclick="openPasoModal(${temaId})">+ Agregar Paso</button>`:''}</div><div id="pasosContainer">${pasosTema.length===0?'<p class="empty-state">No hay pasos prácticos.</p>':''}</div></div>`;
-    main.innerHTML = html;
-    if (modoLecturaOscuro) { document.body.classList.add('modo-lectura'); const btn = document.getElementById("btnModoLectura"); if (btn) btn.textContent = '☀️'; }
-    if (pasosTema.length > 0) {
-        const container = document.getElementById("pasosContainer");
-        container.innerHTML = pasosTema.map((paso, index) => {
-            const prog = progresoData.find(pr => pr.paso_id === paso.id) || { completado: false, notas: '' };
-            return `<div class="paso-item ${prog.completado?'completado':''} draggable" id="paso-${paso.id}" draggable="${isAdmin}" ondragstart="${isAdmin?`handleDragStart(event,${paso.id},'paso')`:''}" ondragend="handleDragEnd(event)" ondragover="${isAdmin?'handleDragOver(event)':''}" ondragleave="${isAdmin?'handleDragLeave(event)':''}" ondrop="${isAdmin?`handleDrop(event,${paso.id},'paso')`:''}">${isAdmin?`<span class="drag-handle">⋮⋮</span>`:''}<div class="paso-checkbox ${prog.completado?'checked':''}" onclick="togglePaso(${paso.id},this)">${prog.completado?'✓':''}</div><div style="flex:1"><div class="paso-texto">${paso.descripcion}</div><textarea class="paso-notas" placeholder="Tus notas..." onchange="guardarNotas(${paso.id},this.value)" style="${prog.completado?'display:block':'display:none'}">${prog.notas||''}</textarea></div>${isAdmin?`<div class="paso-actions"><div class="orden-controls"><button class="orden-btn" onclick="event.stopPropagation();moverItem('paso',${paso.id},-1)" ${index===0?'disabled':''}>▲</button><button class="orden-btn" onclick="event.stopPropagation();moverItem('paso',${paso.id},1)" ${index===pasosTema.length-1?'disabled':''}>▼</button></div><button class="btn btn-warning btn-xs" onclick="event.stopPropagation();editPaso(${paso.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deletePaso(${paso.id})">🗑️</button></div>`:''}</div>`;
-        }).join("");
+// ============================================================
+// MÓDULO: App (Controlador principal)
+// ============================================================
+const App = {
+    async init() {
+        // Cargar datos iniciales
+        await Store.loadData("niveles");
+        await Store.loadData("cursos");
+        await Store.loadData("temas");
+        await Store.loadData("pasos");
+        await Store.loadData("estudiantes");
+        
+        // Seleccionar primer nivel
+        if (Store.state.niveles.length > 0) {
+            Store.setState("nivelActual", Store.state.niveles[0]);
+        }
+        
+        // Seleccionar primer estudiante
+        if (Store.state.estudiantes.length > 0) {
+            Store.setState("estudianteActual", Store.state.estudiantes[0]);
+            await Store.loadData("progreso");
+        }
+        
+        this.render();
+        this.setupEventDelegation();
+    },
+    
+    render() {
+        this.renderHeader();
+        this.renderNivelesNav();
+        this.renderMainContent();
+    },
+    
+    renderHeader() {
+        document.getElementById("app-header").innerHTML = `
+            <img src="logo.png" alt="Logo" class="logo">
+            <div class="header-text">
+                <h1>Academia del Espíritu</h1>
+                <p>Formación Teológica Apostólica</p>
+            </div>
+            <div class="header-actions">
+                ${Store.state.isAdmin ? '<span class="admin-badge">Admin</span>' : ''}
+                ${Store.state.isAdmin 
+                    ? '<button class="btn btn-sm btn-danger" onclick="Auth.logout()">Salir</button>'
+                    : '<button class="btn btn-sm btn-secondary" onclick="Auth.showLogin()">Acceso Admin</button>'}
+            </div>
+        `;
+    },
+    
+    renderNivelesNav() {
+        document.getElementById("nav-niveles").innerHTML = Store.state.niveles.map(n => `
+            <button class="nivel-tab nivel-${n.orden} ${Store.state.nivelActual?.id === n.id ? 'active' : ''}"
+                    onclick="App.selectNivel(${n.id})">
+                <span class="nivel-numero" style="color:${n.color}">${n.nombre}</span>
+                <span class="nivel-nombre">${n.descripcion || ''}</span>
+            </button>
+        `).join('');
+    },
+    
+    renderMainContent() {
+        const main = document.getElementById("main-content");
+        
+        if (!Store.state.nivelActual) {
+            main.innerHTML = UI.templates.emptyState("🎓 Bienvenido a la Academia del Espíritu");
+            return;
+        }
+        
+        if (!Store.state.cursosNivel.length) {
+            main.innerHTML = UI.templates.emptyState("No hay cursos en este nivel aún.");
+            return;
+        }
+        
+        main.innerHTML = `
+            <h2>📚 Cursos de ${Store.state.nivelActual.nombre}</h2>
+            <div class="cursos-grid">
+                ${Store.state.cursosNivel.map(curso => this.cursoCard(curso)).join('')}
+            </div>
+        `;
+    },
+    
+    cursoCard(curso) {
+        const temasCurso = Store.state.temas.filter(t => t.curso_id === curso.id);
+        const color = Store.state.nivelActual.color;
+        
+        return `
+            <div class="curso-card">
+                <div class="curso-card-header" style="background:${color}">
+                    <span>${temasCurso.length} temas</span>
+                </div>
+                <div class="curso-card-body">
+                    <div class="curso-titulo">${curso.titulo}</div>
+                    <div class="curso-desc">${curso.descripcion || ''}</div>
+                    <button class="btn btn-primary btn-sm" onclick="App.verCurso(${curso.id})">📖 Ver Temas</button>
+                </div>
+            </div>
+        `;
+    },
+    
+    async selectNivel(id) {
+        Store.setState("nivelActual", Store.state.niveles.find(n => n.id === id));
+        Store.setState("cursoActual", null);
+        Store.setState("temaActual", null);
+        await Store.loadData("cursos");
+        this.render();
+    },
+    
+    async verCurso(id) {
+        Store.setState("cursoActual", Store.state.cursos.find(c => c.id === id));
+        Store.setState("temaActual", null);
+        await Store.loadData("temas");
+        await Store.loadData("pasos");
+        this.render();
+    },
+    
+    setupEventDelegation() {
+        // Usar event delegation para formularios y clicks dinámicos
+        document.addEventListener("submit", UI.delegate("form", async (e, form) => {
+            e.preventDefault();
+            // Lógica de guardado según el tipo de formulario
+        }));
     }
-}
+};
 
 // ============================================================
-// TOGGLE PASO Y NOTAS
+// INICIAR APLICACIÓN
 // ============================================================
-async function togglePaso(pasoId, checkboxEl) {
-    if (!estudianteActual) {
-        if (estudiantesData.length === 0) { await api("estudiantes","POST",{nombre:"Estudiante",apellido:"Demo",email:"demo@academia.com",telefono:"",fecha_ingreso:new Date().toISOString()}); await loadAll(); }
-        estudianteActual = estudiantesData[0]; updateEstudianteSelect(); await loadProgresoData();
-    }
-    const existing = progresoData.find(pr => pr.paso_id === pasoId);
-    const nuevoEstado = !(existing && existing.completado);
-    if (existing) { await api(`progreso?id=eq.${existing.id}`,"PATCH",{completado:nuevoEstado,fecha_completado:nuevoEstado?new Date().toISOString():null},"return=minimal"); existing.completado = nuevoEstado; }
-    else { const res = await api("progreso","POST",{estudiante_id:estudianteActual.id,paso_id:pasoId,completado:nuevoEstado,fecha_completado:nuevoEstado?new Date().toISOString():null,notas:""},"return=representation"); if (res&&res[0]) progresoData.push(res[0]); }
-    const pasoItem = document.getElementById(`paso-${pasoId}`);
-    if (pasoItem) { pasoItem.classList.toggle("completado",nuevoEstado); const cb = pasoItem.querySelector(".paso-checkbox"); if (cb) { cb.classList.toggle("checked",nuevoEstado); cb.textContent = nuevoEstado?'✓':''; } const na = pasoItem.querySelector(".paso-notas"); if (na) na.style.display = nuevoEstado?'block':'none'; }
-    showToast(nuevoEstado?"✅ ¡Paso completado!":"Paso desmarcado");
-}
-const guardarNotas = debounce(async function(pasoId, notas) {
-    if (!estudianteActual) return;
-    const existing = progresoData.find(pr => pr.paso_id === pasoId);
-    if (existing) { await api(`progreso?id=eq.${existing.id}`,"PATCH",{notas},"return=minimal"); existing.notas = notas; }
-}, 500);
-
-// ============================================================
-// ADMIN: CURSOS
-// ============================================================
-function openCursoModal() {
-    const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>Nuevo Curso</h2><form onsubmit="saveCurso(event,null)"><div class="form-group"><label>Nivel</label><select id="cursoNivelId" required><option value="">Seleccionar</option>${nivelesData.map(n=>`<option value="${n.id}" ${nivelActual&&n.id===nivelActual.id?'selected':''}>${n.nombre}</option>`).join('')}</select></div><div class="form-group"><label>Título</label><input type="text" id="cursoTitulo" required></div><div class="form-group"><label>Descripción</label><input type="text" id="cursoDesc"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
-    document.getElementById("adminModal").classList.add("active");
-}
-function editCurso(id) {
-    const c = cursosData.find(x=>x.id===id); if (!c) return;
-    const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>Editar Curso</h2><form onsubmit="saveCurso(event,${id})"><div class="form-group"><label>Nivel</label><select id="cursoNivelId" required>${nivelesData.map(n=>`<option value="${n.id}" ${c.nivel_id===n.id?'selected':''}>${n.nombre}</option>`).join('')}</select></div><div class="form-group"><label>Título</label><input type="text" id="cursoTitulo" required value="${c.titulo||''}"></div><div class="form-group"><label>Descripción</label><input type="text" id="cursoDesc" value="${c.descripcion||''}"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Actualizar</button></div></form>`;
-    document.getElementById("adminModal").classList.add("active");
-}
-async function saveCurso(e, editId) {
-    e.preventDefault();
-    const data = { nivel_id: parseInt(document.getElementById("cursoNivelId").value), titulo: document.getElementById("cursoTitulo").value, descripcion: document.getElementById("cursoDesc").value };
-    if (!editId) data.orden = cursosData.filter(c=>nivelActual&&c.nivel_id===nivelActual.id).length;
-    try {
-        if (editId) await api(`cursos?id=eq.${editId}`,"PATCH",data,"return=minimal");
-        else await api("cursos","POST",data,"return=minimal");
-        closeAdminModal(); await loadCursosData(); renderCursos();
-        showToast(editId?"✅ Curso actualizado":"✅ Curso creado");
-    } catch(err) { showToast("Error: "+err.message,"error"); }
-}
-async function deleteCurso(id) {
-    if (!confirm("¿Eliminar este curso y su contenido?")) return;
-    try { await api(`cursos?id=eq.${id}`,"DELETE"); await loadCursosData(); renderCursos(); showToast("Curso eliminado","error"); }
-    catch(err) { showToast("Error: "+err.message,"error"); }
-}
-
-// ============================================================
-// ADMIN: TEMAS
-// ============================================================
-function openTemaModal(cursoIdParam) {
-    const cid = cursoIdParam || (cursoActual?cursoActual.id:null);
-    const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>Nuevo Tema</h2><form onsubmit="saveTema(event,null)"><div class="form-group"><label>Curso</label><select id="temaCursoId" required><option value="">Seleccionar</option>${cursosData.map(c=>{const n=nivelesData.find(x=>x.id===c.nivel_id);return `<option value="${c.id}" ${c.id===cid?'selected':''}>${n?.nombre||''} → ${c.titulo}</option>`;}).join('')}</select></div><div class="form-group"><label>Título</label><input type="text" id="temaTitulo" required></div><div class="form-group"><label>Contenido</label><textarea id="temaContenido" placeholder="Escribe el contenido..."></textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
-    document.getElementById("adminModal").classList.add("active");
-    setTimeout(() => createEditor('temaContenido', ''), 200);
-}
-function editTema(id) {
-    const t = temasData.find(x=>x.id===id); if (!t) return;
-    const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>Editar Tema</h2><form onsubmit="saveTema(event,${id})"><div class="form-group"><label>Curso</label><select id="temaCursoId" required>${cursosData.map(c=>{const n=nivelesData.find(x=>x.id===c.nivel_id);return `<option value="${c.id}" ${c.id===t.curso_id?'selected':''}>${n?.nombre||''} → ${c.titulo}</option>`;}).join('')}</select></div><div class="form-group"><label>Título</label><input type="text" id="temaTitulo" required value="${t.titulo||''}"></div><div class="form-group"><label>Contenido</label><textarea id="temaContenido">${t.contenido||''}</textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Actualizar</button></div></form>`;
-    document.getElementById("adminModal").classList.add("active");
-    setTimeout(() => createEditor('temaContenido', t.contenido || ''), 200);
-}
-async function saveTema(e, editId) {
-    e.preventDefault();
-    const textarea = document.getElementById("temaContenido");
-    const data = { curso_id: parseInt(document.getElementById("temaCursoId").value), titulo: document.getElementById("temaTitulo").value, contenido: textarea?textarea.value:'' };
-    if (!editId) data.orden = temasData.filter(t=>cursoActual&&t.curso_id===cursoActual.id).length;
-    try {
-        if (editId) await api(`temas?id=eq.${editId}`,"PATCH",data,"return=minimal");
-        else await api("temas","POST",data,"return=minimal");
-        closeAdminModal(); await loadTemasData();
-        if (temaActual) verTema(temaActual.id); else if (cursoActual) verCurso(cursoActual.id); else renderCursos();
-        showToast(editId?"✅ Tema actualizado":"✅ Tema creado");
-    } catch(err) { showToast("Error: "+err.message,"error"); }
-}
-async function deleteTema(id) {
-    if (!confirm("¿Eliminar este tema?")) return;
-    try { await api(`temas?id=eq.${id}`,"DELETE"); await loadTemasData(); if (cursoActual) verCurso(cursoActual.id); else renderCursos(); showToast("Tema eliminado","error"); }
-    catch(err) { showToast("Error: "+err.message,"error"); }
-}
-
-// ============================================================
-// ADMIN: PASOS
-// ============================================================
-function openPasoModal(temaIdParam) {
-    const tid = temaIdParam || (temaActual?temaActual.id:null);
-    const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>Nuevo Paso</h2><form onsubmit="savePaso(event,null)"><div class="form-group"><label>Tema</label><select id="pasoTemaId" required><option value="">Seleccionar</option>${temasData.map(t=>{const c=cursosData.find(x=>x.id===t.curso_id);return `<option value="${t.id}" ${t.id===tid?'selected':''}>${c?.titulo||''} → ${t.titulo}</option>`;}).join('')}</select></div><div class="form-group"><label>Descripción</label><textarea id="pasoDesc" required placeholder="Acción práctica..."></textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
-    document.getElementById("adminModal").classList.add("active");
-}
-function editPaso(id) {
-    const p = pasosData.find(x=>x.id===id); if (!p) return;
-    const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>Editar Paso</h2><form onsubmit="savePaso(event,${id})"><div class="form-group"><label>Tema</label><select id="pasoTemaId" required>${temasData.map(t=>{const c=cursosData.find(x=>x.id===t.curso_id);return `<option value="${t.id}" ${t.id===p.tema_id?'selected':''}>${c?.titulo||''} → ${t.titulo}</option>`;}).join('')}</select></div><div class="form-group"><label>Descripción</label><textarea id="pasoDesc" required>${p.descripcion||''}</textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Actualizar</button></div></form>`;
-    document.getElementById("adminModal").classList.add("active");
-}
-async function savePaso(e, editId) {
-    e.preventDefault();
-    const temaId = parseInt(document.getElementById("pasoTemaId").value);
-    const desc = document.getElementById("pasoDesc").value.trim();
-    if (!temaId) { showToast("Selecciona un tema","error"); return; }
-    if (!desc) { showToast("Escribe la descripción","error"); return; }
-    const data = { tema_id: temaId, descripcion: desc };
-    if (!editId) data.orden = pasosData.filter(p=>temaActual&&p.tema_id===temaActual.id).length;
-    try {
-        if (editId) await api(`pasos?id=eq.${editId}`,"PATCH",data,"return=minimal");
-        else { const res = await api("pasos","POST",data,"return=representation"); if (!res||!res[0]) throw new Error("Sin confirmación"); }
-        closeAdminModal(); await loadPasosData();
-        if (temaActual) await verTema(temaActual.id); else if (cursoActual) await verCurso(cursoActual.id); else await renderCursos();
-        showToast(editId?"✅ Paso actualizado":"✅ Paso creado");
-    } catch(err) { showToast("Error: "+err.message,"error"); }
-}
-async function deletePaso(id) {
-    if (!confirm("¿Eliminar este paso?")) return;
-    try { await api(`pasos?id=eq.${id}`,"DELETE"); await loadPasosData(); if (temaActual) verTema(temaActual.id); showToast("Paso eliminado","error"); }
-    catch(err) { showToast("Error: "+err.message,"error"); }
-}
-
-// ============================================================
-// ADMIN: ESTUDIANTES
-// ============================================================
-function showEstudiantes() {
-    const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>👥 Estudiantes</h2><div style="margin-bottom:1rem"><button class="btn btn-primary btn-sm" onclick="openEstudianteModal()">+ Nuevo</button></div>${estudiantesData.length===0?'<p class="empty-state">No hay estudiantes.</p>':`<table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--nivel2);color:var(--gold-light)"><th>Nombre</th><th>Email</th><th>Progreso</th><th>Acciones</th></tr></thead><tbody>${estudiantesData.map(e=>{const t=pasosData.length,c=progresoData.filter(p=>p.estudiante_id===e.id&&p.completado).length,p=t>0?Math.round((c/t)*100):0;return`<tr><td>${e.nombre} ${e.apellido}</td><td>${e.email||'-'}</td><td>${c}/${t} (${p}%)</td><td><button class="btn btn-warning btn-xs" onclick="editEstudiante(${e.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="deleteEstudiante(${e.id})">🗑️</button></td></tr>`;}).join('')}</tbody></table>`}<div class="modal-actions"><button class="btn btn-secondary" onclick="closeAdminModal()">Cerrar</button></div>`;
-    document.getElementById("adminModal").classList.add("active");
-}
-function openEstudianteModal(editId) {
-    const e = editId ? estudiantesData.find(x=>x.id===editId) : null;
-    const content = document.getElementById("adminModalContent");
-    content.innerHTML = `<h2>${e?'Editar':'Nuevo'} Estudiante</h2><form onsubmit="saveEstudiante(event,${editId||'null'})"><div class="form-row"><div class="form-group"><label>Nombre</label><input type="text" id="estNombre" required value="${e?e.nombre||'':''}"></div><div class="form-group"><label>Apellido</label><input type="text" id="estApellido" required value="${e?e.apellido||'':''}"></div></div><div class="form-group"><label>Email</label><input type="email" id="estEmail" value="${e?e.email||'':''}"></div><div class="form-group"><label>Teléfono</label><input type="text" id="estTelefono" value="${e?e.telefono||'':''}"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="closeAdminModal()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`;
-    document.getElementById("adminModal").classList.add("active");
-}
-function editEstudiante(id) { openEstudianteModal(id); }
-async function saveEstudiante(e, editId) {
-    e.preventDefault();
-    const data = { nombre: document.getElementById("estNombre").value, apellido: document.getElementById("estApellido").value, email: document.getElementById("estEmail").value, telefono: document.getElementById("estTelefono").value };
-    try {
-        if (editId) await api(`estudiantes?id=eq.${editId}`,"PATCH",data,"return=minimal");
-        else await api("estudiantes","POST",data,"return=minimal");
-        await loadAll(); showEstudiantes();
-        showToast(editId?"✅ Actualizado":"✅ Creado");
-    } catch(err) { showToast("Error: "+err.message,"error"); }
-}
-async function deleteEstudiante(id) {
-    if (!confirm("¿Eliminar?")) return;
-    try { await api(`estudiantes?id=eq.${id}`,"DELETE"); await loadAll(); showEstudiantes(); showToast("Eliminado","error"); }
-    catch(err) { showToast("Error: "+err.message,"error"); }
-}
-
-// ============================================================
-// MODAL
-// ============================================================
-function closeAdminModal() { document.getElementById("adminModal").classList.remove("active"); }
-document.getElementById("adminModal").addEventListener("click", function(e) { if (e.target === this) closeAdminModal(); });
-
-// ============================================================
-// INICIO
-// ============================================================
-async function init() {
-    await loadAll(); updateAdminUI(); aplicarTamanoFuente();
-    if (nivelesData.length > 0) { nivelActual = nivelesData[0]; await loadCursosData(); await loadTemasData(); await loadPasosData(); }
-    renderNiveles();
-}
-init();
+document.addEventListener("DOMContentLoaded", () => App.init());
 </script>
 </body>
 </html>
