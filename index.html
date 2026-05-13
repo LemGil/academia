@@ -135,14 +135,79 @@
         .toast-error { background:var(--danger); color:#fff; }
         @keyframes slideIn { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
         
+        /* ============================================ */
+        /* MODO LECTURA OSCURO - COMPLETO                */
+        /* ============================================ */
         .modo-lectura { background:#1a1a1a; }
-        .modo-lectura .tema-contenido { background:#2a2a2a; color:#e0e0e0; border:1px solid #444; }
+        .modo-lectura .tema-contenido { background:#2a2a2a; color:#e8e8e8; border:1px solid #444; }
         .modo-lectura .tema-contenido h2 { color:#F5D77A; }
-        .modo-lectura .contenido-texto { color:#d0d0d0; }
+        .modo-lectura .contenido-texto { color:#e8e8e8; }
+        .modo-lectura .contenido-texto h2,
+        .modo-lectura .contenido-texto h3,
+        .modo-lectura .contenido-texto h4 { color:#F5D77A; }
+        .modo-lectura .contenido-texto strong { color:#F5D77A; }
+        .modo-lectura .contenido-texto em { color:#e8c878; }
+        .modo-lectura .contenido-texto u { color:#e8e8e8; }
+        .modo-lectura .contenido-texto blockquote { background:#333; color:#d4b87a; border-left-color:#C9A24A; }
+        .modo-lectura .contenido-texto hr { border-top-color:#555; }
+        .modo-lectura .contenido-texto ul,.modo-lectura .contenido-texto ol { color:#e8e8e8; }
+        .modo-lectura .contenido-texto li { color:#e8e8e8; }
         .modo-lectura .pasos-section { background:#2a2a2a; border:1px solid #444; }
         .modo-lectura .pasos-section h3 { color:#F5D77A; }
         .modo-lectura .paso-item { background:#333; border-color:#555; }
-        .modo-lectura .contenido-texto blockquote { background:#333; color:#d4b87a; }
+        .modo-lectura .paso-item.completado { background:#1a3a2a; border-color:var(--success); }
+        .modo-lectura .paso-texto { color:#e8e8e8; }
+        .modo-lectura .paso-checkbox { background:#444; border-color:#666; color:#e8e8e8; }
+        .modo-lectura .paso-checkbox.checked { background:var(--success); border-color:var(--success); color:#fff; }
+        .modo-lectura .paso-notas { background:#3a3a3a; color:#e8e8e8; border-color:#555; }
+        .modo-lectura .paso-notas::placeholder { color:#888; }
+        .modo-lectura .tema-item { border-bottom-color:#444; }
+        .modo-lectura .tema-item:hover { background:#333; }
+        .modo-lectura .tema-titulo { color:#e8e8e8; }
+        .modo-lectura .tema-pasos { color:#aaa; }
+        .modo-lectura .tema-numero.tema-pendiente { background:#444; color:#aaa; }
+        .modo-lectura .tema-numero.tema-completado { background:#1a3a2a; color:var(--success); }
+        .modo-lectura .tema-check { color:#e8e8e8; }
+        .modo-lectura .temas-lista { background:#2a2a2a; border:1px solid #444; }
+        .modo-lectura .curso-card { background:#2a2a2a; border:1px solid #444; }
+        .modo-lectura .curso-titulo { color:#e8e8e8; }
+        .modo-lectura .curso-desc { color:#bbb; }
+        .modo-lectura .progreso-bar { background:#444; }
+        .modo-lectura .back-btn { background:#2a2a2a; color:#F5D77A; border-color:#555; }
+        .modo-lectura .reading-controls { background:#2a2a2a; color:#e8e8e8; border:1px solid #444; }
+        .modo-lectura .reading-controls span { color:#e8e8e8; }
+        .modo-lectura .font-size-btn { background:#333; border-color:#555; color:#e8e8e8; }
+        .modo-lectura .font-size-btn:hover { border-color:var(--gold); background:var(--gold-light); color:var(--nivel2); }
+        .modo-lectura .font-size-indicator { color:#F5D77A; }
+        .modo-lectura .empty-state { color:#aaa; }
+        .modo-lectura .orden-btn { background:#333; border-color:#555; color:#aaa; }
+        .modo-lectura .orden-btn:hover:not(:disabled) { background:#555; color:#F5D77A; border-color:var(--gold); }
+        .modo-lectura .drag-handle { color:#777; }
+        .modo-lectura .btn-secondary { background:#333; color:#F5D77A; border-color:#555; }
+        .modo-lectura .btn-secondary:hover { background:#444; }
+        .modo-lectura .btn-warning { background:#333; color:var(--warning); border-color:#555; }
+        .modo-lectura .btn-danger { background:#333; color:var(--danger); border-color:#555; }
+        .modo-lectura .btn-danger:hover { background:var(--danger); color:#fff; }
+        .modo-lectura .btn-warning:hover { background:var(--warning); color:#fff; }
+        .modo-lectura .modal-content { background:#2a2a2a; color:#e8e8e8; border-color:var(--gold); }
+        .modo-lectura .modal-content h2 { color:#F5D77A; }
+        .modo-lectura .modal-content label { color:#e8e8e8; }
+        .modo-lectura .modal-content input,
+        .modo-lectura .modal-content select,
+        .modo-lectura .modal-content textarea { background:#333; color:#e8e8e8; border-color:#555; }
+        .modo-lectura .form-group label { color:#e8e8e8; }
+        .modo-lectura .estudiantes-table th { background:#333; color:#F5D77A; }
+        .modo-lectura .estudiantes-table td { color:#e8e8e8; border-bottom-color:#444; }
+        .modo-lectura .estudiantes-table tr:hover { background:#333; }
+        .modo-lectura .editor-toolbar { background:#333; border-bottom-color:#555; }
+        .modo-lectura .editor-toolbar .tool-group { border-right-color:#555; }
+        .modo-lectura .tool-btn { color:#e8e8e8; }
+        .modo-lectura .tool-btn:hover { background:#444; border-color:#555; }
+        .modo-lectura .editor-textarea { background:#2a2a2a; color:#e8e8e8; }
+        .modo-lectura .editor-preview { background:#2a2a2a; color:#e8e8e8; border-top-color:#555; }
+        .modo-lectura .editor-statusbar { background:#333; color:#aaa; border-top-color:#555; }
+        .modo-lectura .editor-tab { color:#aaa; }
+        .modo-lectura .editor-tab.active { color:#F5D77A; border-bottom-color:var(--gold); }
         
         .skeleton { background:linear-gradient(90deg,#eee 25%,#f5f5f5 50%,#eee 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:4px; }
         @keyframes shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
@@ -228,786 +293,275 @@
 <div id="toast-container"></div>
 
 <script>
-// ============================================================
-// CONFIG
-// ============================================================
 const CONFIG = {
     SUPABASE_URL: "https://cdabgazsrjkfcqzqeint.supabase.co",
     SUPABASE_KEY: "sb_publishable_gbS0u_HxiWdEuCANkRbGeQ_gKChZZiN",
     ADMIN_EMAIL: "admin@academia.com"
 };
 
-// ============================================================
-// API
-// ============================================================
 const API = {
     sessionToken: null,
-
     get headers() {
-        return {
-            "Content-Type": "application/json",
-            "apikey": CONFIG.SUPABASE_KEY,
-            "Authorization": "Bearer " + (this.sessionToken || CONFIG.SUPABASE_KEY)
-        };
+        return {"Content-Type":"application/json","apikey":CONFIG.SUPABASE_KEY,"Authorization":"Bearer "+(this.sessionToken||CONFIG.SUPABASE_KEY)};
     },
-    async request(path, method = "GET", body = null, prefer = null) {
-        const headers = {...this.headers};
-        if (prefer) headers["Prefer"] = prefer;
-        const opts = { method, headers };
-        if (body) opts.body = JSON.stringify(body);
-        const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${path}`, opts);
-        if (res.status === 204 || (method === "DELETE" && res.ok)) return null;
-        if (res.ok) { const t = await res.text(); return t ? JSON.parse(t) : null; }
+    async request(path,method="GET",body=null,prefer=null){
+        const headers={...this.headers};if(prefer)headers["Prefer"]=prefer;
+        const opts={method,headers};if(body)opts.body=JSON.stringify(body);
+        const res=await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${path}`,opts);
+        if(res.status===204||(method==="DELETE"&&res.ok))return null;
+        if(res.ok){const t=await res.text();return t?JSON.parse(t):null;}
         throw new Error(await res.text());
     },
-    async getAll(table, query = "select=*", order = "orden") {
-        try {
-            let path = `${table}?${query}`;
-            if (order) path += `&order=${order}`;
-            const res = await this.request(path);
-            return res || [];
-        } catch(e) {
-            console.warn('getAll(' + table + ') failed:', e);
-            return [];
-        }
+    async getAll(table,query="select=*",order="orden"){
+        try{let path=`${table}?${query}`;if(order)path+=`&order=${order}`;const res=await this.request(path);return res||[];}
+        catch(e){console.warn('getAll('+table+') failed:',e);return[];}
     },
-    async create(table, data) { return await this.request(table, "POST", data, "return=representation"); },
-    async update(table, id, data) { return await this.request(`${table}?id=eq.${id}`, "PATCH", data, "return=minimal"); },
-    async remove(table, id) { return await this.request(`${table}?id=eq.${id}`, "DELETE"); }
+    async create(table,data){return await this.request(table,"POST",data,"return=representation");},
+    async update(table,id,data){return await this.request(`${table}?id=eq.${id}`,"PATCH",data,"return=minimal");},
+    async remove(table,id){return await this.request(`${table}?id=eq.${id}`,"DELETE");}
 };
 
-// ============================================================
-// STORE
-// ============================================================
-const Store = {
-    niveles: [],
-    cursos: [],
-    temas: [],
-    pasos: [],
-    progreso: [],
-    estudiantes: [],
-    isAdmin: false,
-    estudianteActual: null,
-    nivelActual: null,
-    cursoActual: null,
-    temaActual: null,
-    fontSize: 1.1,
-    modoOscuro: false,
-    get cursosNivel() {
-        if (!this.nivelActual) return [];
-        return this.cursos.filter(c => c.nivel_id === this.nivelActual.id).sort((a, b) => (a.orden || 0) - (b.orden || 0));
+const Store={
+    niveles:[],cursos:[],temas:[],pasos:[],progreso:[],estudiantes:[],
+    isAdmin:false,estudianteActual:null,nivelActual:null,cursoActual:null,temaActual:null,
+    fontSize:1.1,modoOscuro:false,
+    get cursosNivel(){if(!this.nivelActual)return[];return this.cursos.filter(c=>c.nivel_id===this.nivelActual.id).sort((a,b)=>(a.orden||0)-(b.orden||0));},
+    get temasCurso(){if(!this.cursoActual)return[];return this.temas.filter(t=>t.curso_id===this.cursoActual.id).sort((a,b)=>(a.orden||0)-(b.orden||0));},
+    get pasosTema(){if(!this.temaActual)return[];return this.pasos.filter(p=>p.tema_id===this.temaActual.id).sort((a,b)=>(a.orden||0)-(b.orden||0));},
+    getProgreso(pid){return this.progreso.find(pr=>pr.paso_id===pid);},
+    async load(table){
+        try{if(table==='progreso'&&!this.estudianteActual){this.progreso=[];return;}const filter=table==='progreso'?`select=*&estudiante_id=eq.${this.estudianteActual.id}`:'select=*';this[table]=(await API.getAll(table,filter))||[];}
+        catch(e){console.error('Error loading '+table+':',e);this[table]=[];}
     },
-    get temasCurso() {
-        if (!this.cursoActual) return [];
-        return this.temas.filter(t => t.curso_id === this.cursoActual.id).sort((a, b) => (a.orden || 0) - (b.orden || 0));
-    },
-    get pasosTema() {
-        if (!this.temaActual) return [];
-        return this.pasos.filter(p => p.tema_id === this.temaActual.id).sort((a, b) => (a.orden || 0) - (b.orden || 0));
-    },
-    getProgreso(pasoId) { return this.progreso.find(pr => pr.paso_id === pasoId); },
-    async load(table) {
-        try {
-            if (table === 'progreso' && !this.estudianteActual) { this.progreso = []; return; }
-            const filter = table === 'progreso' ? `select=*&estudiante_id=eq.${this.estudianteActual.id}` : 'select=*';
-            const data = await API.getAll(table, filter);
-            this[table] = data || [];
-        } catch(e) {
-            console.error('Error loading ' + table + ':', e);
-            this[table] = [];
-        }
-    },
-    async loadAll() {
-        await Promise.all(['niveles', 'cursos', 'temas', 'pasos', 'estudiantes'].map(t => this.load(t)));
-        if (this.estudiantes && this.estudiantes.length > 0) {
-            this.estudianteActual = this.estudiantes[0];
-            await this.load('progreso');
-        }
-    }
+    async loadAll(){await Promise.all(['niveles','cursos','temas','pasos','estudiantes'].map(t=>this.load(t)));if(this.estudiantes&&this.estudiantes.length>0){this.estudianteActual=this.estudiantes[0];await this.load('progreso');}}
 };
 
-// ============================================================
-// UI HELPERS
-// ============================================================
-const UI = {
-    toast(msg, type = 'success') {
-        const t = document.createElement('div'); t.className = `toast toast-${type}`; t.textContent = msg;
-        document.getElementById('toast-container').appendChild(t);
-        setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 2500);
-    },
-    parseMarkdown(text) {
-        if (!text) return '<p style="color:#999;font-style:italic">Sin contenido</p>';
-        let html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+const UI={
+    toast(msg,type='success'){const t=document.createElement('div');t.className=`toast toast-${type}`;t.textContent=msg;document.getElementById('toast-container').appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(()=>t.remove(),300);},2500);},
+    parseMarkdown(text){
+        if(!text)return'<p style="color:#999;font-style:italic">Sin contenido</p>';
+        let html=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
             .replace(/^#### (.*$)/gm,'<h4>$1</h4>').replace(/^### (.*$)/gm,'<h3>$1</h3>').replace(/^## (.*$)/gm,'<h2>$1</h2>')
             .replace(/^&gt; (.*$)/gm,'<blockquote>$1</blockquote>')
             .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/_(.*?)_/g,'<u>$1</u>')
             .replace(/^---$/gm,'<hr>').replace(/^- (.*$)/gm,'<li>$1</li>').replace(/^\d+\. (.*$)/gm,'<li>$1</li>')
             .replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>');
-        return '<p>'+html+'</p>';
+        return'<p>'+html+'</p>';
     }
 };
 
-// ============================================================
-// AUTH (REST API directa — sin dependencias externas)
-// ============================================================
-const Auth = {
-    mode: 'login',
-
-    async init() {
-        const token = localStorage.getItem('sb_access_token');
-        const refreshToken = localStorage.getItem('sb_refresh_token');
-        if (token) {
-            try {
-                const res = await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/user`, {
-                    headers: { "apikey": CONFIG.SUPABASE_KEY, "Authorization": "Bearer " + token }
-                });
-                if (res.ok) {
-                    const user = await res.json();
-                    API.sessionToken = token;
-                    Store.isAdmin = user?.email === CONFIG.ADMIN_EMAIL;
-                } else if (refreshToken) {
-                    const refreshRes = await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
-                        method: "POST",
-                        headers: { "apikey": CONFIG.SUPABASE_KEY, "Content-Type": "application/json" },
-                        body: JSON.stringify({ refresh_token: refreshToken })
-                    });
-                    if (refreshRes.ok) {
-                        const data = await refreshRes.json();
-                        localStorage.setItem('sb_access_token', data.access_token);
-                        localStorage.setItem('sb_refresh_token', data.refresh_token);
-                        API.sessionToken = data.access_token;
-                        Store.isAdmin = data.user?.email === CONFIG.ADMIN_EMAIL;
-                    } else {
-                        localStorage.removeItem('sb_access_token');
-                        localStorage.removeItem('sb_refresh_token');
-                    }
+const Auth={
+    mode:'login',
+    async init(){
+        const token=localStorage.getItem('sb_access_token'),refreshToken=localStorage.getItem('sb_refresh_token');
+        if(token){
+            try{
+                const res=await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/user`,{headers:{"apikey":CONFIG.SUPABASE_KEY,"Authorization":"Bearer "+token}});
+                if(res.ok){const user=await res.json();API.sessionToken=token;Store.isAdmin=user?.email===CONFIG.ADMIN_EMAIL;}
+                else if(refreshToken){
+                    const refreshRes=await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,{method:"POST",headers:{"apikey":CONFIG.SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:refreshToken})});
+                    if(refreshRes.ok){const data=await refreshRes.json();localStorage.setItem('sb_access_token',data.access_token);localStorage.setItem('sb_refresh_token',data.refresh_token);API.sessionToken=data.access_token;Store.isAdmin=data.user?.email===CONFIG.ADMIN_EMAIL;}
+                    else{localStorage.removeItem('sb_access_token');localStorage.removeItem('sb_refresh_token');}
                 }
-            } catch(e) { console.warn('Session restore failed:', e); }
+            }catch(e){console.warn('Session restore failed:',e);}
         }
     },
-
-    setMode(mode) {
-        this.mode = mode;
-        document.querySelectorAll('.login-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
-        document.getElementById('login-submit-btn').textContent = mode === 'login' ? 'Entrar' : 'Crear Cuenta';
-        document.getElementById('login-error').classList.add('hidden');
+    setMode(mode){this.mode=mode;document.querySelectorAll('.login-tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===mode));document.getElementById('login-submit-btn').textContent=mode==='login'?'Entrar':'Crear Cuenta';document.getElementById('login-error').classList.add('hidden');},
+    showLogin(){this.setMode('login');document.getElementById('login-overlay').classList.add('active');document.getElementById('login-email').value='';document.getElementById('login-password').value='';document.getElementById('login-email').focus();},
+    hideLogin(){document.getElementById('login-overlay').classList.remove('active');},
+    submit(){if(this.mode==='login')this.login();else this.signUp();},
+    async login(){
+        const email=document.getElementById('login-email').value.trim(),password=document.getElementById('login-password').value;
+        if(!email||!password){this.showError('Ingresa correo y contraseña');return;}
+        try{
+            const res=await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:"POST",headers:{"apikey":CONFIG.SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})});
+            const body=await res.json();
+            if(!res.ok)throw new Error(body.msg||body.error_description||body.message||body.error||'Credenciales incorrectas');
+            localStorage.setItem('sb_access_token',body.access_token);localStorage.setItem('sb_refresh_token',body.refresh_token);
+            API.sessionToken=body.access_token;Store.isAdmin=body.user?.email===CONFIG.ADMIN_EMAIL;
+            this.hideLogin();App.render();UI.toast(Store.isAdmin?'✅ Acceso admin concedido':'✅ Sesión iniciada');
+        }catch(err){console.error('Login error:',err);this.showError(err.message);}
     },
-
-    showLogin() {
-        this.setMode('login');
-        document.getElementById('login-overlay').classList.add('active');
-        document.getElementById('login-email').value = '';
-        document.getElementById('login-password').value = '';
-        document.getElementById('login-email').focus();
+    async signUp(){
+        const email=document.getElementById('login-email').value.trim(),password=document.getElementById('login-password').value;
+        if(!email||!password){this.showError('Ingresa correo y contraseña');return;}
+        if(password.length<6){this.showError('La contraseña debe tener al menos 6 caracteres');return;}
+        try{
+            const res=await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/signup`,{method:"POST",headers:{"apikey":CONFIG.SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({email,password})});
+            const body=await res.json();
+            if(!res.ok)throw new Error(body.msg||body.error_description||body.message||body.error||'Error al crear cuenta');
+            if(body.user?.identities?.length===0){this.showError('⚠️ Este correo ya está registrado. Usa la pestaña "Iniciar Sesión".');}
+            else{const needsConfirm=!!body.user?.confirmation_sent_at;if(needsConfirm){this.showError('✅ Cuenta creada. Revisa tu correo y haz clic en el enlace de confirmación, luego inicia sesión.');}else{this.showError('✅ Cuenta creada. Ahora inicia sesión.');}this.setMode('login');}
+        }catch(err){console.error('Signup error:',err);this.showError(err.message);}
     },
-
-    hideLogin() {
-        document.getElementById('login-overlay').classList.remove('active');
-    },
-
-    submit() {
-        if (this.mode === 'login') this.login();
-        else this.signUp();
-    },
-
-    async login() {
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value;
-        if (!email || !password) {
-            this.showError('Ingresa correo y contraseña');
-            return;
-        }
-        try {
-            const res = await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-                method: "POST",
-                headers: { "apikey": CONFIG.SUPABASE_KEY, "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
-            const body = await res.json();
-            if (!res.ok) {
-                throw new Error(body.msg || body.error_description || body.message || body.error || 'Credenciales incorrectas');
-            }
-            localStorage.setItem('sb_access_token', body.access_token);
-            localStorage.setItem('sb_refresh_token', body.refresh_token);
-            API.sessionToken = body.access_token;
-            Store.isAdmin = body.user?.email === CONFIG.ADMIN_EMAIL;
-            this.hideLogin();
-            App.render();
-            UI.toast(Store.isAdmin ? '✅ Acceso admin concedido' : '✅ Sesión iniciada');
-        } catch (err) {
-            console.error('Login error:', err);
-            this.showError(err.message);
-        }
-    },
-
-    async signUp() {
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value;
-        if (!email || !password) {
-            this.showError('Ingresa correo y contraseña');
-            return;
-        }
-        if (password.length < 6) {
-            this.showError('La contraseña debe tener al menos 6 caracteres');
-            return;
-        }
-        try {
-            const res = await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/signup`, {
-                method: "POST",
-                headers: { "apikey": CONFIG.SUPABASE_KEY, "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
-            const body = await res.json();
-            if (!res.ok) {
-                throw new Error(body.msg || body.error_description || body.message || body.error || 'Error al crear cuenta');
-            }
-            if (body.user?.identities?.length === 0) {
-                this.showError('⚠️ Este correo ya está registrado. Usa la pestaña "Iniciar Sesión".');
-            } else {
-                const needsConfirm = !!body.user?.confirmation_sent_at;
-                if (needsConfirm) {
-                    this.showError('✅ Cuenta creada. Revisa tu correo y haz clic en el enlace de confirmación, luego inicia sesión.');
-                } else {
-                    this.showError('✅ Cuenta creada. Ahora inicia sesión.');
-                }
-                this.setMode('login');
-            }
-        } catch (err) {
-            console.error('Signup error:', err);
-            this.showError(err.message);
-        }
-    },
-
-    showError(msg) {
-        const el = document.getElementById('login-error');
-        el.innerHTML = msg;
-        el.classList.remove('hidden');
-    },
-
-    async logout() {
-        if (API.sessionToken) {
-            await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/logout`, {
-                method: "POST",
-                headers: { "apikey": CONFIG.SUPABASE_KEY, "Authorization": "Bearer " + API.sessionToken }
-            }).catch(() => {});
-        }
-        localStorage.removeItem('sb_access_token');
-        localStorage.removeItem('sb_refresh_token');
-        API.sessionToken = null;
-        Store.isAdmin = false;
-        App.render();
+    showError(msg){const el=document.getElementById('login-error');el.innerHTML=msg;el.classList.remove('hidden');},
+    async logout(){
+        if(API.sessionToken){await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/logout`,{method:"POST",headers:{"apikey":CONFIG.SUPABASE_KEY,"Authorization":"Bearer "+API.sessionToken}}).catch(()=>{});}
+        localStorage.removeItem('sb_access_token');localStorage.removeItem('sb_refresh_token');API.sessionToken=null;Store.isAdmin=false;App.render();
     }
 };
 
-// ============================================================
-// MODAL
-// ============================================================
-const Modal = {
-    open(html) { document.getElementById('modal-container').innerHTML = html; document.getElementById('modal-overlay').classList.add('active'); },
-    close() { document.getElementById('modal-overlay').classList.remove('active'); }
+const Modal={
+    open(html){document.getElementById('modal-container').innerHTML=html;document.getElementById('modal-overlay').classList.add('active');},
+    close(){document.getElementById('modal-overlay').classList.remove('active');}
 };
-document.getElementById('modal-overlay').addEventListener('click', function(e) { if (e.target === this) Modal.close(); });
+document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)Modal.close();});
 
-// ============================================================
-// APP
-// ============================================================
-const App = {
-    async init() {
-        try {
-            // Check if running from file:// (CORS issues)
-            if (location.protocol === 'file:') {
-                console.warn('Ejecutando desde file:// — si hay errores de conexión, sirve el archivo con: npx serve ' + location.pathname);
-            }
-            await Auth.init();
-            await Store.loadAll();
-            if (Store.niveles.length > 0) { Store.nivelActual = Store.niveles[0]; }
-            this.render();
-        } catch(e) {
-            console.error('Init error:', e);
-            App.renderMain('<div class="empty-state"><h2 style="color:var(--danger)">Error al cargar datos</h2><p>Verifica que las tablas de Supabase existan y el proyecto esté activo.</p><button class="btn btn-primary" onclick="location.reload()" style="margin-top:1rem">Reintentar</button></div>');
-        }
+const App={
+    async init(){
+        try{if(location.protocol==='file:')console.warn('Ejecutando desde file:// — si hay errores, sirve con: npx serve .');await Auth.init();await Store.loadAll();if(Store.niveles.length>0)Store.nivelActual=Store.niveles[0];this.render();}
+        catch(e){console.error('Init error:',e);App.renderMain('<div class="empty-state"><h2 style="color:var(--danger)">Error al cargar datos</h2><p>Verifica que las tablas de Supabase existan.</p><button class="btn btn-primary" onclick="location.reload()" style="margin-top:1rem">Reintentar</button></div>');}
     },
-    render() {
-        this.renderHeader();
-        this.renderNiveles();
-        if (!Store.nivelActual) { this.renderMain('<div class="empty-state">🎓 Bienvenido a la Academia del Espíritu</div>'); return; }
-        if (Store.temaActual) { this.renderTema(); return; }
-        if (Store.cursoActual) { this.renderTemas(); return; }
-        this.renderCursos();
+    render(){this.renderHeader();this.renderNiveles();if(!Store.nivelActual){this.renderMain('<div class="empty-state">🎓 Bienvenido a la Academia del Espíritu</div>');return;}if(Store.temaActual){this.renderTema();return;}if(Store.cursoActual){this.renderTemas();return;}this.renderCursos();},
+    renderHeader(){
+        const sel=Store.estudiantes.map(e=>`<option value="${e.id}" ${Store.estudianteActual?.id===e.id?'selected':''}>${e.nombre} ${e.apellido}</option>`).join('');
+        document.getElementById('app-header').innerHTML=`<img src="logo.png" alt="Logo" class="logo" onerror="this.style.display='none'"><div class="header-text"><h1>Academia del Espíritu</h1><p>Formación Teológica Apostólica</p></div><div class="header-actions">${Store.isAdmin?'<span class="admin-badge">Admin</span>':''}<select id="estudiante-select" class="${Store.isAdmin?'':'hidden'}" onchange="App.cambiarEstudiante(this.value)"><option value="">Seleccionar estudiante...</option>${sel}</select>${Store.isAdmin?'<button class="btn btn-sm btn-danger" onclick="Auth.logout()">Salir</button>':'<button class="btn btn-sm btn-secondary" onclick="Auth.showLogin()">Acceso Admin</button>'}</div>`;
     },
-    renderHeader() {
-        const sel = Store.estudiantes.map(e => `<option value="${e.id}" ${Store.estudianteActual?.id === e.id ? 'selected' : ''}>${e.nombre} ${e.apellido}</option>`).join('');
-        document.getElementById('app-header').innerHTML = `
-            <img src="logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
-            <div class="header-text"><h1>Academia del Espíritu</h1><p>Formación Teológica Apostólica</p></div>
-            <div class="header-actions">
-                ${Store.isAdmin ? '<span class="admin-badge">Admin</span>' : ''}
-                <select id="estudiante-select" class="${Store.isAdmin ? '' : 'hidden'}" onchange="App.cambiarEstudiante(this.value)">
-                    <option value="">Seleccionar estudiante...</option>${sel}
-                </select>
-                ${Store.isAdmin ? '<button class="btn btn-sm btn-danger" onclick="Auth.logout()">Salir</button>' : '<button class="btn btn-sm btn-secondary" onclick="Auth.showLogin()">Acceso Admin</button>'}
-            </div>`;
-    },
-    renderNiveles() {
-        document.getElementById('nav-niveles').innerHTML = Store.niveles.map(n =>
-            `<button class="nivel-tab nivel-${n.orden}${Store.nivelActual?.id===n.id?' active':''}" onclick="App.selectNivel(${n.id})">
-                <span class="nivel-numero" style="color:${n.color}">${n.nombre}</span>
-                <span class="nivel-nombre">${n.descripcion||''}</span></button>`
-        ).join('');
-    },
-    renderMain(html) { document.getElementById('main-content').innerHTML = html; },
-    
-    async selectNivel(id) {
-        Store.nivelActual = Store.niveles.find(n => n.id === id) || null;
-        Store.cursoActual = null; Store.temaActual = null;
-        this.renderNiveles();
-        if (Store.nivelActual) { await Store.load('cursos'); this.renderCursos(); }
-    },
-    
-    // --- CURSOS ---
-    renderCursos() {
-        const cursos = Store.cursosNivel;
-        let html = `<div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${Store.nivelActual.color};font-size:1.4rem">📚 Cursos de ${Store.nivelActual.nombre}</h2></div>`;
-        if (Store.isAdmin) html += `<div style="margin-bottom:1rem;display:flex;gap:0.5rem;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="App.modalCurso()">+ Nuevo Curso</button><button class="btn btn-secondary btn-sm" onclick="App.showEstudiantes()">👥 Estudiantes</button></div>`;
-        if (!cursos.length) { html += '<div class="empty-state">No hay cursos en este nivel aún.</div>'; this.renderMain(html); return; }
-        html += '<div class="cursos-grid">';
-        cursos.forEach((c, i) => {
-            const ids = Store.temas.filter(t => t.curso_id === c.id).map(t => t.id);
-            const total = Store.pasos.filter(p => ids.includes(p.tema_id)).length;
-            const com = Store.estudianteActual ? Store.progreso.filter(pr => pr.completado && ids.includes(Store.pasos.find(p => p.id === pr.paso_id)?.tema_id)).length : 0;
-            const pct = total > 0 ? Math.round(com/total*100) : 0;
-            html += `<div class="curso-card draggable" draggable="${Store.isAdmin}" data-id="${c.id}" data-type="curso">
-                <div class="curso-card-header" style="background:${Store.nivelActual.color}">
-                    ${Store.isAdmin?'<span class="drag-handle">⋮⋮</span>':''}
-                    <span>${ids.length} temas</span><span>${total} pasos</span>
-                </div>
-                <div class="curso-card-body">
-                    <div class="curso-titulo">${c.titulo}</div>
-                    <div class="curso-desc">${c.descripcion||''}</div>
-                    <div class="progreso-bar"><div class="progreso-fill" style="width:${pct}%;background:${Store.nivelActual.color}"></div></div>
-                    <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem">${com}/${total} pasos (${pct}%)</div>
-                    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center">
-                        <button class="btn btn-primary btn-sm" onclick="App.verCurso(${c.id})">📖 Ver Temas</button>
-                        ${Store.isAdmin ? `
-                        <div class="orden-controls"><button class="orden-btn" onclick="App.mover('curso',${c.id},-1,${i})" ${i===0?'disabled':''}>▲</button><button class="orden-btn" onclick="App.mover('curso',${c.id},1,${i})" ${i===cursos.length-1?'disabled':''}>▼</button></div>
-                        <button class="btn btn-warning btn-sm" onclick="App.modalCurso(${c.id})">✏️</button>
-                        <button class="btn btn-danger btn-sm" onclick="App.delete('cursos',${c.id})">🗑️</button>`:''}
-                    </div>
-                </div></div>`;
+    renderNiveles(){document.getElementById('nav-niveles').innerHTML=Store.niveles.map(n=>`<button class="nivel-tab nivel-${n.orden}${Store.nivelActual?.id===n.id?' active':''}" onclick="App.selectNivel(${n.id})"><span class="nivel-numero" style="color:${n.color}">${n.nombre}</span><span class="nivel-nombre">${n.descripcion||''}</span></button>`).join('');},
+    renderMain(html){document.getElementById('main-content').innerHTML=html;},
+    async selectNivel(id){Store.nivelActual=Store.niveles.find(n=>n.id===id)||null;Store.cursoActual=null;Store.temaActual=null;this.renderNiveles();if(Store.nivelActual){await Store.load('cursos');this.renderCursos();}},
+    renderCursos(){
+        const cursos=Store.cursosNivel;let html=`<div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${Store.nivelActual.color};font-size:1.4rem">📚 Cursos de ${Store.nivelActual.nombre}</h2></div>`;
+        if(Store.isAdmin)html+=`<div style="margin-bottom:1rem;display:flex;gap:0.5rem;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="App.modalCurso()">+ Nuevo Curso</button><button class="btn btn-secondary btn-sm" onclick="App.showEstudiantes()">👥 Estudiantes</button></div>`;
+        if(!cursos.length){html+='<div class="empty-state">No hay cursos en este nivel aún.</div>';this.renderMain(html);return;}
+        html+='<div class="cursos-grid">';
+        cursos.forEach((c,i)=>{
+            const ids=Store.temas.filter(t=>t.curso_id===c.id).map(t=>t.id);
+            const total=Store.pasos.filter(p=>ids.includes(p.tema_id)).length;
+            const com=Store.estudianteActual?Store.progreso.filter(pr=>pr.completado&&ids.includes(Store.pasos.find(p=>p.id===pr.paso_id)?.tema_id)).length:0;
+            const pct=total>0?Math.round(com/total*100):0;
+            html+=`<div class="curso-card draggable" draggable="${Store.isAdmin}" data-id="${c.id}" data-type="curso"><div class="curso-card-header" style="background:${Store.nivelActual.color}">${Store.isAdmin?'<span class="drag-handle">⋮⋮</span>':''}<span>${ids.length} temas</span><span>${total} pasos</span></div><div class="curso-card-body"><div class="curso-titulo">${c.titulo}</div><div class="curso-desc">${c.descripcion||''}</div><div class="progreso-bar"><div class="progreso-fill" style="width:${pct}%;background:${Store.nivelActual.color}"></div></div><div style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem">${com}/${total} pasos (${pct}%)</div><div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center"><button class="btn btn-primary btn-sm" onclick="App.verCurso(${c.id})">📖 Ver Temas</button>${Store.isAdmin?`<div class="orden-controls"><button class="orden-btn" onclick="App.mover('curso',${c.id},-1,${i})" ${i===0?'disabled':''}>▲</button><button class="orden-btn" onclick="App.mover('curso',${c.id},1,${i})" ${i===cursos.length-1?'disabled':''}>▼</button></div><button class="btn btn-warning btn-sm" onclick="App.modalCurso(${c.id})">✏️</button><button class="btn btn-danger btn-sm" onclick="App.delete('cursos',${c.id})">🗑️</button>`:''}</div></div></div>`;
         });
-        html += '</div>';
-        this.renderMain(html);
-        this.setupDragDrop();
+        html+='</div>';this.renderMain(html);this.setupDragDrop();
     },
-    
-    async verCurso(id) {
-        Store.cursoActual = Store.cursos.find(c => c.id === id);
-        Store.temaActual = null;
-        await Store.load('temas'); await Store.load('pasos'); await Store.load('progreso');
-        this.renderTemas();
-    },
-    
-    // --- TEMAS ---
-    renderTemas() {
-        const temas = Store.temasCurso;
-        let html = `<button class="btn btn-secondary back-btn" onclick="App.backToCursos()">← Volver a Cursos</button>
-            <div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${Store.nivelActual.color};font-size:1.4rem">📖 ${Store.cursoActual.titulo}</h2>
-            <p style="color:var(--text-light);font-family:'Crimson Pro',serif">${Store.cursoActual.descripcion||''}</p></div>`;
-        if (Store.isAdmin) html += `<div style="margin-bottom:1rem"><button class="btn btn-primary btn-sm" onclick="App.modalTema()">+ Agregar Tema</button></div>`;
-        if (!temas.length) { html += '<div class="empty-state">No hay temas en este curso aún.</div>'; this.renderMain(html); return; }
-        html += '<div class="temas-lista">';
-        temas.forEach((t, i) => {
-            const ps = Store.pasos.filter(p => p.tema_id === t.id);
-            const com = Store.estudianteActual ? Store.progreso.filter(pr => pr.completado && ps.some(p => p.id === pr.paso_id)).length : 0;
-            const done = ps.length > 0 && com === ps.length;
-            html += `<div class="tema-item draggable" draggable="${Store.isAdmin}" data-id="${t.id}" data-type="tema">
-                ${Store.isAdmin?'<span class="drag-handle">⋮⋮</span>':''}
-                <div class="tema-numero ${done?'tema-completado':'tema-pendiente'}">${done?'✓':i+1}</div>
-                <div class="tema-info" onclick="App.verTema(${t.id})"><div class="tema-titulo">${t.titulo}</div><div class="tema-pasos">${ps.length} pasos · ${com} completados</div></div>
-                ${Store.isAdmin ? `
-                <div class="orden-controls"><button class="orden-btn" onclick="App.mover('tema',${t.id},-1,${i})" ${i===0?'disabled':''}>▲</button><button class="orden-btn" onclick="App.mover('tema',${t.id},1,${i})" ${i===temas.length-1?'disabled':''}>▼</button></div>
-                <button class="btn btn-warning btn-xs" onclick="App.modalTema(${t.id})">✏️</button>
-                <button class="btn btn-danger btn-xs" onclick="App.delete('temas',${t.id})">🗑️</button>`:''}
-                <div style="font-size:1.2rem;cursor:pointer" onclick="App.verTema(${t.id})">${done?'✅':'▶️'}</div>
-            </div>`;
+    async verCurso(id){Store.cursoActual=Store.cursos.find(c=>c.id===id);Store.temaActual=null;await Store.load('temas');await Store.load('pasos');await Store.load('progreso');this.renderTemas();},
+    renderTemas(){
+        const temas=Store.temasCurso;let html=`<button class="btn btn-secondary back-btn" onclick="App.backToCursos()">← Volver a Cursos</button><div style="margin-bottom:1.5rem"><h2 style="font-family:'Cinzel',serif;color:${Store.nivelActual.color};font-size:1.4rem">📖 ${Store.cursoActual.titulo}</h2><p style="color:var(--text-light);font-family:'Crimson Pro',serif">${Store.cursoActual.descripcion||''}</p></div>`;
+        if(Store.isAdmin)html+=`<div style="margin-bottom:1rem"><button class="btn btn-primary btn-sm" onclick="App.modalTema()">+ Agregar Tema</button></div>`;
+        if(!temas.length){html+='<div class="empty-state">No hay temas en este curso aún.</div>';this.renderMain(html);return;}
+        html+='<div class="temas-lista">';
+        temas.forEach((t,i)=>{
+            const ps=Store.pasos.filter(p=>p.tema_id===t.id);
+            const com=Store.estudianteActual?Store.progreso.filter(pr=>pr.completado&&ps.some(p=>p.id===pr.paso_id)).length:0;
+            const done=ps.length>0&&com===ps.length;
+            html+=`<div class="tema-item draggable" draggable="${Store.isAdmin}" data-id="${t.id}" data-type="tema">${Store.isAdmin?'<span class="drag-handle">⋮⋮</span>':''}<div class="tema-numero ${done?'tema-completado':'tema-pendiente'}">${done?'✓':i+1}</div><div class="tema-info" onclick="App.verTema(${t.id})"><div class="tema-titulo">${t.titulo}</div><div class="tema-pasos">${ps.length} pasos · ${com} completados</div></div>${Store.isAdmin?`<div class="orden-controls"><button class="orden-btn" onclick="App.mover('tema',${t.id},-1,${i})" ${i===0?'disabled':''}>▲</button><button class="orden-btn" onclick="App.mover('tema',${t.id},1,${i})" ${i===temas.length-1?'disabled':''}>▼</button></div><button class="btn btn-warning btn-xs" onclick="App.modalTema(${t.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="App.delete('temas',${t.id})">🗑️</button>`:''}<div style="font-size:1.2rem;cursor:pointer" onclick="App.verTema(${t.id})">${done?'✅':'▶️'}</div></div>`;
         });
-        html += '</div>';
-        this.renderMain(html);
-        this.setupDragDrop();
+        html+='</div>';this.renderMain(html);this.setupDragDrop();
     },
-    
-    async verTema(id) {
-        Store.temaActual = Store.temas.find(t => t.id === id);
-        await Store.load('pasos'); await Store.load('progreso');
-        document.documentElement.style.setProperty('--font-size-content', Store.fontSize + 'rem');
-        this.renderTema();
+    async verTema(id){Store.temaActual=Store.temas.find(t=>t.id===id);await Store.load('pasos');await Store.load('progreso');document.documentElement.style.setProperty('--font-size-content',Store.fontSize+'rem');this.renderTema();},
+    renderTema(){
+        const pasos=Store.pasosTema;let html=`<button class="btn btn-secondary back-btn" onclick="App.backToTemas()">← Volver a Temas</button><div class="reading-controls"><span>🔤 Tamaño:</span><button class="font-size-btn" onclick="App.cambiarFuente(-1)">A-</button><span class="font-size-indicator" id="fontSizeIndicator">${Store.fontSize.toFixed(1)}rem</span><button class="font-size-btn" onclick="App.cambiarFuente(1)">A+</button><button class="btn btn-sm btn-secondary" onclick="App.resetFont()" style="margin-left:0.3rem">Normal</button><span style="margin-left:1rem">🎨</span><button class="btn btn-sm btn-secondary" onclick="App.toggleModo()">${Store.modoOscuro?'☀️':'🌙'}</button></div><div class="tema-contenido"><span style="display:inline-block;background:${Store.nivelActual.color};color:#fff;padding:0.2rem 0.6rem;border-radius:3px;font-size:0.75rem;font-weight:700;margin-bottom:1rem">${Store.nivelActual.nombre}</span><h2>${Store.temaActual.titulo}</h2><div class="contenido-texto">${UI.parseMarkdown(Store.temaActual.contenido)}</div></div><div class="pasos-section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap"><h3>✋ Pasos Prácticos (${pasos.length})</h3>${Store.isAdmin?`<button class="btn btn-primary btn-sm" onclick="App.modalPaso()">+ Agregar Paso</button>`:''}</div><div id="pasos-container">${this.renderPasos(pasos)}</div></div>`;
+        this.renderMain(html);if(Store.modoOscuro)document.body.classList.add('modo-lectura');this.setupDragDrop();
     },
-    
-    // --- TEMA + PASOS ---
-    renderTema() {
-        const pasos = Store.pasosTema;
-        let html = `<button class="btn btn-secondary back-btn" onclick="App.backToTemas()">← Volver a Temas</button>
-            <div class="reading-controls">
-                <span>🔤 Tamaño:</span>
-                <button class="font-size-btn" onclick="App.cambiarFuente(-1)">A-</button>
-                <span class="font-size-indicator" id="fontSizeIndicator">${Store.fontSize.toFixed(1)}rem</span>
-                <button class="font-size-btn" onclick="App.cambiarFuente(1)">A+</button>
-                <button class="btn btn-sm btn-secondary" onclick="App.resetFont()" style="margin-left:0.3rem">Normal</button>
-                <span style="margin-left:1rem">🎨</span>
-                <button class="btn btn-sm btn-secondary" onclick="App.toggleModo()">${Store.modoOscuro?'☀️':'🌙'}</button>
-            </div>
-            <div class="tema-contenido">
-                <span style="display:inline-block;background:${Store.nivelActual.color};color:#fff;padding:0.2rem 0.6rem;border-radius:3px;font-size:0.75rem;font-weight:700;margin-bottom:1rem">${Store.nivelActual.nombre}</span>
-                <h2>${Store.temaActual.titulo}</h2>
-                <div class="contenido-texto">${UI.parseMarkdown(Store.temaActual.contenido)}</div>
-            </div>
-            <div class="pasos-section">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap">
-                    <h3>✋ Pasos Prácticos (${pasos.length})</h3>
-                    ${Store.isAdmin ? `<button class="btn btn-primary btn-sm" onclick="App.modalPaso()">+ Agregar Paso</button>` : ''}
-                </div>
-                <div id="pasos-container">${this.renderPasos(pasos)}</div>
-            </div>`;
-        this.renderMain(html);
-        if (Store.modoOscuro) document.body.classList.add('modo-lectura');
-        this.setupDragDrop();
+    renderPasos(pasos){
+        if(!pasos.length)return'<p class="empty-state">No hay pasos prácticos para este tema.</p>';
+        return pasos.map((p,i)=>{const prog=Store.getProgreso(p.id)||{completado:false,notas:''};return`<div class="paso-item ${prog.completado?'completado':''} draggable" data-id="${p.id}" data-type="paso" draggable="${Store.isAdmin}">${Store.isAdmin?'<span class="drag-handle">⋮⋮</span>':''}<div class="paso-checkbox ${prog.completado?'checked':''}" onclick="App.togglePaso(${p.id},this)">${prog.completado?'✓':''}</div><div style="flex:1"><div class="paso-texto">${p.descripcion}</div><textarea class="paso-notas" placeholder="Tus notas..." onchange="App.guardarNotas(${p.id},this.value)">${prog.notas||''}</textarea></div>${Store.isAdmin?`<div class="orden-controls"><button class="orden-btn" onclick="App.mover('paso',${p.id},-1,${i})" ${i===0?'disabled':''}>▲</button><button class="orden-btn" onclick="App.mover('paso',${p.id},1,${i})" ${i===pasos.length-1?'disabled':''}>▼</button></div><button class="btn btn-warning btn-xs" onclick="App.modalPaso(${p.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="App.delete('pasos',${p.id})">🗑️</button>`:''}</div>`;}).join('');
     },
-    
-    renderPasos(pasos) {
-        if (!pasos.length) return '<p class="empty-state">No hay pasos prácticos para este tema.</p>';
-        return pasos.map((p, i) => {
-            const prog = Store.getProgreso(p.id) || { completado: false, notas: '' };
-            return `<div class="paso-item ${prog.completado?'completado':''} draggable" data-id="${p.id}" data-type="paso" draggable="${Store.isAdmin}">
-                ${Store.isAdmin?'<span class="drag-handle">⋮⋮</span>':''}
-                <div class="paso-checkbox ${prog.completado?'checked':''}" onclick="App.togglePaso(${p.id},this)">${prog.completado?'✓':''}</div>
-                <div style="flex:1">
-                    <div class="paso-texto">${p.descripcion}</div>
-                    <textarea class="paso-notas" placeholder="Tus notas..." onchange="App.guardarNotas(${p.id},this.value)">${prog.notas||''}</textarea>
-                </div>
-                ${Store.isAdmin ? `
-                <div class="orden-controls"><button class="orden-btn" onclick="App.mover('paso',${p.id},-1,${i})" ${i===0?'disabled':''}>▲</button><button class="orden-btn" onclick="App.mover('paso',${p.id},1,${i})" ${i===pasos.length-1?'disabled':''}>▼</button></div>
-                <button class="btn btn-warning btn-xs" onclick="App.modalPaso(${p.id})">✏️</button>
-                <button class="btn btn-danger btn-xs" onclick="App.delete('pasos',${p.id})">🗑️</button>`:''}
-            </div>`;
-        }).join('');
+    backToCursos(){Store.cursoActual=null;Store.temaActual=null;this.renderCursos();},
+    backToTemas(){Store.temaActual=null;this.renderTemas();},
+    async cambiarEstudiante(id){Store.estudianteActual=Store.estudiantes.find(e=>e.id===parseInt(id))||null;await Store.load('progreso');if(Store.temaActual)this.renderTema();else if(Store.cursoActual)this.renderTemas();else this.renderCursos();},
+    async togglePaso(pasoId,el){
+        if(!Store.estudianteActual){if(Store.estudiantes.length===0){await API.create('estudiantes',{nombre:'Estudiante',apellido:'Demo',email:'demo@academia.com'});await Store.load('estudiantes');}Store.estudianteActual=Store.estudiantes[0];await Store.load('progreso');this.renderHeader();}
+        const prog=Store.getProgreso(pasoId);const nuevo=!(prog&&prog.completado);
+        if(prog){await API.update('progreso',prog.id,{completado:nuevo,fecha_completado:nuevo?new Date().toISOString():null});prog.completado=nuevo;}
+        else{const res=await API.create('progreso',{estudiante_id:Store.estudianteActual.id,paso_id:pasoId,completado:nuevo,fecha_completado:nuevo?new Date().toISOString():null,notas:''});if(res?.[0])Store.progreso.push(res[0]);else await Store.load('progreso');}
+        const item=el.closest('.paso-item');if(item){item.classList.toggle('completado',nuevo);el.classList.toggle('checked',nuevo);el.textContent=nuevo?'✓':'';}UI.toast(nuevo?'✅ ¡Paso completado!':'Paso desmarcado');
     },
-    
-    // --- NAVEGACIÓN ---
-    backToCursos() { Store.cursoActual = null; Store.temaActual = null; this.renderCursos(); },
-    backToTemas() { Store.temaActual = null; this.renderTemas(); },
-    
-    // --- ESTUDIANTE ---
-    async cambiarEstudiante(id) {
-        Store.estudianteActual = Store.estudiantes.find(e => e.id === parseInt(id)) || null;
-        await Store.load('progreso');
-        if (Store.temaActual) this.renderTema();
-        else if (Store.cursoActual) this.renderTemas();
-        else this.renderCursos();
-    },
-    
-    // --- TOGGLE PASO ---
-    async togglePaso(pasoId, el) {
-        if (!Store.estudianteActual) {
-            if (Store.estudiantes.length === 0) {
-                await API.create('estudiantes', { nombre: 'Estudiante', apellido: 'Demo', email: 'demo@academia.com' });
-                await Store.load('estudiantes');
-            }
-            Store.estudianteActual = Store.estudiantes[0];
-            await Store.load('progreso');
-            this.renderHeader();
-        }
-        const prog = Store.getProgreso(pasoId);
-        const nuevo = !(prog && prog.completado);
-        if (prog) {
-            await API.update('progreso', prog.id, { completado: nuevo, fecha_completado: nuevo ? new Date().toISOString() : null });
-            prog.completado = nuevo;
-        } else {
-            const res = await API.create('progreso', { estudiante_id: Store.estudianteActual.id, paso_id: pasoId, completado: nuevo, fecha_completado: nuevo ? new Date().toISOString() : null, notas: '' });
-            if (res?.[0]) Store.progreso.push(res[0]); else await Store.load('progreso');
-        }
-        const item = el.closest('.paso-item');
-        if (item) { item.classList.toggle('completado', nuevo); el.classList.toggle('checked', nuevo); el.textContent = nuevo ? '✓' : ''; }
-        UI.toast(nuevo ? '✅ ¡Paso completado!' : 'Paso desmarcado');
-    },
-    
-    guardarNotas: (function() {
-        let timeout;
-        return function(pasoId, val) {
-            clearTimeout(timeout);
-            timeout = setTimeout(async () => {
-                const prog = Store.getProgreso(pasoId);
-                if (prog) { await API.update('progreso', prog.id, { notas: val }); prog.notas = val; }
-            }, 500);
-        };
-    })(),
-    
-    // --- FUENTE ---
-    cambiarFuente(dir) { Store.fontSize = Math.max(0.9, Math.min(1.6, Store.fontSize + dir * 0.1)); 
-        document.documentElement.style.setProperty('--font-size-content', Store.fontSize + 'rem');
-        const el = document.getElementById('fontSizeIndicator'); if (el) el.textContent = Store.fontSize.toFixed(1) + 'rem';
-    },
-    resetFont() { Store.fontSize = 1.1; document.documentElement.style.setProperty('--font-size-content', '1.1rem');
-        const el = document.getElementById('fontSizeIndicator'); if (el) el.textContent = '1.1rem';
-    },
-    toggleModo() { Store.modoOscuro = !Store.modoOscuro; document.body.classList.toggle('modo-lectura', Store.modoOscuro); },
-    
-    // --- DRAG & DROP ---
-    setupDragDrop() {
-        if (!Store.isAdmin) return;
-        const items = document.querySelectorAll('.draggable[draggable="true"]');
-        items.forEach(el => {
-            el.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', JSON.stringify({id: el.dataset.id, type: el.dataset.type})); el.classList.add('dragging'); });
-            el.addEventListener('dragend', () => el.classList.remove('dragging'));
-            el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag-over'); });
-            el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
-            el.addEventListener('drop', e => {
-                e.preventDefault(); el.classList.remove('drag-over');
-                const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-                const srcId = parseInt(data.id), srcType = data.type;
-                const tgtId = parseInt(el.dataset.id);
-                if (srcId !== tgtId && srcType === el.dataset.type) this.reordenar(srcType, srcId, tgtId);
-            });
+    guardarNotas:(function(){let t;return function(pid,v){clearTimeout(t);t=setTimeout(async()=>{const prog=Store.getProgreso(pid);if(prog){await API.update('progreso',prog.id,{notas:v});prog.notas=v;}},500);}})(),
+    cambiarFuente(dir){Store.fontSize=Math.max(0.9,Math.min(1.6,Store.fontSize+dir*0.1));document.documentElement.style.setProperty('--font-size-content',Store.fontSize+'rem');const el=document.getElementById('fontSizeIndicator');if(el)el.textContent=Store.fontSize.toFixed(1)+'rem';},
+    resetFont(){Store.fontSize=1.1;document.documentElement.style.setProperty('--font-size-content','1.1rem');const el=document.getElementById('fontSizeIndicator');if(el)el.textContent='1.1rem';},
+    toggleModo(){Store.modoOscuro=!Store.modoOscuro;document.body.classList.toggle('modo-lectura',Store.modoOscuro);if(Store.temaActual)this.renderTema();},
+    setupDragDrop(){
+        if(!Store.isAdmin)return;
+        document.querySelectorAll('.draggable[draggable="true"]').forEach(el=>{
+            el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',JSON.stringify({id:el.dataset.id,type:el.dataset.type}));el.classList.add('dragging');});
+            el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+            el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('drag-over');});
+            el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));
+            el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('drag-over');const d=JSON.parse(e.dataTransfer.getData('text/plain'));if(parseInt(d.id)!==parseInt(el.dataset.id)&&d.type===el.dataset.type)this.reordenar(d.type,parseInt(d.id),parseInt(el.dataset.id));});
         });
     },
-    
-    reordenar(type, fromId, toId) {
-        let items;
-        if (type === 'curso') items = Store.cursosNivel;
-        else if (type === 'tema') items = Store.temasCurso;
-        else items = Store.pasosTema;
-        const fi = items.findIndex(x => x.id === fromId);
-        const ti = items.findIndex(x => x.id === toId);
-        if (fi < 0 || ti < 0 || fi === ti) return;
-        const [m] = items.splice(fi, 1); items.splice(ti, 0, m);
-        items.forEach((x, i) => x.orden = i);
-        const table = type === 'curso' ? 'cursos' : type === 'tema' ? 'temas' : 'pasos';
-        if (type === 'curso') this.renderCursos(); else if (type === 'tema') this.renderTemas(); else this.renderTema();
-        items.forEach(x => API.update(table, x.id, { orden: x.orden }).catch(() => {}));
+    reordenar(type,fromId,toId){
+        let items;if(type==='curso')items=Store.cursosNivel;else if(type==='tema')items=Store.temasCurso;else items=Store.pasosTema;
+        const fi=items.findIndex(x=>x.id===fromId),ti=items.findIndex(x=>x.id===toId);if(fi<0||ti<0||fi===ti)return;
+        const[m]=items.splice(fi,1);items.splice(ti,0,m);items.forEach((x,i)=>x.orden=i);
+        const table=type==='curso'?'cursos':type==='tema'?'temas':'pasos';
+        if(type==='curso')this.renderCursos();else if(type==='tema')this.renderTemas();else this.renderTema();
+        items.forEach(x=>API.update(table,x.id,{orden:x.orden}).catch(()=>{}));
     },
-    
-    mover(type, id, dir, idx) {
-        let items;
-        if (type === 'curso') items = Store.cursosNivel;
-        else if (type === 'tema') items = Store.temasCurso;
-        else items = Store.pasosTema;
-        const ni = idx + dir;
-        if (ni < 0 || ni >= items.length) return;
-        [items[idx], items[ni]] = [items[ni], items[idx]];
-        items.forEach((x, i) => x.orden = i);
-        const table = type === 'curso' ? 'cursos' : type === 'tema' ? 'temas' : 'pasos';
-        if (type === 'curso') this.renderCursos(); else if (type === 'tema') this.renderTemas(); else this.renderTema();
-        items.forEach(x => API.update(table, x.id, { orden: x.orden }).catch(() => {}));
+    mover(type,id,dir,idx){
+        let items;if(type==='curso')items=Store.cursosNivel;else if(type==='tema')items=Store.temasCurso;else items=Store.pasosTema;
+        const ni=idx+dir;if(ni<0||ni>=items.length)return;
+        [items[idx],items[ni]]=[items[ni],items[idx]];items.forEach((x,i)=>x.orden=i);
+        const table=type==='curso'?'cursos':type==='tema'?'temas':'pasos';
+        if(type==='curso')this.renderCursos();else if(type==='tema')this.renderTemas();else this.renderTema();
+        items.forEach(x=>API.update(table,x.id,{orden:x.orden}).catch(()=>{}));
     },
-    
-    // --- CRUD ---
-    async save(table, data, editId) {
-        try {
-            if (editId) await API.update(table, editId, data);
-            else await API.create(table, data);
-            Modal.close(); await Store.load(table);
-            if (table === 'cursos') this.renderCursos();
-            else if (table === 'temas') Store.temaActual ? this.renderTemas() : this.renderTemas();
-            else if (table === 'pasos') this.renderTema();
-            UI.toast(editId ? '✅ Actualizado' : '✅ Creado');
-        } catch (err) { UI.toast('Error: ' + err.message, 'error'); }
+    async save(table,data,editId){try{if(editId)await API.update(table,editId,data);else await API.create(table,data);Modal.close();await Store.load(table);if(table==='cursos')this.renderCursos();else if(table==='temas')Store.temaActual?this.renderTema():this.renderTemas();else if(table==='pasos')this.renderTema();UI.toast(editId?'✅ Actualizado':'✅ Creado');}catch(err){UI.toast('Error: '+err.message,'error');}},
+    async delete(table,id){if(!confirm(`¿Eliminar este ${table.slice(0,-1)}?`))return;try{await API.remove(table,id);await Store.load(table);if(table==='cursos')this.renderCursos();else if(table==='temas')this.renderTemas();else this.renderTema();UI.toast('Eliminado','error');}catch(err){UI.toast('Error: '+err.message,'error');}},
+    modalCurso(editId){const c=editId?Store.cursos.find(x=>x.id===editId):null;Modal.open(`<h2>${editId?'Editar':'Nuevo'} Curso</h2><form onsubmit="event.preventDefault();App.save('cursos',{nivel_id:parseInt(document.getElementById('f-nivel').value),titulo:document.getElementById('f-titulo').value,descripcion:document.getElementById('f-desc').value,orden:${editId?'undefined':Store.cursosNivel.length}},${editId||'null'})"><div class="form-group"><label>Nivel</label><select id="f-nivel" required>${Store.niveles.map(n=>`<option value="${n.id}" ${(c?.nivel_id||Store.nivelActual?.id)===n.id?'selected':''}>${n.nombre}</option>`).join('')}</select></div><div class="form-group"><label>Título</label><input id="f-titulo" required value="${c?.titulo||''}"></div><div class="form-group"><label>Descripción</label><input id="f-desc" value="${c?.descripcion||''}"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`);},
+    modalTema(editId){const t=editId?Store.temas.find(x=>x.id===editId):null;Modal.open(`<h2>${editId?'Editar':'Nuevo'} Tema</h2><form onsubmit="event.preventDefault();App.save('temas',{curso_id:parseInt(document.getElementById('f-curso').value),titulo:document.getElementById('f-ttulo').value,contenido:document.getElementById('f-cont').value,orden:${editId?'undefined':Store.temasCurso.length}},${editId||'null'})"><div class="form-group"><label>Curso</label><select id="f-curso" required>${Store.cursos.map(c=>`<option value="${c.id}" ${(t?.curso_id||Store.cursoActual?.id)===c.id?'selected':''}>${c.titulo}</option>`).join('')}</select></div><div class="form-group"><label>Título</label><input id="f-ttulo" required value="${t?.titulo||''}"></div><div class="form-group"><label>Contenido</label><textarea id="f-cont" style="min-height:200px">${t?.contenido||''}</textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`);setTimeout(()=>App.setupEditor('f-cont'),200);},
+    modalPaso(editId){const p=editId?Store.pasos.find(x=>x.id===editId):null;Modal.open(`<h2>${editId?'Editar':'Nuevo'} Paso</h2><form onsubmit="event.preventDefault();App.save('pasos',{tema_id:parseInt(document.getElementById('f-tema').value),descripcion:document.getElementById('f-descp').value,orden:${editId?'undefined':Store.pasosTema.length}},${editId||'null'})"><div class="form-group"><label>Tema</label><select id="f-tema" required>${Store.temas.map(t=>`<option value="${t.id}" ${(p?.tema_id||Store.temaActual?.id)===t.id?'selected':''}>${t.titulo}</option>`).join('')}</select></div><div class="form-group"><label>Descripción</label><textarea id="f-descp" required>${p?.descripcion||''}</textarea></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`);},
+    setupEditor(textareaId){
+        const ta=document.getElementById(textareaId);if(!ta)return;const w=document.createElement('div');w.className='editor-wrapper';ta.parentNode.insertBefore(w,ta);
+        w.innerHTML=`<div class="editor-toolbar"><div class="tool-group"><button type="button" class="tool-btn" data-cmd="bold"><b>B</b></button><button type="button" class="tool-btn" data-cmd="italic"><i>I</i></button><button type="button" class="tool-btn" data-cmd="underline"><u>U</u></button></div><div class="tool-group"><button type="button" class="tool-btn tool-heading" data-cmd="h2">H2</button><button type="button" class="tool-btn tool-heading" data-cmd="h3">H3</button><button type="button" class="tool-btn tool-heading" data-cmd="h4">H4</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="ul">•≡</button><button type="button" class="tool-btn" data-cmd="ol">1≡</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="quote">❝</button><button type="button" class="tool-btn" data-cmd="hr">—</button></div><div class="tool-group"><button type="button" class="tool-btn" data-cmd="preview">👁️</button><button type="button" class="tool-btn" data-cmd="fullscreen">⛶</button><button type="button" class="tool-btn" data-cmd="help">❓</button></div></div><div class="editor-tabs"><button type="button" class="editor-tab active" data-tab="edit">✏️ Editar</button><button type="button" class="editor-tab" data-tab="preview">👁️ Vista previa</button></div>`;
+        const ed=document.createElement('textarea');ed.className='editor-textarea';ed.value=ta.value;ed.id=textareaId+'_ed';
+        const pre=document.createElement('div');pre.className='editor-preview';
+        const sb=document.createElement('div');sb.className='editor-statusbar';sb.innerHTML=`<span>Markdown: **negrita** *cursiva* ## Título</span><span id="${textareaId}_count">${ta.value.length} caracteres</span>`;
+        w.appendChild(ed);w.appendChild(pre);w.appendChild(sb);ta.style.display='none';
+        const upd=()=>{ta.value=ed.value;sb.innerHTML=`<span>Markdown: **negrita** *cursiva* ## Título</span><span>${ed.value.length} caracteres · ${ed.value.trim()?ed.value.trim().split(/\s+/).length:0} palabras</span>`;};
+        ed.addEventListener('input',upd);
+        w.querySelectorAll('.tool-btn').forEach(b=>b.addEventListener('click',function(e){e.preventDefault();const cmd=this.dataset.cmd;if(cmd==='preview'){w.querySelector('[data-tab="preview"]')?.click();return;}if(cmd==='fullscreen'){ed.classList.toggle('fullscreen');document.body.style.overflow=ed.classList.contains('fullscreen')?'hidden':'';return;}if(cmd==='help'){alert('📝 **negrita** *cursiva* _subrayado_ ## Título ### H3 #### H4 - lista 1. numerada > cita --- línea');return;}const s=ed.selectionStart,e2=ed.selectionEnd,v=ed.value,sel=v.substring(s,e2);const tags={bold:['**','**'],italic:['*','*'],underline:['_','_'],h2:['\n## ','\n'],h3:['\n### ','\n'],h4:['\n#### ','\n'],ul:['\n- ','\n'],ol:['\n1. ','\n'],quote:['\n> ','\n'],hr:['\n---\n','']};const[o,c]=tags[cmd]||['',''];if(cmd==='ul'&&sel){ed.value=v.substring(0,s)+sel.split('\n').map(l=>'- '+l).join('\n')+v.substring(e2);}else if(cmd==='ol'&&sel){ed.value=v.substring(0,s)+sel.split('\n').map((l,i)=>(i+1)+'. '+l).join('\n')+v.substring(e2);}else{ed.value=v.substring(0,s)+o+(sel||'texto')+c+v.substring(e2);}ed.focus();upd();}));
+        w.querySelectorAll('.editor-tab').forEach(tab=>tab.addEventListener('click',function(){w.querySelectorAll('.editor-tab').forEach(x=>x.classList.remove('active'));this.classList.add('active');if(this.dataset.tab==='edit'){ed.style.display='';pre.style.display='none';}else{ed.style.display='none';pre.style.display='block';pre.innerHTML=UI.parseMarkdown(ed.value);}}));
+        ed.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&{b:'bold',i:'italic',u:'underline'}[e.key]){e.preventDefault();const cmd={b:'bold',i:'italic',u:'underline'}[e.key];const s=this.selectionStart,e2=this.selectionEnd,v=this.value,sel=v.substring(s,e2);const tags={bold:['**','**'],italic:['*','*'],underline:['_','_']};const[o,c]=tags[cmd];this.value=v.substring(0,s)+o+(sel||'texto')+c+v.substring(e2);upd();}if(e.key==='Escape'&&this.classList.contains('fullscreen')){this.classList.remove('fullscreen');document.body.style.overflow='';}});
     },
-    async delete(table, id) {
-        if (!confirm(`¿Eliminar este ${table.slice(0,-1)}?`)) return;
-        try { await API.remove(table, id); await Store.load(table); if (table === 'cursos') this.renderCursos(); else if (table === 'temas') this.renderTemas(); else this.renderTema(); UI.toast('Eliminado', 'error'); } catch (err) { UI.toast('Error: ' + err.message, 'error'); }
-    },
-    
-    // --- MODALES ---
-    modalCurso(editId) {
-        const c = editId ? Store.cursos.find(x => x.id === editId) : null;
-        Modal.open(`<h2>${editId ? 'Editar' : 'Nuevo'} Curso</h2>
-            <form onsubmit="event.preventDefault();App.save('cursos',{nivel_id:parseInt(document.getElementById('f-nivel').value),titulo:document.getElementById('f-titulo').value,descripcion:document.getElementById('f-desc').value,orden:${editId ? 'undefined' : Store.cursosNivel.length}},${editId||'null'})">
-                <div class="form-group"><label>Nivel</label><select id="f-nivel" required>${Store.niveles.map(n => `<option value="${n.id}" ${(c?.nivel_id||Store.nivelActual?.id)===n.id?'selected':''}>${n.nombre}</option>`).join('')}</select></div>
-                <div class="form-group"><label>Título</label><input id="f-titulo" required value="${c?.titulo||''}"></div>
-                <div class="form-group"><label>Descripción</label><input id="f-desc" value="${c?.descripcion||''}"></div>
-                <div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div>
-            </form>`);
-    },
-    
-    modalTema(editId) {
-        const t = editId ? Store.temas.find(x => x.id === editId) : null;
-        Modal.open(`<h2>${editId ? 'Editar' : 'Nuevo'} Tema</h2>
-            <form onsubmit="event.preventDefault();App.save('temas',{curso_id:parseInt(document.getElementById('f-curso').value),titulo:document.getElementById('f-ttulo').value,contenido:document.getElementById('f-cont').value,orden:${editId ? 'undefined' : Store.temasCurso.length}},${editId||'null'})">
-                <div class="form-group"><label>Curso</label><select id="f-curso" required>${Store.cursos.map(c => `<option value="${c.id}" ${(t?.curso_id||Store.cursoActual?.id)===c.id?'selected':''}>${c.titulo}</option>`).join('')}</select></div>
-                <div class="form-group"><label>Título</label><input id="f-ttulo" required value="${t?.titulo||''}"></div>
-                <div class="form-group"><label>Contenido</label><textarea id="f-cont" style="min-height:200px">${t?.contenido||''}</textarea></div>
-                <div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div>
-            </form>`);
-        setTimeout(() => App.setupEditor('f-cont'), 200);
-    },
-    
-    modalPaso(editId) {
-        const p = editId ? Store.pasos.find(x => x.id === editId) : null;
-        Modal.open(`<h2>${editId ? 'Editar' : 'Nuevo'} Paso</h2>
-            <form onsubmit="event.preventDefault();App.save('pasos',{tema_id:parseInt(document.getElementById('f-tema').value),descripcion:document.getElementById('f-descp').value,orden:${editId ? 'undefined' : Store.pasosTema.length}},${editId||'null'})">
-                <div class="form-group"><label>Tema</label><select id="f-tema" required>${Store.temas.map(t => `<option value="${t.id}" ${(p?.tema_id||Store.temaActual?.id)===t.id?'selected':''}>${t.titulo}</option>`).join('')}</select></div>
-                <div class="form-group"><label>Descripción</label><textarea id="f-descp" required>${p?.descripcion||''}</textarea></div>
-                <div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div>
-            </form>`);
-    },
-    
-    // --- EDITOR MARKDOWN ---
-    setupEditor(textareaId) {
-        const ta = document.getElementById(textareaId); if (!ta) return;
-        const w = document.createElement('div'); w.className = 'editor-wrapper';
-        ta.parentNode.insertBefore(w, ta);
-        w.innerHTML = `<div class="editor-toolbar">
-            <div class="tool-group"><button type="button" class="tool-btn" data-cmd="bold"><b>B</b></button><button type="button" class="tool-btn" data-cmd="italic"><i>I</i></button><button type="button" class="tool-btn" data-cmd="underline"><u>U</u></button></div>
-            <div class="tool-group"><button type="button" class="tool-btn tool-heading" data-cmd="h2">H2</button><button type="button" class="tool-btn tool-heading" data-cmd="h3">H3</button><button type="button" class="tool-btn tool-heading" data-cmd="h4">H4</button></div>
-            <div class="tool-group"><button type="button" class="tool-btn" data-cmd="ul">•≡</button><button type="button" class="tool-btn" data-cmd="ol">1≡</button></div>
-            <div class="tool-group"><button type="button" class="tool-btn" data-cmd="quote">❝</button><button type="button" class="tool-btn" data-cmd="hr">—</button></div>
-            <div class="tool-group"><button type="button" class="tool-btn" data-cmd="preview">👁️</button><button type="button" class="tool-btn" data-cmd="fullscreen">⛶</button><button type="button" class="tool-btn" data-cmd="help">❓</button></div>
-        </div>
-        <div class="editor-tabs"><button type="button" class="editor-tab active" data-tab="edit">✏️ Editar</button><button type="button" class="editor-tab" data-tab="preview">👁️ Vista previa</button></div>`;
-        const ed = document.createElement('textarea'); ed.className = 'editor-textarea'; ed.value = ta.value; ed.id = textareaId + '_ed';
-        const pre = document.createElement('div'); pre.className = 'editor-preview';
-        const sb = document.createElement('div'); sb.className = 'editor-statusbar';
-        sb.innerHTML = `<span>Markdown: **negrita** *cursiva* ## Título</span><span id="${textareaId}_count">${ta.value.length} caracteres</span>`;
-        w.appendChild(ed); w.appendChild(pre); w.appendChild(sb);
-        ta.style.display = 'none';
-        const upd = () => { ta.value = ed.value; sb.innerHTML = `<span>Markdown: **negrita** *cursiva* ## Título</span><span>${ed.value.length} caracteres · ${ed.value.trim()?ed.value.trim().split(/\s+/).length:0} palabras</span>`; };
-        ed.addEventListener('input', upd);
-        w.querySelectorAll('.tool-btn').forEach(b => b.addEventListener('click', function(e) {
-            e.preventDefault(); const cmd = this.dataset.cmd;
-            if (cmd === 'preview') { w.querySelector('[data-tab="preview"]')?.click(); return; }
-            if (cmd === 'fullscreen') { ed.classList.toggle('fullscreen'); document.body.style.overflow = ed.classList.contains('fullscreen') ? 'hidden' : ''; return; }
-            if (cmd === 'help') { alert('📝 **negrita** *cursiva* _subrayado_ ## Título ### H3 #### H4 - lista 1. numerada > cita --- línea'); return; }
-            const s = ed.selectionStart, e2 = ed.selectionEnd, v = ed.value, sel = v.substring(s, e2);
-            const tags = { bold: ['**','**'], italic: ['*','*'], underline: ['_','_'], h2: ['\n## ','\n'], h3: ['\n### ','\n'], h4: ['\n#### ','\n'], ul: ['\n- ','\n'], ol: ['\n1. ','\n'], quote: ['\n> ','\n'], hr: ['\n---\n',''] };
-            const [o, c] = tags[cmd] || ['',''];
-            if (cmd === 'ul' && sel) { ed.value = v.substring(0,s) + sel.split('\n').map(l => '- ' + l).join('\n') + v.substring(e2); } 
-            else if (cmd === 'ol' && sel) { ed.value = v.substring(0,s) + sel.split('\n').map((l,i) => (i+1) + '. ' + l).join('\n') + v.substring(e2); }
-            else { ed.value = v.substring(0,s) + o + (sel || 'texto') + c + v.substring(e2); }
-            ed.focus(); upd();
-        }));
-        w.querySelectorAll('.editor-tab').forEach(tab => tab.addEventListener('click', function() {
-            w.querySelectorAll('.editor-tab').forEach(x => x.classList.remove('active')); this.classList.add('active');
-            if (this.dataset.tab === 'edit') { ed.style.display = ''; pre.style.display = 'none'; }
-            else { ed.style.display = 'none'; pre.style.display = 'block'; pre.innerHTML = UI.parseMarkdown(ed.value); }
-        }));
-        ed.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey||e.metaKey) && {b:'bold',i:'italic',u:'underline'}[e.key]) {
-                e.preventDefault(); const cmd = {b:'bold',i:'italic',u:'underline'}[e.key];
-                const s = this.selectionStart, e2 = this.selectionEnd, v = this.value, sel = v.substring(s, e2);
-                const tags = { bold: ['**','**'], italic: ['*','*'], underline: ['_','_'] };
-                const [o, c] = tags[cmd];
-                this.value = v.substring(0,s) + o + (sel || 'texto') + c + v.substring(e2); upd();
-            }
-            if (e.key === 'Escape' && this.classList.contains('fullscreen')) { this.classList.remove('fullscreen'); document.body.style.overflow = ''; }
-        });
-    },
-    
-    // --- ESTUDIANTES ---
-    showEstudiantes() {
-        Modal.open(`<h2>👥 Estudiantes</h2>
-            <div style="margin-bottom:1rem"><button class="btn btn-primary btn-sm" onclick="App.modalEstudiante()">+ Nuevo Estudiante</button></div>
-            <div style="max-height:400px;overflow-y:auto">
-            ${Store.estudiantes.length === 0 ? '<p class="empty-state">No hay estudiantes.</p>' : 
-            `<table class="estudiantes-table"><thead><tr><th>Nombre</th><th>Email</th><th>Progreso</th><th>Acciones</th></tr></thead><tbody>
-            ${Store.estudiantes.map(e => {
-                const t = Store.pasos.length, c = Store.progreso.filter(p => p.estudiante_id === e.id && p.completado).length, pct = t > 0 ? Math.round(c/t*100) : 0;
-                return `<tr><td>${e.nombre} ${e.apellido}</td><td>${e.email||'-'}</td><td>${c}/${t} (${pct}%)</td>
-                    <td><button class="btn btn-warning btn-xs" onclick="App.modalEstudiante(${e.id})">✏️</button>
-                    <button class="btn btn-danger btn-xs" onclick="App.deleteEstudiante(${e.id})">🗑️</button></td></tr>`;
-            }).join('')}</tbody></table>`}
-            </div>
-            <div class="modal-actions"><button class="btn btn-secondary" onclick="Modal.close()">Cerrar</button></div>`);
-    },
-    modalEstudiante(editId) {
-        const e = editId ? Store.estudiantes.find(x => x.id === editId) : null;
-        Modal.open(`<h2>${editId?'Editar':'Nuevo'} Estudiante</h2>
-            <form onsubmit="event.preventDefault();App.saveEstudiante(${editId||'null'})">
-                <div class="form-row"><div class="form-group"><label>Nombre</label><input id="e-nom" required value="${e?.nombre||''}"></div>
-                <div class="form-group"><label>Apellido</label><input id="e-ape" required value="${e?.apellido||''}"></div></div>
-                <div class="form-group"><label>Email</label><input id="e-email" value="${e?.email||''}"></div>
-                <div class="form-group"><label>Teléfono</label><input id="e-tel" value="${e?.telefono||''}"></div>
-                <div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div>
-            </form>`);
-    },
-    async saveEstudiante(editId) {
-        const data = { nombre: document.getElementById('e-nom').value, apellido: document.getElementById('e-ape').value, email: document.getElementById('e-email').value, telefono: document.getElementById('e-tel').value };
-        try {
-            if (editId) await API.update('estudiantes', editId, data);
-            else await API.create('estudiantes', data);
-            await Store.load('estudiantes'); Modal.close(); this.showEstudiantes(); UI.toast(editId ? '✅ Actualizado' : '✅ Creado');
-        } catch (err) { UI.toast('Error: '+err.message, 'error'); }
-    },
-    async deleteEstudiante(id) {
-        if (!confirm('¿Eliminar este estudiante y su progreso?')) return;
-        try { await API.remove('estudiantes', id); await Store.load('estudiantes'); this.showEstudiantes(); UI.toast('Eliminado', 'error'); } 
-        catch (err) { UI.toast('Error: '+err.message, 'error'); }
-    }
+    showEstudiantes(){Modal.open(`<h2>👥 Estudiantes</h2><div style="margin-bottom:1rem"><button class="btn btn-primary btn-sm" onclick="App.modalEstudiante()">+ Nuevo Estudiante</button></div><div style="max-height:400px;overflow-y:auto">${Store.estudiantes.length===0?'<p class="empty-state">No hay estudiantes.</p>':`<table class="estudiantes-table"><thead><tr><th>Nombre</th><th>Email</th><th>Progreso</th><th>Acciones</th></tr></thead><tbody>${Store.estudiantes.map(e=>{const t=Store.pasos.length,c=Store.progreso.filter(p=>p.estudiante_id===e.id&&p.completado).length,pct=t>0?Math.round(c/t*100):0;return`<tr><td>${e.nombre} ${e.apellido}</td><td>${e.email||'-'}</td><td>${c}/${t} (${pct}%)</td><td><button class="btn btn-warning btn-xs" onclick="App.modalEstudiante(${e.id})">✏️</button><button class="btn btn-danger btn-xs" onclick="App.deleteEstudiante(${e.id})">🗑️</button></td></tr>`;}).join('')}</tbody></table>`}</div><div class="modal-actions"><button class="btn btn-secondary" onclick="Modal.close()">Cerrar</button></div>`);},
+    modalEstudiante(editId){const e=editId?Store.estudiantes.find(x=>x.id===editId):null;Modal.open(`<h2>${editId?'Editar':'Nuevo'} Estudiante</h2><form onsubmit="event.preventDefault();App.saveEstudiante(${editId||'null'})"><div class="form-row"><div class="form-group"><label>Nombre</label><input id="e-nom" required value="${e?.nombre||''}"></div><div class="form-group"><label>Apellido</label><input id="e-ape" required value="${e?.apellido||''}"></div></div><div class="form-group"><label>Email</label><input id="e-email" value="${e?.email||''}"></div><div class="form-group"><label>Teléfono</label><input id="e-tel" value="${e?.telefono||''}"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="Modal.close()">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form>`);},
+    async saveEstudiante(editId){const data={nombre:document.getElementById('e-nom').value,apellido:document.getElementById('e-ape').value,email:document.getElementById('e-email').value,telefono:document.getElementById('e-tel').value};try{if(editId)await API.update('estudiantes',editId,data);else await API.create('estudiantes',data);await Store.load('estudiantes');Modal.close();this.showEstudiantes();UI.toast(editId?'✅ Actualizado':'✅ Creado');}catch(err){UI.toast('Error: '+err.message,'error');}},
+    async deleteEstudiante(id){if(!confirm('¿Eliminar este estudiante y su progreso?'))return;try{await API.remove('estudiantes',id);await Store.load('estudiantes');this.showEstudiantes();UI.toast('Eliminado','error');}catch(err){UI.toast('Error: '+err.message,'error');}}
 };
 
-// ============================================================
-// SAFETY TIMEOUT (evita spinner infinito)
-// ============================================================
-setTimeout(() => {
-    const main = document.getElementById('main-content');
-    if (main && main.querySelector('.spinner')) {
-        main.innerHTML = '<div class="empty-state"><h2 style="color:var(--danger)">Tiempo de espera agotado</h2><p>Revisa la consola del navegador (F12) para ver errores.</p><p style="font-size:0.85rem;color:var(--text-light)">Asegúrate de que el proyecto Supabase esté activo.</p><button class="btn btn-primary" onclick="location.reload()" style="margin-top:1rem">Reintentar</button></div>';
-    }
-}, 8000);
+setTimeout(()=>{const main=document.getElementById('main-content');if(main&&main.querySelector('.spinner')){main.innerHTML='<div class="empty-state"><h2 style="color:var(--danger)">Tiempo de espera agotado</h2><p>Revisa la consola (F12) para ver errores.</p><button class="btn btn-primary" onclick="location.reload()" style="margin-top:1rem">Reintentar</button></div>';}},8000);
 
-// ============================================================
-// INIT
-// ============================================================
-document.addEventListener('DOMContentLoaded', () => App.init());
+document.addEventListener('DOMContentLoaded',()=>App.init());
 
 /*
 ╔══════════════════════════════════════════════════════════════╗
 ║  SEGURIDAD: EJECUTA ESTE SQL EN SUPABASE SQL EDITOR         ║
 ╚══════════════════════════════════════════════════════════════╝
-
--- 1. Habilita RLS en todas las tablas (si no lo está ya)
+-- 1. Habilita RLS en todas las tablas
 ALTER TABLE niveles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cursos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE temas ENABLE ROW LEVEL SECURITY;
 ALTER TABLE pasos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE estudiantes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE progreso ENABLE ROW LEVEL SECURITY;
-
--- 2. Políticas: contenido público (SELECT para anon y authenticated)
+-- 2. Políticas: SELECT público
 CREATE POLICY "niveles_select_public" ON niveles FOR SELECT USING (true);
 CREATE POLICY "cursos_select_public" ON cursos FOR SELECT USING (true);
 CREATE POLICY "temas_select_public" ON temas FOR SELECT USING (true);
 CREATE POLICY "pasos_select_public" ON pasos FOR SELECT USING (true);
-
--- 3. Políticas: escritura solo para usuarios autenticados (admin)
-CREATE POLICY "niveles_insert_admin" ON niveles FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "niveles_update_admin" ON niveles FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "niveles_delete_admin" ON niveles FOR DELETE USING (auth.role() = 'authenticated');
-
-CREATE POLICY "cursos_insert_admin" ON cursos FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "cursos_update_admin" ON cursos FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "cursos_delete_admin" ON cursos FOR DELETE USING (auth.role() = 'authenticated');
-
-CREATE POLICY "temas_insert_admin" ON temas FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "temas_update_admin" ON temas FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "temas_delete_admin" ON temas FOR DELETE USING (auth.role() = 'authenticated');
-
-CREATE POLICY "pasos_insert_admin" ON pasos FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "pasos_update_admin" ON pasos FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "pasos_delete_admin" ON pasos FOR DELETE USING (auth.role() = 'authenticated');
-
--- 4. Estudiantes: solo usuarios autenticados
-CREATE POLICY "estudiantes_select_admin" ON estudiantes FOR SELECT USING (auth.role() = 'authenticated');
-CREATE POLICY "estudiantes_insert_admin" ON estudiantes FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "estudiantes_update_admin" ON estudiantes FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "estudiantes_delete_admin" ON estudiantes FOR DELETE USING (auth.role() = 'authenticated');
-
--- 5. Progreso: autenticados pueden ver todo (o limita por estudiante si prefieres)
-CREATE POLICY "progreso_select_admin" ON progreso FOR SELECT USING (auth.role() = 'authenticated');
-CREATE POLICY "progreso_insert_admin" ON progreso FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "progreso_update_admin" ON progreso FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "progreso_delete_admin" ON progreso FOR DELETE USING (auth.role() = 'authenticated');
-
--- Opcional: crear el admin en Auth desde SQL (usa el panel Authentication > Users)
--- O desde la app: ve a "Acceso Admin" > "Crear cuenta"
+-- 3. Políticas: escritura solo auth
+CREATE POLICY "niveles_modify_admin" ON niveles FOR INSERT WITH CHECK (auth.role()='authenticated');
+CREATE POLICY "niveles_update_admin" ON niveles FOR UPDATE USING (auth.role()='authenticated');
+CREATE POLICY "niveles_delete_admin" ON niveles FOR DELETE USING (auth.role()='authenticated');
+CREATE POLICY "cursos_modify_admin" ON cursos FOR INSERT WITH CHECK (auth.role()='authenticated');
+CREATE POLICY "cursos_update_admin" ON cursos FOR UPDATE USING (auth.role()='authenticated');
+CREATE POLICY "cursos_delete_admin" ON cursos FOR DELETE USING (auth.role()='authenticated');
+CREATE POLICY "temas_modify_admin" ON temas FOR INSERT WITH CHECK (auth.role()='authenticated');
+CREATE POLICY "temas_update_admin" ON temas FOR UPDATE USING (auth.role()='authenticated');
+CREATE POLICY "temas_delete_admin" ON temas FOR DELETE USING (auth.role()='authenticated');
+CREATE POLICY "pasos_modify_admin" ON pasos FOR INSERT WITH CHECK (auth.role()='authenticated');
+CREATE POLICY "pasos_update_admin" ON pasos FOR UPDATE USING (auth.role()='authenticated');
+CREATE POLICY "pasos_delete_admin" ON pasos FOR DELETE USING (auth.role()='authenticated');
+CREATE POLICY "estudiantes_select_admin" ON estudiantes FOR SELECT USING (auth.role()='authenticated');
+CREATE POLICY "estudiantes_modify_admin" ON estudiantes FOR INSERT WITH CHECK (auth.role()='authenticated');
+CREATE POLICY "estudiantes_update_admin" ON estudiantes FOR UPDATE USING (auth.role()='authenticated');
+CREATE POLICY "estudiantes_delete_admin" ON estudiantes FOR DELETE USING (auth.role()='authenticated');
+CREATE POLICY "progreso_select_admin" ON progreso FOR SELECT USING (auth.role()='authenticated');
+CREATE POLICY "progreso_modify_admin" ON progreso FOR INSERT WITH CHECK (auth.role()='authenticated');
+CREATE POLICY "progreso_update_admin" ON progreso FOR UPDATE USING (auth.role()='authenticated');
+CREATE POLICY "progreso_delete_admin" ON progreso FOR DELETE USING (auth.role()='authenticated');
 */
 </script>
 </body>
