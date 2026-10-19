@@ -24,16 +24,24 @@ El progreso se guarda **en el teléfono**; si un día hay internet, se podrá si
 
 ```bash
 cd ~/Descargas
-unzip ~/Descargas/academia-estudiante-v1.2.zip   # (o donde lo hayas guardado)
+unzip ~/Descargas/academia-estudiante-v1.zip   # (o donde lo hayas guardado)
 cd academia-estudiante
 
 # 1. Crea el repositorio en GitHub (nombre sugerido: academia-estudiante)
 #    https://github.com/new  →  LemGil/academia-estudiante  →  Create repository
+#    (Si prefieres reutilizar el repo viejo LemGil/academia —la versión web
+#    de matrícula que ya no siguen—, clónalo en vez de crear uno nuevo,
+#    quita los archivos viejos y sigue desde el paso 2:
+#      git clone https://github.com/LemGil/academia.git
+#      cd academia && git rm -q index.html logo.png logo2.png README.md .gitignore
+#      cp -a ~/Descargas/academia-estudiante/. .
+#    Nota: si ese repo tenía GitHub Pages activo, la página vieja dejará de
+#    funcionar; se desactiva en Settings → Pages.)
 
 # 2. Súbelo
 git init
 git add .
-git commit -m "Academia del Espíritu v1.2.0 — app del estudiante"
+git commit -m "Academia del Espíritu v1.0.0 — app del estudiante"
 git branch -M main
 git remote add origin https://github.com/LemGil/academia-estudiante.git
 git push -u origin main
@@ -55,15 +63,17 @@ git push -u origin main
 # 1. Actualiza los documentos .md de las academias (o agrega el nuevo)
 # 2. Reempaqueta el contenido:
 npm run contenido
-# 3. Sube la versión en package.json (ej: 1.0.0 → 1.1.0)
-#    y también versionName en android/app/build.gradle
+# 3. Sube la versión en package.json (ej: 1.2.0 → 1.3.0)
+#    y también versionName/versionCode en android/app/build.gradle
 # 4. Commit + push + corre el workflow de nuevo
 ```
 
 El script `scripts/empaquetar-contenido.py` lee los `.md` y genera
 `src/contenido/academias.json`, que es lo que viaja dentro de la APK.
-Si un documento cambia de nombre o agregas una academia nueva,
-edita la lista `ACADEMIAS` al inicio de ese script.
+Busca los `.md` en la carpeta `contenido-fuente/` del repo
+(archivos `a1.md` … `a13.md`, `camino-fe.md`); si no la encuentra,
+usa las rutas de la máquina de Leo. Si no hay fuentes, no toca el JSON
+y el workflow sigue sin fallar.
 
 ## Notas técnicas
 

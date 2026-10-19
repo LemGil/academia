@@ -5,48 +5,69 @@
 #
 # Uso:  npm run contenido
 #       (o: python3 scripts/empaquetar-contenido.py)
+#
+# Dónde busca los .md (en orden):
+#   1. Carpeta "contenido-fuente/" en la raíz del repo, con esta estructura:
+#        contenido-fuente/a1.md, a2.md, ... a13.md, camino-fe.md
+#   2. Rutas de la máquina de Leo (cuando él regenera el paquete).
+#
+# Si NO encuentra ninguna fuente, no toca el JSON existente y termina bien
+# (así el workflow de GitHub nunca falla por esto).
+#
 # Cuando haya temas nuevos: actualizar los .md y correr de nuevo, luego
 # subir version en package.json y compilar la APK.
 
 import json
+import os
 import re
 from datetime import date
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
-YOUR_FILES = Path("/home/hatch/workspace/your_files")
-GOALS = Path("/home/hatch/workspace/goals")
+FUENTE_REPO = BASE / "contenido-fuente"
+YOUR_FILES = Path(os.environ.get("ACADEMIA_YOUR_FILES", "/home/hatch/workspace/your_files"))
+GOALS = Path(os.environ.get("ACADEMIA_GOALS", "/home/hatch/workspace/goals"))
 
+# (id, número, título, archivo en contenido-fuente/, ruta alternativa en máquina de Leo)
 ACADEMIAS = [
-    ("a1", "Nº 1", "Descodificando la Luz",
+    ("a1", "Nº 1", "Descodificando la Luz", "a1.md",
      YOUR_FILES / "academia-espiritu-a1/Academia del Espíritu — Códigos A_1.md"),
-    ("a2", "Nº 2", "Descodificando el Plan Eterno",
+    ("a2", "Nº 2", "Descodificando el Plan Eterno", "a2.md",
      YOUR_FILES / "academia-espiritu-a2/Academia del Espíritu — Códigos A_2.md"),
-    ("a3", "Nº 3", "Descodificando la Creación",
+    ("a3", "Nº 3", "Descodificando la Creación", "a3.md",
      YOUR_FILES / "academia-espiritu-a3/Academia del Espíritu — Códigos A_3.md"),
-    ("a4", "Nº 4", "Descodificando el Conocer",
+    ("a4", "Nº 4", "Descodificando el Conocer", "a4.md",
      YOUR_FILES / "academia-espiritu-a4/Academia del Espíritu — Códigos A_4.md"),
-    ("a5", "Nº 5", "Descodificando la Eternidad",
+    ("a5", "Nº 5", "Descodificando la Eternidad", "a5.md",
      YOUR_FILES / "academia-espiritu-a5/Academia del Espíritu — Códigos A_5.md"),
-    ("a6", "Nº 6", "Descodificando la Nueva Creación",
+    ("a6", "Nº 6", "Descodificando la Nueva Creación", "a6.md",
      YOUR_FILES / "academia-espiritu-a6/Academia del Espíritu — Códigos A_6.md"),
-    ("a7", "Nº 7", "Descodificando la Fe",
+    ("a7", "Nº 7", "Descodificando la Fe", "a7.md",
      YOUR_FILES / "academia-espiritu-a7/Academia del Espíritu — Códigos A_7.md"),
-    ("a8", "Nº 8", "Descodificando la Palabra",
+    ("a8", "Nº 8", "Descodificando la Palabra", "a8.md",
      YOUR_FILES / "academia-espiritu-a8/Academia del Espíritu — Códigos A_8.md"),
-    ("a9", "Nº 9", "Descodificando la Plenitud",
+    ("a9", "Nº 9", "Descodificando la Plenitud", "a9.md",
      YOUR_FILES / "academia-espiritu-a9/Academia del Espíritu — Códigos A_9.md"),
-    ("a10", "Nº 10", "Descodificando el Vivir en Cristo",
+    ("a10", "Nº 10", "Descodificando el Vivir en Cristo", "a10.md",
      YOUR_FILES / "academia-espiritu-a10/Academia del Espíritu — Códigos A_10.md"),
-    ("a11", "Nº 11", "Descodificando el Nuevo Retoño",
+    ("a11", "Nº 11", "Descodificando el Nuevo Retoño", "a11.md",
      YOUR_FILES / "academia-espiritu-a11/Academia del Espíritu — Códigos A_11.md"),
-    ("a12", "Nº 12", "Descodificando la Salvación",
+    ("a12", "Nº 12", "Descodificando la Salvación", "a12.md",
      YOUR_FILES / "descodificando-la-salvacion/Academia del Espíritu — Códigos A_12.md"),
-    ("a13", "Nº 13", "Descodificando el Reposo",
+    ("a13", "Nº 13", "Descodificando el Reposo", "a13.md",
      YOUR_FILES / "academia-espiritu-reposo/Academia del Espíritu — Códigos Reposo.md"),
-    ("camino-fe", "Serie", "Descodificando el camino de la Fe",
+    ("camino-fe", "Serie", "Descodificando el camino de la Fe", "camino-fe.md",
      GOALS / "studies-for-the-future-academy-descodificando-la-fe/files/descodificando-la-fe/academia/Academia del Espíritu — Descodificando el camino de la Fe.md"),
 ]
+
+
+def resolver_fuente(nombre_repo: str, alternativa: Path) -> Path | None:
+    candidato = FUENTE_REPO / nombre_repo
+    if candidato.exists():
+        return candidato
+    if alternativa.exists():
+        return alternativa
+    return None
 
 
 def limpiar(texto: str) -> str:
@@ -69,9 +90,6 @@ def limpiar(texto: str) -> str:
 
 
 def parsear_academia(aid: str, numero: str, titulo: str, ruta: Path) -> dict:
-    if not ruta.exists():
-        print(f"  AVISO: no existe {ruta}, se omite")
-        return None
     texto = limpiar(ruta.read_text(encoding="utf-8"))
 
     # Divide por encabezados de código
@@ -116,11 +134,19 @@ def parsear_academia(aid: str, numero: str, titulo: str, ruta: Path) -> dict:
 
 def main():
     print("Empaquetando enseñanzas...")
+    destino = BASE / "src/contenido/academias.json"
     academias = []
-    for aid, numero, titulo, ruta in ACADEMIAS:
-        a = parsear_academia(aid, numero, titulo, ruta)
-        if a:
-            academias.append(a)
+    for aid, numero, titulo, nombre_repo, alternativa in ACADEMIAS:
+        ruta = resolver_fuente(nombre_repo, alternativa)
+        if not ruta:
+            print(f"  AVISO: no se encontró fuente para {numero} {titulo}, se omite")
+            continue
+        academias.append(parsear_academia(aid, numero, titulo, ruta))
+
+    if not academias:
+        print("No se encontró ninguna fuente: se conserva el JSON existente.")
+        print(f"OK (sin cambios): {destino}")
+        return
 
     total_codigos = sum(len(a["codigos"]) for a in academias)
     paquete = {
@@ -129,8 +155,6 @@ def main():
         "nota": "Enseñanzas incluidas en la APK. Funciona sin internet.",
         "academias": academias,
     }
-    destino = BASE / "src/contenido/academias.json"
-    destino.parent.mkdir(parents=True, exist_ok=True)
     destino.write_text(json.dumps(paquete, ensure_ascii=False, indent=1), encoding="utf-8")
     kb = destino.stat().st_size // 1024
     print(f"OK: {len(academias)} academias, {total_codigos} códigos -> {destino} ({kb} KB)")
