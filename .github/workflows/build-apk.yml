@@ -1,0 +1,56 @@
+# Compila la APK de Academia del Espíritu (estudiante) en GitHub.
+# Uso: pestaña Actions → "Construir APK Academia del Espíritu" → Run workflow.
+# Al terminar, la APK queda en "Artifacts" de la corrida para descargar
+# desde la PC o desde el móvil e instalarla / pasarla por Bluetooth/archivo.
+name: Construir APK Academia del Espíritu
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'academia-v*'
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Preparar Java (para Android)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Instalar dependencias
+        run: npm ci || npm install
+
+      - name: Empaquetar enseñanzas
+        run: npm run contenido
+
+      - name: Compilar la web (Capacitor)
+        env:
+          BUILD_TARGET: capacitor
+        run: npm run build:capacitor
+
+      - name: Sincronizar Capacitor
+        run: npx cap sync android
+
+      - name: Compilar la APK (debug)
+        working-directory: android
+        run: ./gradlew assembleDebug
+
+      - name: Subir la APK como artefacto descargable
+        uses: actions/upload-artifact@v4
+        with:
+          # El número de corrida distingue cada descarga (antes todas se
+          # llamaban igual y era fácil instalar una APK vieja sin notarlo).
+          name: Academia-Espiritu-APK-${{ github.run_number }}
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

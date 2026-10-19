@@ -1,0 +1,3288 @@
+{
+ "id": "nt-ano",
+ "nombre": "El Nuevo Testamento en un año",
+ "descripcion": "Los 27 libros del Nuevo Testamento en 365 días, a ritmo suave.",
+ "carga": "~1 capítulo diario",
+ "dias": [
+  {
+   "dia": 1,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 2,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 3,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 4,
+   "lecturas": []
+  },
+  {
+   "dia": 5,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 6,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 7,
+   "lecturas": []
+  },
+  {
+   "dia": 8,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 9,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 7,
+     "capFin": 7
+    }
+   ]
+  },
+  {
+   "dia": 10,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 8,
+     "capFin": 8
+    }
+   ]
+  },
+  {
+   "dia": 11,
+   "lecturas": []
+  },
+  {
+   "dia": 12,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 9,
+     "capFin": 9
+    }
+   ]
+  },
+  {
+   "dia": 13,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 10,
+     "capFin": 10
+    }
+   ]
+  },
+  {
+   "dia": 14,
+   "lecturas": []
+  },
+  {
+   "dia": 15,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 11,
+     "capFin": 11
+    }
+   ]
+  },
+  {
+   "dia": 16,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 12,
+     "capFin": 12
+    }
+   ]
+  },
+  {
+   "dia": 17,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 13,
+     "capFin": 13
+    }
+   ]
+  },
+  {
+   "dia": 18,
+   "lecturas": []
+  },
+  {
+   "dia": 19,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 14,
+     "capFin": 14
+    }
+   ]
+  },
+  {
+   "dia": 20,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 15,
+     "capFin": 15
+    }
+   ]
+  },
+  {
+   "dia": 21,
+   "lecturas": []
+  },
+  {
+   "dia": 22,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 16,
+     "capFin": 16
+    }
+   ]
+  },
+  {
+   "dia": 23,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 17,
+     "capFin": 17
+    }
+   ]
+  },
+  {
+   "dia": 24,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 18,
+     "capFin": 18
+    }
+   ]
+  },
+  {
+   "dia": 25,
+   "lecturas": []
+  },
+  {
+   "dia": 26,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 19,
+     "capFin": 19
+    }
+   ]
+  },
+  {
+   "dia": 27,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 20,
+     "capFin": 20
+    }
+   ]
+  },
+  {
+   "dia": 28,
+   "lecturas": []
+  },
+  {
+   "dia": 29,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 21,
+     "capFin": 21
+    }
+   ]
+  },
+  {
+   "dia": 30,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 22,
+     "capFin": 22
+    }
+   ]
+  },
+  {
+   "dia": 31,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 23,
+     "capFin": 23
+    }
+   ]
+  },
+  {
+   "dia": 32,
+   "lecturas": []
+  },
+  {
+   "dia": 33,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 24,
+     "capFin": 24
+    }
+   ]
+  },
+  {
+   "dia": 34,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 25,
+     "capFin": 25
+    }
+   ]
+  },
+  {
+   "dia": 35,
+   "lecturas": []
+  },
+  {
+   "dia": 36,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 26,
+     "capFin": 26
+    }
+   ]
+  },
+  {
+   "dia": 37,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 27,
+     "capFin": 27
+    }
+   ]
+  },
+  {
+   "dia": 38,
+   "lecturas": [
+    {
+     "libro": "MAT",
+     "nombreLibro": "Mateo",
+     "capInicio": 28,
+     "capFin": 28
+    }
+   ]
+  },
+  {
+   "dia": 39,
+   "lecturas": []
+  },
+  {
+   "dia": 40,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 41,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 42,
+   "lecturas": []
+  },
+  {
+   "dia": 43,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 44,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 45,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 46,
+   "lecturas": []
+  },
+  {
+   "dia": 47,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 48,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 7,
+     "capFin": 7
+    }
+   ]
+  },
+  {
+   "dia": 49,
+   "lecturas": []
+  },
+  {
+   "dia": 50,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 8,
+     "capFin": 8
+    }
+   ]
+  },
+  {
+   "dia": 51,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 9,
+     "capFin": 9
+    }
+   ]
+  },
+  {
+   "dia": 52,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 10,
+     "capFin": 10
+    }
+   ]
+  },
+  {
+   "dia": 53,
+   "lecturas": []
+  },
+  {
+   "dia": 54,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 11,
+     "capFin": 11
+    }
+   ]
+  },
+  {
+   "dia": 55,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 12,
+     "capFin": 12
+    }
+   ]
+  },
+  {
+   "dia": 56,
+   "lecturas": []
+  },
+  {
+   "dia": 57,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 13,
+     "capFin": 13
+    }
+   ]
+  },
+  {
+   "dia": 58,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 14,
+     "capFin": 14
+    }
+   ]
+  },
+  {
+   "dia": 59,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 15,
+     "capFin": 15
+    }
+   ]
+  },
+  {
+   "dia": 60,
+   "lecturas": []
+  },
+  {
+   "dia": 61,
+   "lecturas": [
+    {
+     "libro": "MRK",
+     "nombreLibro": "Marcos",
+     "capInicio": 16,
+     "capFin": 16
+    }
+   ]
+  },
+  {
+   "dia": 62,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 63,
+   "lecturas": []
+  },
+  {
+   "dia": 64,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 65,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 66,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 67,
+   "lecturas": []
+  },
+  {
+   "dia": 68,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 69,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 70,
+   "lecturas": []
+  },
+  {
+   "dia": 71,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 7,
+     "capFin": 7
+    }
+   ]
+  },
+  {
+   "dia": 72,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 8,
+     "capFin": 8
+    }
+   ]
+  },
+  {
+   "dia": 73,
+   "lecturas": []
+  },
+  {
+   "dia": 74,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 9,
+     "capFin": 9
+    }
+   ]
+  },
+  {
+   "dia": 75,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 10,
+     "capFin": 10
+    }
+   ]
+  },
+  {
+   "dia": 76,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 11,
+     "capFin": 11
+    }
+   ]
+  },
+  {
+   "dia": 77,
+   "lecturas": []
+  },
+  {
+   "dia": 78,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 12,
+     "capFin": 12
+    }
+   ]
+  },
+  {
+   "dia": 79,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 13,
+     "capFin": 13
+    }
+   ]
+  },
+  {
+   "dia": 80,
+   "lecturas": []
+  },
+  {
+   "dia": 81,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 14,
+     "capFin": 14
+    }
+   ]
+  },
+  {
+   "dia": 82,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 15,
+     "capFin": 15
+    }
+   ]
+  },
+  {
+   "dia": 83,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 16,
+     "capFin": 16
+    }
+   ]
+  },
+  {
+   "dia": 84,
+   "lecturas": []
+  },
+  {
+   "dia": 85,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 17,
+     "capFin": 17
+    }
+   ]
+  },
+  {
+   "dia": 86,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 18,
+     "capFin": 18
+    }
+   ]
+  },
+  {
+   "dia": 87,
+   "lecturas": []
+  },
+  {
+   "dia": 88,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 19,
+     "capFin": 19
+    }
+   ]
+  },
+  {
+   "dia": 89,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 20,
+     "capFin": 20
+    }
+   ]
+  },
+  {
+   "dia": 90,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 21,
+     "capFin": 21
+    }
+   ]
+  },
+  {
+   "dia": 91,
+   "lecturas": []
+  },
+  {
+   "dia": 92,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 22,
+     "capFin": 22
+    }
+   ]
+  },
+  {
+   "dia": 93,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 23,
+     "capFin": 23
+    }
+   ]
+  },
+  {
+   "dia": 94,
+   "lecturas": []
+  },
+  {
+   "dia": 95,
+   "lecturas": [
+    {
+     "libro": "LUK",
+     "nombreLibro": "Lucas",
+     "capInicio": 24,
+     "capFin": 24
+    }
+   ]
+  },
+  {
+   "dia": 96,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 97,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 98,
+   "lecturas": []
+  },
+  {
+   "dia": 99,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 100,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 101,
+   "lecturas": []
+  },
+  {
+   "dia": 102,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 103,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 104,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 7,
+     "capFin": 7
+    }
+   ]
+  },
+  {
+   "dia": 105,
+   "lecturas": []
+  },
+  {
+   "dia": 106,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 8,
+     "capFin": 8
+    }
+   ]
+  },
+  {
+   "dia": 107,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 9,
+     "capFin": 9
+    }
+   ]
+  },
+  {
+   "dia": 108,
+   "lecturas": []
+  },
+  {
+   "dia": 109,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 10,
+     "capFin": 10
+    }
+   ]
+  },
+  {
+   "dia": 110,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 11,
+     "capFin": 11
+    }
+   ]
+  },
+  {
+   "dia": 111,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 12,
+     "capFin": 12
+    }
+   ]
+  },
+  {
+   "dia": 112,
+   "lecturas": []
+  },
+  {
+   "dia": 113,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 13,
+     "capFin": 13
+    }
+   ]
+  },
+  {
+   "dia": 114,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 14,
+     "capFin": 14
+    }
+   ]
+  },
+  {
+   "dia": 115,
+   "lecturas": []
+  },
+  {
+   "dia": 116,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 15,
+     "capFin": 15
+    }
+   ]
+  },
+  {
+   "dia": 117,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 16,
+     "capFin": 16
+    }
+   ]
+  },
+  {
+   "dia": 118,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 17,
+     "capFin": 17
+    }
+   ]
+  },
+  {
+   "dia": 119,
+   "lecturas": []
+  },
+  {
+   "dia": 120,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 18,
+     "capFin": 18
+    }
+   ]
+  },
+  {
+   "dia": 121,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 19,
+     "capFin": 19
+    }
+   ]
+  },
+  {
+   "dia": 122,
+   "lecturas": []
+  },
+  {
+   "dia": 123,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 20,
+     "capFin": 20
+    }
+   ]
+  },
+  {
+   "dia": 124,
+   "lecturas": [
+    {
+     "libro": "JHN",
+     "nombreLibro": "Juan",
+     "capInicio": 21,
+     "capFin": 21
+    }
+   ]
+  },
+  {
+   "dia": 125,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 126,
+   "lecturas": []
+  },
+  {
+   "dia": 127,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 128,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 129,
+   "lecturas": []
+  },
+  {
+   "dia": 130,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 131,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 132,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 133,
+   "lecturas": []
+  },
+  {
+   "dia": 134,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 7,
+     "capFin": 7
+    }
+   ]
+  },
+  {
+   "dia": 135,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 8,
+     "capFin": 8
+    }
+   ]
+  },
+  {
+   "dia": 136,
+   "lecturas": []
+  },
+  {
+   "dia": 137,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 9,
+     "capFin": 9
+    }
+   ]
+  },
+  {
+   "dia": 138,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 10,
+     "capFin": 10
+    }
+   ]
+  },
+  {
+   "dia": 139,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 11,
+     "capFin": 11
+    }
+   ]
+  },
+  {
+   "dia": 140,
+   "lecturas": []
+  },
+  {
+   "dia": 141,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 12,
+     "capFin": 12
+    }
+   ]
+  },
+  {
+   "dia": 142,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 13,
+     "capFin": 13
+    }
+   ]
+  },
+  {
+   "dia": 143,
+   "lecturas": []
+  },
+  {
+   "dia": 144,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 14,
+     "capFin": 14
+    }
+   ]
+  },
+  {
+   "dia": 145,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 15,
+     "capFin": 15
+    }
+   ]
+  },
+  {
+   "dia": 146,
+   "lecturas": []
+  },
+  {
+   "dia": 147,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 16,
+     "capFin": 16
+    }
+   ]
+  },
+  {
+   "dia": 148,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 17,
+     "capFin": 17
+    }
+   ]
+  },
+  {
+   "dia": 149,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 18,
+     "capFin": 18
+    }
+   ]
+  },
+  {
+   "dia": 150,
+   "lecturas": []
+  },
+  {
+   "dia": 151,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 19,
+     "capFin": 19
+    }
+   ]
+  },
+  {
+   "dia": 152,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 20,
+     "capFin": 20
+    }
+   ]
+  },
+  {
+   "dia": 153,
+   "lecturas": []
+  },
+  {
+   "dia": 154,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 21,
+     "capFin": 21
+    }
+   ]
+  },
+  {
+   "dia": 155,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 22,
+     "capFin": 22
+    }
+   ]
+  },
+  {
+   "dia": 156,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 23,
+     "capFin": 23
+    }
+   ]
+  },
+  {
+   "dia": 157,
+   "lecturas": []
+  },
+  {
+   "dia": 158,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 24,
+     "capFin": 24
+    }
+   ]
+  },
+  {
+   "dia": 159,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 25,
+     "capFin": 25
+    }
+   ]
+  },
+  {
+   "dia": 160,
+   "lecturas": []
+  },
+  {
+   "dia": 161,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 26,
+     "capFin": 26
+    }
+   ]
+  },
+  {
+   "dia": 162,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 27,
+     "capFin": 27
+    }
+   ]
+  },
+  {
+   "dia": 163,
+   "lecturas": [
+    {
+     "libro": "ACT",
+     "nombreLibro": "Hechos",
+     "capInicio": 28,
+     "capFin": 28
+    }
+   ]
+  },
+  {
+   "dia": 164,
+   "lecturas": []
+  },
+  {
+   "dia": 165,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 166,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 167,
+   "lecturas": []
+  },
+  {
+   "dia": 168,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 169,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 170,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 171,
+   "lecturas": []
+  },
+  {
+   "dia": 172,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 173,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 7,
+     "capFin": 7
+    }
+   ]
+  },
+  {
+   "dia": 174,
+   "lecturas": []
+  },
+  {
+   "dia": 175,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 8,
+     "capFin": 8
+    }
+   ]
+  },
+  {
+   "dia": 176,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 9,
+     "capFin": 9
+    }
+   ]
+  },
+  {
+   "dia": 177,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 10,
+     "capFin": 10
+    }
+   ]
+  },
+  {
+   "dia": 178,
+   "lecturas": []
+  },
+  {
+   "dia": 179,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 11,
+     "capFin": 11
+    }
+   ]
+  },
+  {
+   "dia": 180,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 12,
+     "capFin": 12
+    }
+   ]
+  },
+  {
+   "dia": 181,
+   "lecturas": []
+  },
+  {
+   "dia": 182,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 13,
+     "capFin": 13
+    }
+   ]
+  },
+  {
+   "dia": 183,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 14,
+     "capFin": 14
+    }
+   ]
+  },
+  {
+   "dia": 184,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 15,
+     "capFin": 15
+    }
+   ]
+  },
+  {
+   "dia": 185,
+   "lecturas": []
+  },
+  {
+   "dia": 186,
+   "lecturas": [
+    {
+     "libro": "ROM",
+     "nombreLibro": "Romanos",
+     "capInicio": 16,
+     "capFin": 16
+    }
+   ]
+  },
+  {
+   "dia": 187,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 188,
+   "lecturas": []
+  },
+  {
+   "dia": 189,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 190,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 191,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 192,
+   "lecturas": []
+  },
+  {
+   "dia": 193,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 194,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 195,
+   "lecturas": []
+  },
+  {
+   "dia": 196,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 7,
+     "capFin": 7
+    }
+   ]
+  },
+  {
+   "dia": 197,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 8,
+     "capFin": 8
+    }
+   ]
+  },
+  {
+   "dia": 198,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 9,
+     "capFin": 9
+    }
+   ]
+  },
+  {
+   "dia": 199,
+   "lecturas": []
+  },
+  {
+   "dia": 200,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 10,
+     "capFin": 10
+    }
+   ]
+  },
+  {
+   "dia": 201,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 11,
+     "capFin": 11
+    }
+   ]
+  },
+  {
+   "dia": 202,
+   "lecturas": []
+  },
+  {
+   "dia": 203,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 12,
+     "capFin": 12
+    }
+   ]
+  },
+  {
+   "dia": 204,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 13,
+     "capFin": 13
+    }
+   ]
+  },
+  {
+   "dia": 205,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 14,
+     "capFin": 14
+    }
+   ]
+  },
+  {
+   "dia": 206,
+   "lecturas": []
+  },
+  {
+   "dia": 207,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 15,
+     "capFin": 15
+    }
+   ]
+  },
+  {
+   "dia": 208,
+   "lecturas": [
+    {
+     "libro": "1CO",
+     "nombreLibro": "1 Corintios",
+     "capInicio": 16,
+     "capFin": 16
+    }
+   ]
+  },
+  {
+   "dia": 209,
+   "lecturas": []
+  },
+  {
+   "dia": 210,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 211,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 212,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 213,
+   "lecturas": []
+  },
+  {
+   "dia": 214,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 215,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 216,
+   "lecturas": []
+  },
+  {
+   "dia": 217,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 218,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 7,
+     "capFin": 7
+    }
+   ]
+  },
+  {
+   "dia": 219,
+   "lecturas": []
+  },
+  {
+   "dia": 220,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 8,
+     "capFin": 8
+    }
+   ]
+  },
+  {
+   "dia": 221,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 9,
+     "capFin": 9
+    }
+   ]
+  },
+  {
+   "dia": 222,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 10,
+     "capFin": 10
+    }
+   ]
+  },
+  {
+   "dia": 223,
+   "lecturas": []
+  },
+  {
+   "dia": 224,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 11,
+     "capFin": 11
+    }
+   ]
+  },
+  {
+   "dia": 225,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 12,
+     "capFin": 12
+    }
+   ]
+  },
+  {
+   "dia": 226,
+   "lecturas": []
+  },
+  {
+   "dia": 227,
+   "lecturas": [
+    {
+     "libro": "2CO",
+     "nombreLibro": "2 Corintios",
+     "capInicio": 13,
+     "capFin": 13
+    }
+   ]
+  },
+  {
+   "dia": 228,
+   "lecturas": [
+    {
+     "libro": "GAL",
+     "nombreLibro": "Gálatas",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 229,
+   "lecturas": [
+    {
+     "libro": "GAL",
+     "nombreLibro": "Gálatas",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 230,
+   "lecturas": []
+  },
+  {
+   "dia": 231,
+   "lecturas": [
+    {
+     "libro": "GAL",
+     "nombreLibro": "Gálatas",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 232,
+   "lecturas": [
+    {
+     "libro": "GAL",
+     "nombreLibro": "Gálatas",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 233,
+   "lecturas": []
+  },
+  {
+   "dia": 234,
+   "lecturas": [
+    {
+     "libro": "GAL",
+     "nombreLibro": "Gálatas",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 235,
+   "lecturas": [
+    {
+     "libro": "GAL",
+     "nombreLibro": "Gálatas",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 236,
+   "lecturas": [
+    {
+     "libro": "EPH",
+     "nombreLibro": "Efesios",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 237,
+   "lecturas": []
+  },
+  {
+   "dia": 238,
+   "lecturas": [
+    {
+     "libro": "EPH",
+     "nombreLibro": "Efesios",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 239,
+   "lecturas": [
+    {
+     "libro": "EPH",
+     "nombreLibro": "Efesios",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 240,
+   "lecturas": []
+  },
+  {
+   "dia": 241,
+   "lecturas": [
+    {
+     "libro": "EPH",
+     "nombreLibro": "Efesios",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 242,
+   "lecturas": [
+    {
+     "libro": "EPH",
+     "nombreLibro": "Efesios",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 243,
+   "lecturas": [
+    {
+     "libro": "EPH",
+     "nombreLibro": "Efesios",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 244,
+   "lecturas": []
+  },
+  {
+   "dia": 245,
+   "lecturas": [
+    {
+     "libro": "PHP",
+     "nombreLibro": "Filipenses",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 246,
+   "lecturas": [
+    {
+     "libro": "PHP",
+     "nombreLibro": "Filipenses",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 247,
+   "lecturas": []
+  },
+  {
+   "dia": 248,
+   "lecturas": [
+    {
+     "libro": "PHP",
+     "nombreLibro": "Filipenses",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 249,
+   "lecturas": [
+    {
+     "libro": "PHP",
+     "nombreLibro": "Filipenses",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 250,
+   "lecturas": [
+    {
+     "libro": "COL",
+     "nombreLibro": "Colosenses",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 251,
+   "lecturas": []
+  },
+  {
+   "dia": 252,
+   "lecturas": [
+    {
+     "libro": "COL",
+     "nombreLibro": "Colosenses",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 253,
+   "lecturas": [
+    {
+     "libro": "COL",
+     "nombreLibro": "Colosenses",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 254,
+   "lecturas": []
+  },
+  {
+   "dia": 255,
+   "lecturas": [
+    {
+     "libro": "COL",
+     "nombreLibro": "Colosenses",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 256,
+   "lecturas": [
+    {
+     "libro": "1TH",
+     "nombreLibro": "1 Tesalonicenses",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 257,
+   "lecturas": [
+    {
+     "libro": "1TH",
+     "nombreLibro": "1 Tesalonicenses",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 258,
+   "lecturas": []
+  },
+  {
+   "dia": 259,
+   "lecturas": [
+    {
+     "libro": "1TH",
+     "nombreLibro": "1 Tesalonicenses",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 260,
+   "lecturas": [
+    {
+     "libro": "1TH",
+     "nombreLibro": "1 Tesalonicenses",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 261,
+   "lecturas": []
+  },
+  {
+   "dia": 262,
+   "lecturas": [
+    {
+     "libro": "1TH",
+     "nombreLibro": "1 Tesalonicenses",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 263,
+   "lecturas": [
+    {
+     "libro": "2TH",
+     "nombreLibro": "2 Tesalonicenses",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 264,
+   "lecturas": [
+    {
+     "libro": "2TH",
+     "nombreLibro": "2 Tesalonicenses",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 265,
+   "lecturas": []
+  },
+  {
+   "dia": 266,
+   "lecturas": [
+    {
+     "libro": "2TH",
+     "nombreLibro": "2 Tesalonicenses",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 267,
+   "lecturas": [
+    {
+     "libro": "1TI",
+     "nombreLibro": "1 Timoteo",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 268,
+   "lecturas": []
+  },
+  {
+   "dia": 269,
+   "lecturas": [
+    {
+     "libro": "1TI",
+     "nombreLibro": "1 Timoteo",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 270,
+   "lecturas": [
+    {
+     "libro": "1TI",
+     "nombreLibro": "1 Timoteo",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 271,
+   "lecturas": [
+    {
+     "libro": "1TI",
+     "nombreLibro": "1 Timoteo",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 272,
+   "lecturas": []
+  },
+  {
+   "dia": 273,
+   "lecturas": [
+    {
+     "libro": "1TI",
+     "nombreLibro": "1 Timoteo",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 274,
+   "lecturas": [
+    {
+     "libro": "1TI",
+     "nombreLibro": "1 Timoteo",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 275,
+   "lecturas": []
+  },
+  {
+   "dia": 276,
+   "lecturas": [
+    {
+     "libro": "2TI",
+     "nombreLibro": "2 Timoteo",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 277,
+   "lecturas": [
+    {
+     "libro": "2TI",
+     "nombreLibro": "2 Timoteo",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 278,
+   "lecturas": [
+    {
+     "libro": "2TI",
+     "nombreLibro": "2 Timoteo",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 279,
+   "lecturas": []
+  },
+  {
+   "dia": 280,
+   "lecturas": [
+    {
+     "libro": "2TI",
+     "nombreLibro": "2 Timoteo",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 281,
+   "lecturas": [
+    {
+     "libro": "TIT",
+     "nombreLibro": "Tito",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 282,
+   "lecturas": []
+  },
+  {
+   "dia": 283,
+   "lecturas": [
+    {
+     "libro": "TIT",
+     "nombreLibro": "Tito",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 284,
+   "lecturas": [
+    {
+     "libro": "TIT",
+     "nombreLibro": "Tito",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 285,
+   "lecturas": [
+    {
+     "libro": "PHM",
+     "nombreLibro": "Filemón",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 286,
+   "lecturas": []
+  },
+  {
+   "dia": 287,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 288,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 289,
+   "lecturas": []
+  },
+  {
+   "dia": 290,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 291,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 292,
+   "lecturas": []
+  },
+  {
+   "dia": 293,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 294,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 295,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 7,
+     "capFin": 7
+    }
+   ]
+  },
+  {
+   "dia": 296,
+   "lecturas": []
+  },
+  {
+   "dia": 297,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 8,
+     "capFin": 8
+    }
+   ]
+  },
+  {
+   "dia": 298,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 9,
+     "capFin": 9
+    }
+   ]
+  },
+  {
+   "dia": 299,
+   "lecturas": []
+  },
+  {
+   "dia": 300,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 10,
+     "capFin": 10
+    }
+   ]
+  },
+  {
+   "dia": 301,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 11,
+     "capFin": 11
+    }
+   ]
+  },
+  {
+   "dia": 302,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 12,
+     "capFin": 12
+    }
+   ]
+  },
+  {
+   "dia": 303,
+   "lecturas": []
+  },
+  {
+   "dia": 304,
+   "lecturas": [
+    {
+     "libro": "HEB",
+     "nombreLibro": "Hebreos",
+     "capInicio": 13,
+     "capFin": 13
+    }
+   ]
+  },
+  {
+   "dia": 305,
+   "lecturas": [
+    {
+     "libro": "JAS",
+     "nombreLibro": "Santiago",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 306,
+   "lecturas": []
+  },
+  {
+   "dia": 307,
+   "lecturas": [
+    {
+     "libro": "JAS",
+     "nombreLibro": "Santiago",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 308,
+   "lecturas": [
+    {
+     "libro": "JAS",
+     "nombreLibro": "Santiago",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 309,
+   "lecturas": [
+    {
+     "libro": "JAS",
+     "nombreLibro": "Santiago",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 310,
+   "lecturas": []
+  },
+  {
+   "dia": 311,
+   "lecturas": [
+    {
+     "libro": "JAS",
+     "nombreLibro": "Santiago",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 312,
+   "lecturas": [
+    {
+     "libro": "1PE",
+     "nombreLibro": "1 Pedro",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 313,
+   "lecturas": []
+  },
+  {
+   "dia": 314,
+   "lecturas": [
+    {
+     "libro": "1PE",
+     "nombreLibro": "1 Pedro",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 315,
+   "lecturas": [
+    {
+     "libro": "1PE",
+     "nombreLibro": "1 Pedro",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 316,
+   "lecturas": [
+    {
+     "libro": "1PE",
+     "nombreLibro": "1 Pedro",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 317,
+   "lecturas": []
+  },
+  {
+   "dia": 318,
+   "lecturas": [
+    {
+     "libro": "1PE",
+     "nombreLibro": "1 Pedro",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 319,
+   "lecturas": [
+    {
+     "libro": "2PE",
+     "nombreLibro": "2 Pedro",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 320,
+   "lecturas": []
+  },
+  {
+   "dia": 321,
+   "lecturas": [
+    {
+     "libro": "2PE",
+     "nombreLibro": "2 Pedro",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 322,
+   "lecturas": [
+    {
+     "libro": "2PE",
+     "nombreLibro": "2 Pedro",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 323,
+   "lecturas": [
+    {
+     "libro": "1JN",
+     "nombreLibro": "1 Juan",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 324,
+   "lecturas": []
+  },
+  {
+   "dia": 325,
+   "lecturas": [
+    {
+     "libro": "1JN",
+     "nombreLibro": "1 Juan",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 326,
+   "lecturas": [
+    {
+     "libro": "1JN",
+     "nombreLibro": "1 Juan",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 327,
+   "lecturas": []
+  },
+  {
+   "dia": 328,
+   "lecturas": [
+    {
+     "libro": "1JN",
+     "nombreLibro": "1 Juan",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 329,
+   "lecturas": [
+    {
+     "libro": "1JN",
+     "nombreLibro": "1 Juan",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 330,
+   "lecturas": [
+    {
+     "libro": "2JN",
+     "nombreLibro": "2 Juan",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 331,
+   "lecturas": []
+  },
+  {
+   "dia": 332,
+   "lecturas": [
+    {
+     "libro": "3JN",
+     "nombreLibro": "3 Juan",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 333,
+   "lecturas": [
+    {
+     "libro": "JUD",
+     "nombreLibro": "Judas",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 334,
+   "lecturas": []
+  },
+  {
+   "dia": 335,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 1,
+     "capFin": 1
+    }
+   ]
+  },
+  {
+   "dia": 336,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 2,
+     "capFin": 2
+    }
+   ]
+  },
+  {
+   "dia": 337,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 3,
+     "capFin": 3
+    }
+   ]
+  },
+  {
+   "dia": 338,
+   "lecturas": []
+  },
+  {
+   "dia": 339,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 4,
+     "capFin": 4
+    }
+   ]
+  },
+  {
+   "dia": 340,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 5,
+     "capFin": 5
+    }
+   ]
+  },
+  {
+   "dia": 341,
+   "lecturas": []
+  },
+  {
+   "dia": 342,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 6,
+     "capFin": 6
+    }
+   ]
+  },
+  {
+   "dia": 343,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 7,
+     "capFin": 7
+    }
+   ]
+  },
+  {
+   "dia": 344,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 8,
+     "capFin": 8
+    }
+   ]
+  },
+  {
+   "dia": 345,
+   "lecturas": []
+  },
+  {
+   "dia": 346,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 9,
+     "capFin": 9
+    }
+   ]
+  },
+  {
+   "dia": 347,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 10,
+     "capFin": 10
+    }
+   ]
+  },
+  {
+   "dia": 348,
+   "lecturas": []
+  },
+  {
+   "dia": 349,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 11,
+     "capFin": 11
+    }
+   ]
+  },
+  {
+   "dia": 350,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 12,
+     "capFin": 12
+    }
+   ]
+  },
+  {
+   "dia": 351,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 13,
+     "capFin": 13
+    }
+   ]
+  },
+  {
+   "dia": 352,
+   "lecturas": []
+  },
+  {
+   "dia": 353,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 14,
+     "capFin": 14
+    }
+   ]
+  },
+  {
+   "dia": 354,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 15,
+     "capFin": 15
+    }
+   ]
+  },
+  {
+   "dia": 355,
+   "lecturas": []
+  },
+  {
+   "dia": 356,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 16,
+     "capFin": 16
+    }
+   ]
+  },
+  {
+   "dia": 357,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 17,
+     "capFin": 17
+    }
+   ]
+  },
+  {
+   "dia": 358,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 18,
+     "capFin": 18
+    }
+   ]
+  },
+  {
+   "dia": 359,
+   "lecturas": []
+  },
+  {
+   "dia": 360,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 19,
+     "capFin": 19
+    }
+   ]
+  },
+  {
+   "dia": 361,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 20,
+     "capFin": 20
+    }
+   ]
+  },
+  {
+   "dia": 362,
+   "lecturas": []
+  },
+  {
+   "dia": 363,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 21,
+     "capFin": 21
+    }
+   ]
+  },
+  {
+   "dia": 364,
+   "lecturas": [
+    {
+     "libro": "REV",
+     "nombreLibro": "Apocalipsis",
+     "capInicio": 22,
+     "capFin": 22
+    }
+   ]
+  },
+  {
+   "dia": 365,
+   "lecturas": []
+  }
+ ]
+}
