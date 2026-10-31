@@ -4,6 +4,12 @@ La APK del alumno: lector de las enseñanzas + Biblia offline.
 Todo el contenido vive **dentro de la app** (funciona sin internet).
 El progreso se guarda **en el teléfono**; si un día hay internet, se podrá sincronizar con la nube.
 
+**Firma fija v1.3.3:**
+- La APK ahora se firma siempre con la misma clave (la tuya, en los
+  secretos del repo): las próximas versiones se instalan **encima** de
+  la anterior, sin desinstalar y sin perder el progreso. Ver la
+  sección «Firma fija» — hay que crear la llave una sola vez.
+
 **Mejora v1.3.2:**
 - En la pantalla Progreso, cada academia de la lista ahora se puede
   tocar para abrirla directamente (con su «›» y la nota «Toca una
@@ -41,7 +47,66 @@ El progreso se guarda **en el teléfono**; si un día hay internet, se podrá si
 
 ---
 
-## Actualización a la v1.3.2 (esta entrega, en tu PC)
+## Firma fija (una sola vez — necesario desde la v1.3.3)
+
+**Para qué:** hasta la v1.3.2 cada APK salía firmada con una clave
+temporal distinta (GitHub genera una nueva en cada corrida) y Android
+no dejaba instalarla encima de la anterior: tocaba desinstalar, y en
+esta app el progreso vive **dentro** de la app, así que se perdía.
+Con una clave fija tuya, guardada como secreto del repositorio, todas
+las APK futuras se firman igual y se instalan encima sin desinstalar.
+Es el mismo remedio que ya usa LemWriter Local.
+
+### Paso 1 — Crear tu clave (en tu PC, terminal)
+
+```bash
+keytool -genkeypair -v -keystore ~/academia.keystore -alias academia -keyalg RSA -keysize 2048 -validity 10000
+```
+
+Te pide una contraseña (una que no olvides; la pide dos veces) y unos
+datos (puedes dar Enter a casi todo; lo importante es la contraseña).
+Al final vuelve a pedir la contraseña de la clave: pulsa Enter para
+usar la misma.
+
+**Guarda como oro:** el archivo `~/academia.keystore` (hazle copia en
+un lugar seguro, **fuera** de la carpeta del repo) y la contraseña.
+Sin ellos no podrás firmar actualizaciones futuras.
+
+### Paso 2 — Convertir la clave a texto (en tu PC)
+
+```bash
+base64 -w 0 ~/academia.keystore > ~/academia-keystore-b64.txt
+```
+
+### Paso 3 — Crear los 4 secretos en GitHub
+
+En **github.com/LemGil/academia → Settings → Secrets and variables →
+Actions → New repository secret**, crea estos cuatro:
+
+| Nombre | Valor |
+|---|---|
+| `ANDROID_KEYSTORE` | todo el contenido de `~/academia-keystore-b64.txt` |
+| `ANDROID_KEYSTORE_PASSWORD` | la contraseña del paso 1 |
+| `ANDROID_KEY_ALIAS` | `academia` |
+| `ANDROID_KEY_PASSWORD` | la misma contraseña del paso 1 |
+
+**Ojo:** si corres el flujo sin crear los secretos, la corrida falla
+a propósito con «Falta el secreto ANDROID_KEYSTORE» (para no entregar
+otra APK con firma temporal sin darte cuenta).
+
+### La primera instalación con firma nueva
+
+La APK firmada se llama **`app-firmada.apk`** (es la única que trae el
+artefacto). Como la firma cambia respecto a la temporal anterior,
+**esta vez toca desinstalar la app vieja una última vez** e instalar
+la nueva — el progreso guardado en ese teléfono se pierde esta única
+vez (lo mismo le pasará a cualquier estudiante que ya tenga la v1.2).
+De ahí en adelante, todas las versiones se instalan encima y el
+progreso se conserva siempre.
+
+---
+
+## Actualización a la v1.3.3 (esta entrega, en tu PC)
 
 Tu clon local quedó atrás de GitHub (los arreglos de Node 22 y Java 21 se
 hicieron en la web), así que **primero `git pull`** y después el parche:
@@ -49,16 +114,20 @@ hicieron en la web), así que **primero `git pull`** y después el parche:
 ```bash
 cd ~/Descargas/academia
 git pull
-unzip -o ~/Descargas/academia-estudiante-v1.3.2.zip
+unzip -o ~/Descargas/academia-estudiante-v1.3.3.zip
 git add .
-git commit -m "Academia del Espíritu v1.3.2 — paquetes importables, correcciones del lector y atajo desde Progreso"
+git commit -m "Academia del Espíritu v1.3.3 — paquetes importables, correcciones del lector y firma fija"
 git push
 ```
 
+(Antes de esto, crea la llave y los 4 secretos de la sección
+«Firma fija» si aún no lo has hecho.)
+
 Luego: GitHub → Actions → "Construir APK Academia del Espíritu" →
 Run workflow. Al terminar en verde, descarga el artefacto
-**Academia-Espiritu-APK-<número>** (el más alto), descomprime e instala
-`app-debug.apk` encima de la anterior (no pierdes progreso).
+**Academia-Espiritu-APK-<número>** (el más alto): dentro va solo
+**`app-firmada.apk`**. Por el cambio de firma, esta vez desinstala la
+app vieja antes de instalarla (última vez; ver «Firma fija»).
 
 Para probar la importación: pásate al teléfono el archivo
 `paquetes/a7.json` (viene en el repo tras este parche), abre la app →
