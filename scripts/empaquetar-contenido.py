@@ -1,27 +1,23 @@
 #!/usr/bin/env python3
-# Empaqueta las enseñanzas de la Academia dentro de la APK del estudiante.
-# Lee los documentos markdown de las academias y genera
-# src/contenido/academias.json (texto incluido en la app, funciona sin internet).
+# Genera los PAQUETES IMPORTABLES de las academias y el bundle de la app.
+# Lee los documentos markdown de las academias y escribe un .json por
+# academia en paquetes/ (paquetes/a1.json, ...): el estudiante recibe el
+# archivo por WhatsApp/Bluetooth/USB y lo importa dentro de la app.
 #
-# Uso:  npm run contenido
-#       (o: python3 scripts/empaquetar-contenido.py)
+# Desde la v1.4 la app se instala VACÍA: src/contenido/academias.json se
+# escribe SIN academias a propósito. El contenido ya no viaja dentro de
+# la APK; viaja en los paquetes.
 #
-# Con --paquetes además escribe un archivo por academia en paquetes/
-# (paquetes/a1.json, paquetes/a2.json, ...): son los PAQUETES IMPORTABLES
-# de la v1.3 — el estudiante los recibe por WhatsApp/Bluetooth/USB y los
-# importa dentro de la app, sin recompilar la APK:
-#       python3 scripts/empaquetar-contenido.py --paquetes
+# Uso:  python3 scripts/empaquetar-contenido.py --paquetes
+#       (npm run contenido escribe solo el bundle vacío)
 #
 # Dónde busca los .md (en orden):
 #   1. Carpeta "contenido-fuente/" en la raíz del repo, con esta estructura:
 #        contenido-fuente/a1.md, a2.md, ... a13.md, camino-fe.md
-#   2. Rutas de la máquina de Leo (cuando él regenera el paquete).
+#   2. Rutas de la máquina de Leo (cuando él regenera los paquetes).
 #
-# Si NO encuentra ninguna fuente, no toca el JSON existente y termina bien
-# (así el workflow de GitHub nunca falla por esto).
-#
-# Cuando haya temas nuevos: actualizar los .md y correr de nuevo, luego
-# subir version en package.json y compilar la APK.
+# En GitHub no hay fuentes: no se escribe ningún paquete y el bundle
+# vacío es el esperado (el workflow nunca falla por esto).
 
 import json
 import os
@@ -142,6 +138,22 @@ def parsear_academia(aid: str, numero: str, titulo: str, ruta: Path) -> dict:
 def main():
     print("Empaquetando enseñanzas...")
     destino = BASE / "src/contenido/academias.json"
+
+    # Desde la v1.4 la app se instala VACÍA: el bundle ya no lleva ninguna
+    # academia dentro. El contenido llega solo por paquetes importables
+    # (los genera este mismo script con --paquetes, o LemWriter).
+    paquete_app = {
+        "version": "1.4.0",
+        "generada": date.today().isoformat(),
+        "nota": "La app se instala sin academias: el contenido llega por paquetes importables.",
+        "academias": [],
+    }
+    destino.write_text(json.dumps(paquete_app, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"OK: bundle de la app vacío (0 academias incluidas) -> {destino}")
+
+    if "--paquetes" not in sys.argv:
+        return
+
     academias = []
     for aid, numero, titulo, nombre_repo, alternativa in ACADEMIAS:
         ruta = resolver_fuente(nombre_repo, alternativa)
@@ -151,35 +163,22 @@ def main():
         academias.append(parsear_academia(aid, numero, titulo, ruta))
 
     if not academias:
-        print("No se encontró ninguna fuente: se conserva el JSON existente.")
-        print(f"OK (sin cambios): {destino}")
+        print("No se encontró ninguna fuente: no se escriben paquetes.")
         return
 
-    total_codigos = sum(len(a["codigos"]) for a in academias)
-    paquete = {
-        "version": "1.0.0",
-        "generada": date.today().isoformat(),
-        "nota": "Enseñanzas incluidas en la APK. Funciona sin internet.",
-        "academias": academias,
-    }
-    destino.write_text(json.dumps(paquete, ensure_ascii=False, indent=1), encoding="utf-8")
-    kb = destino.stat().st_size // 1024
-    print(f"OK: {len(academias)} academias, {total_codigos} códigos -> {destino} ({kb} KB)")
-
-    if "--paquetes" in sys.argv:
-        carpeta = BASE / "paquetes"
-        carpeta.mkdir(exist_ok=True)
-        for a in academias:
-            envoltura = {
-                "tipo": "paquete-academia",
-                "formato": 1,
-                "generada": date.today().isoformat(),
-                "academia": a,
-            }
-            ruta = carpeta / f"{a['id']}.json"
-            ruta.write_text(json.dumps(envoltura, ensure_ascii=False, indent=1), encoding="utf-8")
-            print(f"  paquete: {ruta.name} ({ruta.stat().st_size // 1024} KB)")
-        print(f"OK: {len(academias)} paquetes importables en {carpeta}")
+    carpeta = BASE / "paquetes"
+    carpeta.mkdir(exist_ok=True)
+    for a in academias:
+        envoltura = {
+            "tipo": "paquete-academia",
+            "formato": 1,
+            "generada": date.today().isoformat(),
+            "academia": a,
+        }
+        ruta = carpeta / f"{a['id']}.json"
+        ruta.write_text(json.dumps(envoltura, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"  paquete: {ruta.name} ({ruta.stat().st_size // 1024} KB)")
+    print(f"OK: {len(academias)} paquetes importables en {carpeta}")
 
 
 if __name__ == "__main__":

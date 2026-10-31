@@ -1,15 +1,22 @@
-// Paquetes de enseñanzas importables (v1.3).
+// Paquetes de enseñanzas importables (v1.3; modelo vigente desde la v1.4).
 //
-// Una academia puede llegar al teléfono como archivo suelto (por WhatsApp,
-// Bluetooth o USB) y el estudiante la importa aquí, sin internet y sin
-// recompilar la APK. El maestro genera el paquete desde el .md aprobado con:
+// La app se instala VACÍA: ninguna academia viene dentro de la APK.
+// Cada academia llega como archivo suelto (por WhatsApp, Bluetooth o USB)
+// y el estudiante la importa aquí, sin internet y sin recompilar la APK.
+// El paquete lo genera LemWriter (o el empaquetador de Leo como respaldo):
 //   python3 scripts/empaquetar-contenido.py --paquetes
 // que deja un .json por academia en la carpeta paquetes/ del proyecto.
 //
+// El identificador de la academia es MANUAL (autor + número, asignado por
+// el maestro en LemWriter, ej. id "lemgil-14" con numero "Nº 14"): da el
+// orden deseado en la lista y evita choques entre pastores distintos.
+// La lista se ordena por ese número (2 antes que 10, numérico).
+//
 // Formato del paquete:
 //   { "tipo": "paquete-academia", "formato": 1, "generada": "2026-10-31",
-//     "academia": { "id": "a7", "numero": "Nº 7", "titulo": "...",
-//                   "codigos": [{ "id": "a7-c1", ... }], "cierre": "..." } }
+//     "academia": { "id": "lemgil-14", "numero": "Nº 14", "titulo": "...",
+//                   "autor": "LemGil Apóstol",
+//                   "codigos": [{ "id": "lemgil-14-c1", ... }], "cierre": "..." } }
 //
 // Los paquetes se guardan como archivos en el almacenamiento interno de la
 // app (carpeta "paquetes", vía @capacitor/filesystem, como las carpetas de
@@ -93,20 +100,41 @@ export function validarPaquete(texto: string): Academia {
     id: cruda.id,
     numero: cruda.numero,
     titulo: cruda.titulo,
+    autor: esTexto(cruda.autor) ? cruda.autor : undefined,
     codigos,
     cierre: typeof cruda.cierre === 'string' ? cruda.cierre : '',
   }
 }
 
-/** Catálogo visible: las incluidas, con las importadas reemplazando por id
- *  y las importadas nuevas agregadas al final. */
+/** Número de orden de una academia: el primer número de su «Nº» visible
+ *  (ej. "Nº 14" → 14); si no tiene, el número final de su id ("lemgil-14");
+ *  si tampoco, va al final. */
+function claveNumero(a: Academia): number {
+  const enNumero = /(\d+)/.exec(a.numero)
+  if (enNumero) return parseInt(enNumero[1], 10)
+  const enId = /(\d+)$/.exec(a.id)
+  if (enId) return parseInt(enId[1], 10)
+  return Number.MAX_SAFE_INTEGER
+}
+
+function compararAcademias(a: Academia, b: Academia): number {
+  return (
+    claveNumero(a) - claveNumero(b) ||
+    (a.autor ?? '').localeCompare(b.autor ?? '', 'es') ||
+    a.titulo.localeCompare(b.titulo, 'es')
+  )
+}
+
+/** Catálogo visible, ORDENADO por el número de cada academia (el orden
+ *  que el maestro decidió): las incluidas en la APK (hoy ninguna), con
+ *  las importadas reemplazando por id y las nuevas sumadas. */
 export function fusionarCatalogo(importadas: Map<string, Academia>): Academia[] {
   const lista = ACADEMIAS_INCLUIDAS.map((a) => importadas.get(a.id) ?? a)
   const incluidas = new Set(ACADEMIAS_INCLUIDAS.map((a) => a.id))
-  const nuevas = [...importadas.values()]
-    .filter((a) => !incluidas.has(a.id))
-    .sort((x, y) => x.numero.localeCompare(y.numero, 'es') || x.titulo.localeCompare(y.titulo, 'es'))
-  return [...lista, ...nuevas]
+  for (const a of importadas.values()) {
+    if (!incluidas.has(a.id)) lista.push(a)
+  }
+  return lista.sort(compararAcademias)
 }
 
 // ---------------------------------------------------------------------------

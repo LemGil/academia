@@ -1,8 +1,11 @@
 // Contenido de enseñanzas incluido en la APK (src/contenido/academias.json).
 // Generado con: npm run contenido
-// Desde la v1.3 el catálogo visible es dinámico: a estas academias incluidas
-// se suman (o las reemplazan) los paquetes importados en el teléfono.
-// Ver paquetes.ts.
+//
+// Desde la v1.4 la app se INSTALA VACÍA: no trae ninguna academia dentro.
+// El contenido llega solo por paquetes importados en el teléfono
+// (ver paquetes.ts): el estudiante importa las academias que desee o las
+// que su maestro le asigne, y puede borrarlas. ACADEMIAS_INCLUIDAS queda
+// como base (hoy vacía) por si alguna edición futura incluye contenido.
 import datos from '../contenido/academias.json'
 
 export interface Codigo {
@@ -16,6 +19,10 @@ export interface Academia {
   id: string
   numero: string
   titulo: string
+  /** Maestro/ministerio autor de la enseñanza (opcional; los paquetes
+   *  generados por LemWriter lo traen — permite que en un mismo teléfono
+   *  convivan academias de distintos pastores sin chocar). */
+  autor?: string
   codigos: Codigo[]
   cierre: string
 }

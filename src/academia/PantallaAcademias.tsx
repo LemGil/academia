@@ -69,11 +69,11 @@ export const PantallaAcademias: React.FC<Props> = ({ academias, importadas, alRe
     const esActualizacion = IDS_INCLUIDAS.has(a.id)
     const mensaje = esActualizacion
       ? `¿Quitar la actualización de «${a.titulo}»? Volverá la versión incluida en la app.`
-      : `¿Eliminar la academia importada «${a.titulo}»?`
+      : `¿Eliminar la academia «${a.titulo}»?`
     if (!window.confirm(mensaje)) return
     try {
       await borrarPaqueteImportado(a.id)
-      setAviso({ ok: true, texto: esActualizacion ? '↩️ Actualización retirada: volvió la versión incluida.' : '🗑 Academia importada eliminada.' })
+      setAviso({ ok: true, texto: esActualizacion ? '↩️ Actualización retirada: volvió la versión incluida.' : '🗑 Academia eliminada.' })
       setVista({ tipo: 'lista' })
       await alRefrescarCatalogo()
     } catch {
@@ -122,7 +122,7 @@ export const PantallaAcademias: React.FC<Props> = ({ academias, importadas, alRe
         <h2 style={{ marginTop: 12 }}>{academia.numero} · {academia.titulo}</h2>
         <p style={{ color: '#cfc4a8', fontSize: 14 }}>
           {nLeidos} de {academia.codigos.length} códigos leídos
-          {esImportada && (esActualizacion ? ' · 📥 versión actualizada por paquete' : ' · 📥 academia importada')}
+          {academia.autor ? ` · Por ${academia.autor}` : ''}
         </p>
         {academia.codigos.map((c) => {
           const leido = leidos.has(c.id)
@@ -143,7 +143,7 @@ export const PantallaAcademias: React.FC<Props> = ({ academias, importadas, alRe
         })}
         {esImportada && (
           <button className="btn-secundario" style={{ marginTop: 16 }} onClick={() => alBorrarImportada(academia)}>
-            {esActualizacion ? '🗑 Quitar actualización (vuelve la incluida)' : '🗑 Eliminar academia importada'}
+            {esActualizacion ? '🗑 Quitar actualización (vuelve la incluida)' : '🗑 Eliminar academia'}
           </button>
         )}
       </div>
@@ -179,15 +179,26 @@ export const PantallaAcademias: React.FC<Props> = ({ academias, importadas, alRe
           {aviso.texto}
         </p>
       )}
+      {academias.length === 0 && (
+        <div className="tarjeta" style={{ cursor: 'default', textAlign: 'center', padding: '28px 20px' }}>
+          <div style={{ fontSize: 40 }}>📭</div>
+          <h3>Todavía no tienes academias</h3>
+          <p>
+            Esta app se instala sin enseñanzas: tú decides qué estudiar.
+            Cuando tu maestro te pase un paquete de academia (un archivo
+            .json por WhatsApp, Bluetooth o USB), impórtalo con el botón
+            de arriba y aparecerá aquí.
+          </p>
+        </div>
+      )}
       {academias.map((a) => {
         const nLeidos = a.codigos.filter((c) => leidos.has(c.id)).length
         const pct = a.codigos.length ? Math.round((nLeidos / a.codigos.length) * 100) : 0
-        const esImportada = importadas.has(a.id)
         return (
           <button key={a.id} className="tarjeta" onClick={() => setVista({ tipo: 'academia', id: a.id })}>
-            <span className="num">{a.numero}{esImportada ? ' · 📥' : ''}</span>
+            <span className="num">{a.numero}</span>
             <h3>{a.titulo}</h3>
-            <p>{a.codigos.length} códigos · {nLeidos} leídos</p>
+            <p>{a.codigos.length} códigos · {nLeidos} leídos{a.autor ? ` · ${a.autor}` : ''}</p>
             <div className="barra-progreso"><i style={{ width: `${pct}%` }} /></div>
           </button>
         )

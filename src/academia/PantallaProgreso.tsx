@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Academia, totalCodigos, FECHA_CONTENIDO } from './contenido'
+import { Academia, totalCodigos } from './contenido'
 import { temasLeidos, reiniciarProgresoTemas } from './progreso'
 import { cargarLeidos, reiniciarLeidos } from '../biblia/progresoBiblia'
 
@@ -34,9 +34,16 @@ export const PantallaProgreso: React.FC<{ academias: Academia[]; alAbrirAcademia
         </div>
       </div>
 
-      <p style={{ color: '#8f8468', fontSize: 13, marginTop: 0 }}>
-        Toca una academia para abrirla directamente.
-      </p>
+      {academias.length === 0 ? (
+        <p style={{ color: '#8f8468', fontSize: 13, marginTop: 0 }}>
+          Aún no tienes academias importadas. Cuando importes una en la
+          pestaña Academias, aquí verás tu avance en ella.
+        </p>
+      ) : (
+        <p style={{ color: '#8f8468', fontSize: 13, marginTop: 0 }}>
+          Toca una academia para abrirla directamente.
+        </p>
+      )}
 
       {academias.map((a) => {
         const n = a.codigos.filter((c) => leidosTemas.has(c.id)).length
@@ -70,7 +77,7 @@ export const PantallaProgreso: React.FC<{ academias: Academia[]; alAbrirAcademia
         Tu progreso vive en este teléfono y funciona sin internet.<br />
         Si un día te conectas, aquí aparecerá la opción de sincronizarlo con la nube.
       </p>
-      <p className="nota-version">Contenido incluido en la app · {FECHA_CONTENIDO}</p>
+      <p className="nota-version">Las academias llegan por paquetes: impórtalas en la pestaña Academias.</p>
     </div>
   )
 }

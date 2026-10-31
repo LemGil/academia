@@ -1,8 +1,18 @@
 # Academia del Espíritu — App del estudiante 📚
 
-La APK del alumno: lector de las enseñanzas + Biblia offline.
-Todo el contenido vive **dentro de la app** (funciona sin internet).
+La APK del alumno: Biblia offline + lector de las enseñanzas.
+La Biblia vive **dentro de la app**; las enseñanzas llegan como
+**paquetes** que el estudiante importa (todo funciona sin internet).
 El progreso se guarda **en el teléfono**; si un día hay internet, se podrá sincronizar con la nube.
+
+**Lo que trae la v1.4:**
+- 🚫📦 **La app se instala VACÍA, sin ninguna academia.** El estudiante
+  importa las que desee o las que su maestro le asigne, y puede
+  borrarlas cuando quiera. La lista se **ordena por el número** de cada
+  academia (el orden que el maestro decidió: el 2 va antes que el 10).
+- El paquete puede traer el **autor** (maestro/ministerio): se muestra
+  junto a la academia, y el identificador (autor + número) evita que
+  academias de pastores distintos se pisen en un mismo teléfono.
 
 **Firma fija v1.3.3:**
 - La APK ahora se firma siempre con la misma clave (la tuya, en los
@@ -26,13 +36,11 @@ El progreso se guarda **en el teléfono**; si un día hay internet, se podrá si
 - 📥 **Paquetes de enseñanzas importables**: el estudiante puede importar
   una academia suelta desde un archivo (.json) recibido por WhatsApp,
   Bluetooth o USB — sin internet y **sin recompilar la APK**.
-  Si el paquete es de una academia que ya trae la app, la **actualiza**
+  Si el paquete es de una academia que ya tiene, la **actualiza**
   (el progreso del estudiante se conserva); si es nueva, se agrega a la
-  lista. Las importadas se marcan con 📥 y se pueden quitar (al quitar
-  una actualización, vuelve la versión incluida).
+  lista. Las importadas se pueden quitar desde su pantalla.
 
 **Lo que trae la v1.2:**
-- 14 academias · 84 códigos (Nº 1–13 + «Descodificando el camino de la Fe»)
 - Biblia offline: RV1909, VBL y RVG (como LemWriter Local)
 - 📅 **Planes de lectura**: el discípulo elige al iniciar —
   *La Biblia en un año* (canónico), *El Nuevo Testamento en un año*,
@@ -106,7 +114,7 @@ progreso se conserva siempre.
 
 ---
 
-## Actualización a la v1.3.3 (esta entrega, en tu PC)
+## Actualización a la v1.4.0 (esta entrega, en tu PC)
 
 Tu clon local quedó atrás de GitHub (los arreglos de Node 22 y Java 21 se
 hicieron en la web), así que **primero `git pull`** y después el parche:
@@ -114,9 +122,9 @@ hicieron en la web), así que **primero `git pull`** y después el parche:
 ```bash
 cd ~/Descargas/academia
 git pull
-unzip -o ~/Descargas/academia-estudiante-v1.3.3.zip
+unzip -o ~/Descargas/academia-estudiante-v1.4.0.zip
 git add .
-git commit -m "Academia del Espíritu v1.3.3 — paquetes importables, correcciones del lector y firma fija"
+git commit -m "Academia del Espíritu v1.4.0 — la app se instala vacía, orden por número y autor"
 git push
 ```
 
@@ -126,14 +134,17 @@ git push
 Luego: GitHub → Actions → "Construir APK Academia del Espíritu" →
 Run workflow. Al terminar en verde, descarga el artefacto
 **Academia-Espiritu-APK-<número>** (el más alto): dentro va solo
-**`app-firmada.apk`**. Por el cambio de firma, esta vez desinstala la
-app vieja antes de instalarla (última vez; ver «Firma fija»).
+**`app-firmada.apk`**. Si aún no has instalado ninguna APK con la
+firma fija, esta vez toca desinstalar la vieja una última vez (ver
+«Firma fija»); si ya traes una firmada, se instala encima.
 
-Para probar la importación: pásate al teléfono el archivo
-`paquetes/a7.json` (viene en el repo tras este parche), abre la app →
-Academias → «📥 Importar paquete de academia» → elige el archivo.
-Debe decir «Academia actualizada» (la Nº 7 ya viene incluida; el paquete
-la reemplaza y tus marcas de leído se conservan).
+Para probar la importación: pásate al teléfono el paquete de prueba
+de la Nº 7 que te pasó Leo (`paquete-a7.json`, trae el autor «LemGil
+Apóstol»), abre la app → Academias (saldrá vacía, con el aviso «📭
+Todavía no tienes academias») → «📥 Importar paquete de academia» →
+elige el archivo. Debe decir «Academia importada» y la Nº 7 aparecerá
+en la lista, con su autor. Desde su pantalla puedes borrarla con
+«🗑 Eliminar academia».
 
 ---
 
@@ -176,13 +187,15 @@ git push -u origin main
 
 ## Cómo agregar temas nuevos
 
-**Camino rápido — por paquete (sin recompilar, desde la v1.3):**
+Desde la v1.4 **todo** el contenido llega por paquete — ya nada se
+mete dentro de la APK:
 
 ```bash
-# 1. El .md aprobado de la academia queda en su carpeta de siempre
-# 2. Leo regenera el paquete (o corre esto en su máquina):
+# 1. La academia nace como proyecto en LemWriter (su identificador
+#    manual, autor + número, viaja dentro del paquete), o Leo genera
+#    el paquete desde el .md aprobado como respaldo:
 python3 scripts/empaquetar-contenido.py --paquetes   # deja paquetes/<id>.json
-# 3. Ese .json se envía al estudiante por WhatsApp/Bluetooth/USB
+# 2. Ese .json se envía al estudiante por WhatsApp/Bluetooth/USB
 #    y él lo importa en Academias → «📥 Importar paquete de academia»
 ```
 
@@ -191,23 +204,12 @@ existente (mismo id → reemplaza el contenido y conserva el progreso;
 ojo: las marcas siguen la posición del código, así que no reordenes
 los códigos en una actualización).
 
-**Camino completo — dentro de la APK (nueva versión):**
-
-```bash
-# 1. Actualiza los documentos .md de las academias (o agrega el nuevo)
-# 2. Reempaqueta el contenido:
-npm run contenido
-# 3. Sube la versión en package.json (ej: 1.3.0 → 1.4.0)
-#    y también versionName/versionCode en android/app/build.gradle
-# 4. Commit + push + corre el workflow de nuevo
-```
-
-El script `scripts/empaquetar-contenido.py` lee los `.md` y genera
-`src/contenido/academias.json`, que es lo que viaja dentro de la APK.
-Busca los `.md` en la carpeta `contenido-fuente/` del repo
-(archivos `a1.md` … `a13.md`, `camino-fe.md`); si no la encuentra,
-usa las rutas de la máquina de Leo. Si no hay fuentes, no toca el JSON
-y el workflow sigue sin fallar.
+El script `scripts/empaquetar-contenido.py` busca los `.md` en la
+carpeta `contenido-fuente/` del repo (archivos `a1.md` … `a13.md`,
+`camino-fe.md`) o en las rutas de la máquina de Leo, y escribe el
+bundle de la app (`src/contenido/academias.json`) **vacío a propósito**:
+la app se instala sin academias. En GitHub no hay fuentes y el
+workflow sigue sin fallar.
 
 ## Notas técnicas
 
