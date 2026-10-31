@@ -3,7 +3,7 @@ import { Academia, totalCodigos, FECHA_CONTENIDO } from './contenido'
 import { temasLeidos, reiniciarProgresoTemas } from './progreso'
 import { cargarLeidos, reiniciarLeidos } from '../biblia/progresoBiblia'
 
-export const PantallaProgreso: React.FC<{ academias: Academia[] }> = ({ academias }) => {
+export const PantallaProgreso: React.FC<{ academias: Academia[]; alAbrirAcademia: (id: string) => void }> = ({ academias, alAbrirAcademia }) => {
   const [leidosTemas, setLeidosTemas] = useState<Set<string>>(() => temasLeidos())
   const [leidosBiblia, setLeidosBiblia] = useState<Set<string>>(() => cargarLeidos())
 
@@ -34,17 +34,32 @@ export const PantallaProgreso: React.FC<{ academias: Academia[] }> = ({ academia
         </div>
       </div>
 
+      <p style={{ color: '#8f8468', fontSize: 13, marginTop: 0 }}>
+        Toca una academia para abrirla directamente.
+      </p>
+
       {academias.map((a) => {
         const n = a.codigos.filter((c) => leidosTemas.has(c.id)).length
         const pct = a.codigos.length ? Math.round((n / a.codigos.length) * 100) : 0
         return (
-          <div key={a.id} style={{ marginBottom: 14 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
+          <button
+            key={a.id}
+            onClick={() => alAbrirAcademia(a.id)}
+            style={{
+              display: 'block', width: '100%', background: 'none', border: 'none',
+              padding: '2px 0', marginBottom: 12, textAlign: 'left',
+              cursor: 'pointer', color: 'inherit', fontFamily: 'inherit',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', fontSize: 14 }}>
               <span style={{ color: '#f0e8d2' }}>{a.numero} · {a.titulo}</span>
-              <span style={{ color: '#c9a227' }}>{pct}%</span>
+              <span style={{ whiteSpace: 'nowrap' }}>
+                <span style={{ color: '#c9a227' }}>{pct}%</span>
+                <span style={{ color: '#c9a227', fontSize: 18, marginLeft: 6 }}>›</span>
+              </span>
             </div>
             <div className="barra-progreso"><i style={{ width: `${pct}%` }} /></div>
-          </div>
+          </button>
         )
       })}
 

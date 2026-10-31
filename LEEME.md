@@ -4,6 +4,18 @@ La APK del alumno: lector de las enseñanzas + Biblia offline.
 Todo el contenido vive **dentro de la app** (funciona sin internet).
 El progreso se guarda **en el teléfono**; si un día hay internet, se podrá sincronizar con la nube.
 
+**Mejora v1.3.2:**
+- En la pantalla Progreso, cada academia de la lista ahora se puede
+  tocar para abrirla directamente (con su «›» y la nota «Toca una
+  academia para abrirla directamente»).
+
+**Correcciones v1.3.1:**
+- Al pasar al capítulo siguiente (o anterior), la lectura sube sola al
+  inicio — verso 1 — en vez de quedarse donde estaba el scroll. Vale
+  también al saltar entre códigos de una academia.
+- La pestaña seleccionada del menú inferior ahora se nota de un vistazo:
+  fondo dorado tenue, franja dorada arriba y texto en negrita.
+
 **Lo que trae la v1.3 (nuevo):**
 - 📥 **Paquetes de enseñanzas importables**: el estudiante puede importar
   una academia suelta desde un archivo (.json) recibido por WhatsApp,
@@ -29,7 +41,7 @@ El progreso se guarda **en el teléfono**; si un día hay internet, se podrá si
 
 ---
 
-## Actualización a la v1.3 (esta entrega, en tu PC)
+## Actualización a la v1.3.2 (esta entrega, en tu PC)
 
 Tu clon local quedó atrás de GitHub (los arreglos de Node 22 y Java 21 se
 hicieron en la web), así que **primero `git pull`** y después el parche:
@@ -37,9 +49,9 @@ hicieron en la web), así que **primero `git pull`** y después el parche:
 ```bash
 cd ~/Descargas/academia
 git pull
-unzip -o ~/Descargas/academia-estudiante-v1.3.zip
+unzip -o ~/Descargas/academia-estudiante-v1.3.2.zip
 git add .
-git commit -m "Academia del Espíritu v1.3.0 — paquetes importables"
+git commit -m "Academia del Espíritu v1.3.2 — paquetes importables, correcciones del lector y atajo desde Progreso"
 git push
 ```
 

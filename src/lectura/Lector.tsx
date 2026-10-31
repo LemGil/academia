@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { irAlInicio } from './scroll'
 
 export type TemaLectura = 'nocturno' | 'diurno' | 'sepia'
 
@@ -27,6 +28,12 @@ export const Lector: React.FC<Props> = ({
     const g = localStorage.getItem('academia_tamano_letra')
     return g ? parseInt(g, 10) : 19
   })
+
+  // Al pasar a otro capítulo o código, la lectura empieza desde arriba
+  // (verso 1), no donde quedó el scroll del anterior.
+  useEffect(() => {
+    irAlInicio()
+  }, [titulo])
 
   const cambiarTema = (t: TemaLectura) => {
     setTema(t)

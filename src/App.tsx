@@ -20,6 +20,8 @@ const App: React.FC = () => {
   // Catálogo de enseñanzas: incluidas en la APK + paquetes importados (v1.3).
   const [academias, setAcademias] = useState<Academia[]>(ACADEMIAS_INCLUIDAS)
   const [importadas, setImportadas] = useState<Set<string>>(new Set())
+  // Academia a abrir directamente (al tocarla en la pantalla de Progreso).
+  const [destinoAcademia, setDestinoAcademia] = useState<{ id: string; n: number } | null>(null)
 
   const refrescarCatalogo = useCallback(async () => {
     try {
@@ -40,6 +42,11 @@ const App: React.FC = () => {
     setTab('biblia')
   }
 
+  const irAAcademia = (id: string) => {
+    setDestinoAcademia({ id, n: Date.now() })
+    setTab('academias')
+  }
+
   return (
     <div className="app">
       <div className="contenido" key={tab}>
@@ -48,11 +55,12 @@ const App: React.FC = () => {
             academias={academias}
             importadas={importadas}
             alRefrescarCatalogo={refrescarCatalogo}
+            destino={destinoAcademia}
           />
         )}
         {tab === 'biblia' && <Biblia destino={destino} />}
         {tab === 'plan' && <PantallaPlan onIrACapitulo={irACapitulo} />}
-        {tab === 'progreso' && <PantallaProgreso academias={academias} />}
+        {tab === 'progreso' && <PantallaProgreso academias={academias} alAbrirAcademia={irAAcademia} />}
       </div>
       <nav className="pestanas">
         <button className={tab === 'academias' ? 'activo' : ''} onClick={() => setTab('academias')}>

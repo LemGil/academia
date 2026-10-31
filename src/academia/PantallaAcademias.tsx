@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Academia, ACADEMIAS_INCLUIDAS } from './contenido'
 import { temasLeidos, alternarTemaLeido } from './progreso'
 import { borrarPaqueteImportado, importarPaquete } from './paquetes'
@@ -14,11 +14,13 @@ interface Props {
   academias: Academia[]
   importadas: Set<string>
   alRefrescarCatalogo: () => Promise<void>
+  /** Academia a abrir directamente (viene de tocarla en Progreso). */
+  destino?: { id: string; n: number } | null
 }
 
 const IDS_INCLUIDAS = new Set(ACADEMIAS_INCLUIDAS.map((a) => a.id))
 
-export const PantallaAcademias: React.FC<Props> = ({ academias, importadas, alRefrescarCatalogo }) => {
+export const PantallaAcademias: React.FC<Props> = ({ academias, importadas, alRefrescarCatalogo, destino }) => {
   const [vista, setVista] = useState<Vista>({ tipo: 'lista' })
   const [leidos, setLeidos] = useState<Set<string>>(() => temasLeidos())
   const [aviso, setAviso] = useState<{ ok: boolean; texto: string } | null>(null)
@@ -37,6 +39,11 @@ export const PantallaAcademias: React.FC<Props> = ({ academias, importadas, alRe
     }
     return null
   }, [vista, academias])
+
+  // Apertura directa de una academia (al tocarla en la pantalla Progreso).
+  useEffect(() => {
+    if (destino) setVista({ tipo: 'academia', id: destino.id })
+  }, [destino])
 
   const alElegirArchivo = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const archivo = e.target.files?.[0]

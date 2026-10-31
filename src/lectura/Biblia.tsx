@@ -7,6 +7,7 @@ import {
   cargarLeidos, alternarLeido, claveCapitulo, conteoPorLibro,
 } from '../biblia/progresoBiblia'
 import { Lector } from './Lector'
+import { irAlInicio } from './scroll'
 import type { DestinoBiblia } from '../App'
 
 type VistaBiblia =
@@ -39,6 +40,12 @@ export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }
       setVista({ tipo: 'lectura', codigo: destino.codigo, cap: destino.cap })
     }
   }, [destino])
+
+  // Todo cambio de vista (libros → capítulos → lectura, y de un capítulo
+  // a otro) empieza desde arriba.
+  useEffect(() => {
+    irAlInicio()
+  }, [vista])
 
   const cambiarVersion = (v: VersionBiblia) => {
     setVersion(v)

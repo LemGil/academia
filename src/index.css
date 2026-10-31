@@ -78,7 +78,15 @@ button { font-family: inherit; }
   gap: 2px;
 }
 .pestanas button .ico { font-size: 22px; }
-.pestanas button.activo { color: var(--dorado-claro); font-weight: bold; }
+/* Pestaña seleccionada: fondo dorado tenue, franja dorada arriba y
+   texto dorado en negrita — que se note de un vistazo dónde estás. */
+.pestanas button.activo {
+  color: var(--dorado-claro);
+  font-weight: bold;
+  background: rgba(201, 162, 39, 0.18);
+  box-shadow: inset 0 3px 0 var(--dorado);
+}
+.pestanas button.activo .ico { transform: scale(1.15); }
 
 /* ---------- Listas ---------- */
 .lista { padding: 16px 14px 90px; max-width: 720px; margin: 0 auto; }
