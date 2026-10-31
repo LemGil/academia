@@ -1,5 +1,8 @@
 // Contenido de enseñanzas incluido en la APK (src/contenido/academias.json).
 // Generado con: npm run contenido
+// Desde la v1.3 el catálogo visible es dinámico: a estas academias incluidas
+// se suman (o las reemplazan) los paquetes importados en el teléfono.
+// Ver paquetes.ts.
 import datos from '../contenido/academias.json'
 
 export interface Codigo {
@@ -17,26 +20,19 @@ export interface Academia {
   cierre: string
 }
 
-interface Paquete {
+interface PaqueteIncluido {
   version: string
   generada: string
   academias: Academia[]
 }
 
-const paquete = datos as Paquete
+const paquete = datos as PaqueteIncluido
 
 export const VERSION_CONTENIDO = paquete.version
 export const FECHA_CONTENIDO = paquete.generada
-export const ACADEMIAS: Academia[] = paquete.academias
+/** Academias que viajan dentro de la APK (base del catálogo). */
+export const ACADEMIAS_INCLUIDAS: Academia[] = paquete.academias
 
-export function totalCodigos(): number {
-  return ACADEMIAS.reduce((n, a) => n + a.codigos.length, 0)
-}
-
-export function buscarCodigo(id: string): { academia: Academia; codigo: Codigo } | null {
-  for (const a of ACADEMIAS) {
-    const c = a.codigos.find((x) => x.id === id)
-    if (c) return { academia: a, codigo: c }
-  }
-  return null
+export function totalCodigos(lista: Academia[]): number {
+  return lista.reduce((n, a) => n + a.codigos.length, 0)
 }

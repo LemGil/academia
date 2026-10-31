@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { ACADEMIAS, totalCodigos, FECHA_CONTENIDO } from './contenido'
+import { Academia, totalCodigos, FECHA_CONTENIDO } from './contenido'
 import { temasLeidos, reiniciarProgresoTemas } from './progreso'
 import { cargarLeidos, reiniciarLeidos } from '../biblia/progresoBiblia'
 
-export const PantallaProgreso: React.FC = () => {
+export const PantallaProgreso: React.FC<{ academias: Academia[] }> = ({ academias }) => {
   const [leidosTemas, setLeidosTemas] = useState<Set<string>>(() => temasLeidos())
   const [leidosBiblia, setLeidosBiblia] = useState<Set<string>>(() => cargarLeidos())
 
-  const totalT = totalCodigos()
+  const totalT = totalCodigos(academias)
   const nT = leidosTemas.size
   const pctT = totalT ? Math.round((nT / totalT) * 100) : 0
 
@@ -34,7 +34,7 @@ export const PantallaProgreso: React.FC = () => {
         </div>
       </div>
 
-      {ACADEMIAS.map((a) => {
+      {academias.map((a) => {
         const n = a.codigos.filter((c) => leidosTemas.has(c.id)).length
         const pct = a.codigos.length ? Math.round((n / a.codigos.length) * 100) : 0
         return (

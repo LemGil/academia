@@ -4,6 +4,15 @@ La APK del alumno: lector de las enseñanzas + Biblia offline.
 Todo el contenido vive **dentro de la app** (funciona sin internet).
 El progreso se guarda **en el teléfono**; si un día hay internet, se podrá sincronizar con la nube.
 
+**Lo que trae la v1.3 (nuevo):**
+- 📥 **Paquetes de enseñanzas importables**: el estudiante puede importar
+  una academia suelta desde un archivo (.json) recibido por WhatsApp,
+  Bluetooth o USB — sin internet y **sin recompilar la APK**.
+  Si el paquete es de una academia que ya trae la app, la **actualiza**
+  (el progreso del estudiante se conserva); si es nueva, se agrega a la
+  lista. Las importadas se marcan con 📥 y se pueden quitar (al quitar
+  una actualización, vuelve la versión incluida).
+
 **Lo que trae la v1.2:**
 - 14 academias · 84 códigos (Nº 1–13 + «Descodificando el camino de la Fe»)
 - Biblia offline: RV1909, VBL y RVG (como LemWriter Local)
@@ -17,6 +26,33 @@ El progreso se guarda **en el teléfono**; si un día hay internet, se podrá si
 - Icono y colores oficiales de la Academia
 
 **Lo que NO trae (a propósito):** nada de escribir ni publicar — eso sigue siendo LemWriter (la web queda para el maestro).
+
+---
+
+## Actualización a la v1.3 (esta entrega, en tu PC)
+
+Tu clon local quedó atrás de GitHub (los arreglos de Node 22 y Java 21 se
+hicieron en la web), así que **primero `git pull`** y después el parche:
+
+```bash
+cd ~/Descargas/academia
+git pull
+unzip -o ~/Descargas/academia-estudiante-v1.3.zip
+git add .
+git commit -m "Academia del Espíritu v1.3.0 — paquetes importables"
+git push
+```
+
+Luego: GitHub → Actions → "Construir APK Academia del Espíritu" →
+Run workflow. Al terminar en verde, descarga el artefacto
+**Academia-Espiritu-APK-<número>** (el más alto), descomprime e instala
+`app-debug.apk` encima de la anterior (no pierdes progreso).
+
+Para probar la importación: pásate al teléfono el archivo
+`paquetes/a7.json` (viene en el repo tras este parche), abre la app →
+Academias → «📥 Importar paquete de academia» → elige el archivo.
+Debe decir «Academia actualizada» (la Nº 7 ya viene incluida; el paquete
+la reemplaza y tus marcas de leído se conservan).
 
 ---
 
@@ -57,13 +93,30 @@ git push -u origin main
 #    ya viene dentro, no hay que descargar nada más.
 ```
 
-## Cómo agregar temas nuevos (próximas versiones)
+## Cómo agregar temas nuevos
+
+**Camino rápido — por paquete (sin recompilar, desde la v1.3):**
+
+```bash
+# 1. El .md aprobado de la academia queda en su carpeta de siempre
+# 2. Leo regenera el paquete (o corre esto en su máquina):
+python3 scripts/empaquetar-contenido.py --paquetes   # deja paquetes/<id>.json
+# 3. Ese .json se envía al estudiante por WhatsApp/Bluetooth/USB
+#    y él lo importa en Academias → «📥 Importar paquete de academia»
+```
+
+Sirve igual para una academia **nueva** y para **actualizar** una
+existente (mismo id → reemplaza el contenido y conserva el progreso;
+ojo: las marcas siguen la posición del código, así que no reordenes
+los códigos en una actualización).
+
+**Camino completo — dentro de la APK (nueva versión):**
 
 ```bash
 # 1. Actualiza los documentos .md de las academias (o agrega el nuevo)
 # 2. Reempaqueta el contenido:
 npm run contenido
-# 3. Sube la versión en package.json (ej: 1.2.0 → 1.3.0)
+# 3. Sube la versión en package.json (ej: 1.3.0 → 1.4.0)
 #    y también versionName/versionCode en android/app/build.gradle
 # 4. Commit + push + corre el workflow de nuevo
 ```

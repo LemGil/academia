@@ -6,6 +6,12 @@
 # Uso:  npm run contenido
 #       (o: python3 scripts/empaquetar-contenido.py)
 #
+# Con --paquetes además escribe un archivo por academia en paquetes/
+# (paquetes/a1.json, paquetes/a2.json, ...): son los PAQUETES IMPORTABLES
+# de la v1.3 — el estudiante los recibe por WhatsApp/Bluetooth/USB y los
+# importa dentro de la app, sin recompilar la APK:
+#       python3 scripts/empaquetar-contenido.py --paquetes
+#
 # Dónde busca los .md (en orden):
 #   1. Carpeta "contenido-fuente/" en la raíz del repo, con esta estructura:
 #        contenido-fuente/a1.md, a2.md, ... a13.md, camino-fe.md
@@ -20,6 +26,7 @@
 import json
 import os
 import re
+import sys
 from datetime import date
 from pathlib import Path
 
@@ -158,6 +165,21 @@ def main():
     destino.write_text(json.dumps(paquete, ensure_ascii=False, indent=1), encoding="utf-8")
     kb = destino.stat().st_size // 1024
     print(f"OK: {len(academias)} academias, {total_codigos} códigos -> {destino} ({kb} KB)")
+
+    if "--paquetes" in sys.argv:
+        carpeta = BASE / "paquetes"
+        carpeta.mkdir(exist_ok=True)
+        for a in academias:
+            envoltura = {
+                "tipo": "paquete-academia",
+                "formato": 1,
+                "generada": date.today().isoformat(),
+                "academia": a,
+            }
+            ruta = carpeta / f"{a['id']}.json"
+            ruta.write_text(json.dumps(envoltura, ensure_ascii=False, indent=1), encoding="utf-8")
+            print(f"  paquete: {ruta.name} ({ruta.stat().st_size // 1024} KB)")
+        print(f"OK: {len(academias)} paquetes importables en {carpeta}")
 
 
 if __name__ == "__main__":

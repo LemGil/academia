@@ -20,12 +20,14 @@ jobs:
       - name: Preparar Node
         uses: actions/setup-node@v4
         with:
+          # Capacitor CLI 8 exige Node >= 22
           node-version: '22'
 
       - name: Preparar Java (para Android)
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
+          # @capacitor/android 8.5.x exige compilar con Java 21
           java-version: '21'
 
       - name: Instalar dependencias

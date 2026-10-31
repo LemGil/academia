@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { PantallaAcademias } from './academia/PantallaAcademias'
 import { PantallaProgreso } from './academia/PantallaProgreso'
 import { PantallaPlan } from './planes/PantallaPlan'
 import { Biblia } from './lectura/Biblia'
+import { Academia, ACADEMIAS_INCLUIDAS } from './academia/contenido'
+import { cargarCatalogo } from './academia/paquetes'
 
 type Tab = 'academias' | 'biblia' | 'plan' | 'progreso'
 
@@ -15,6 +17,23 @@ export interface DestinoBiblia {
 const App: React.FC = () => {
   const [tab, setTab] = useState<Tab>('academias')
   const [destino, setDestino] = useState<DestinoBiblia | null>(null)
+  // Catálogo de enseñanzas: incluidas en la APK + paquetes importados (v1.3).
+  const [academias, setAcademias] = useState<Academia[]>(ACADEMIAS_INCLUIDAS)
+  const [importadas, setImportadas] = useState<Set<string>>(new Set())
+
+  const refrescarCatalogo = useCallback(async () => {
+    try {
+      const c = await cargarCatalogo()
+      setAcademias(c.lista)
+      setImportadas(c.importadas)
+    } catch {
+      // Si el almacenamiento falla, la app sigue con el contenido incluido.
+    }
+  }, [])
+
+  useEffect(() => {
+    refrescarCatalogo()
+  }, [refrescarCatalogo])
 
   const irACapitulo = (codigo: string, cap: number) => {
     setDestino({ codigo, cap, n: Date.now() })
@@ -24,10 +43,16 @@ const App: React.FC = () => {
   return (
     <div className="app">
       <div className="contenido" key={tab}>
-        {tab === 'academias' && <PantallaAcademias />}
+        {tab === 'academias' && (
+          <PantallaAcademias
+            academias={academias}
+            importadas={importadas}
+            alRefrescarCatalogo={refrescarCatalogo}
+          />
+        )}
         {tab === 'biblia' && <Biblia destino={destino} />}
         {tab === 'plan' && <PantallaPlan onIrACapitulo={irACapitulo} />}
-        {tab === 'progreso' && <PantallaProgreso />}
+        {tab === 'progreso' && <PantallaProgreso academias={academias} />}
       </div>
       <nav className="pestanas">
         <button className={tab === 'academias' ? 'activo' : ''} onClick={() => setTab('academias')}>
