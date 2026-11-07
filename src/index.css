@@ -363,3 +363,93 @@ button { font-family: inherit; }
   margin-top: 14px;
   font-style: italic;
 }
+
+/* ---------- LemChat (Fase B) ---------- */
+.chat-contador {
+  display: inline-block;
+  min-width: 22px;
+  text-align: center;
+  background: #b3372f;
+  color: #fff;
+  border-radius: 11px;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 1px 6px;
+  margin-left: 8px;
+  vertical-align: 2px;
+}
+.chat-contador.pestana {
+  position: absolute;
+  margin-left: 34px;
+  margin-top: -6px;
+}
+.pestanas button { position: relative; }
+.chat-estado-via {
+  text-align: center;
+  color: var(--dorado-claro);
+  font-size: 14px;
+  margin: 0 4px 14px;
+  font-style: italic;
+}
+.chat-seccion { color: var(--dorado); font-size: 17px; margin: 20px 4px 10px; }
+.chat-fijada { border-color: var(--dorado); background: rgba(201, 162, 39, 0.10); }
+.chat-nota { color: #cfc4a8; font-size: 14px; margin: 8px 4px; }
+.chat-error { color: #ff9d94; font-size: 14px; }
+.chat-ok { color: #9fd48a; font-size: 14px; }
+.chat-aviso-error { color: #ff9d94; }
+.chat-etiqueta { display: block; color: var(--dorado); font-size: 14px; margin: 14px 4px 6px; }
+.chat-entrada {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(201,162,39,0.4);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #fff;
+  font-size: 16px;
+  font-family: inherit;
+  margin-bottom: 12px;
+}
+.chat-codigo { font-size: 12px; word-break: break-all; }
+.chat-qr { display: block; margin: 10px auto; border-radius: 8px; }
+.chat-par .btn-secundario { margin-top: 8px; }
+.chat-conversacion { display: flex; flex-direction: column; min-height: 100%; }
+.chat-barra { background: var(--petroleo-osc); }
+.chat-hilo {
+  flex: 1;
+  padding: 14px;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.chat-burbuja {
+  max-width: 82%;
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-size: 15px;
+}
+.chat-burbuja p { margin: 0; white-space: pre-wrap; word-break: break-word; }
+.chat-burbuja.mia {
+  align-self: flex-end;
+  background: rgba(201, 162, 39, 0.22);
+  border: 1px solid rgba(201, 162, 39, 0.55);
+}
+.chat-burbuja.suya {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+.chat-meta { display: block; font-size: 11px; color: #bfae87; margin-top: 5px; }
+.chat-escribir {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(201, 162, 39, 0.3);
+  background: var(--petroleo-osc);
+  position: sticky;
+  bottom: 0;
+}
+.chat-escribir .chat-entrada { margin-bottom: 0; flex: 1; }
+.chat-enviar { padding: 10px 18px; font-size: 15px; }

@@ -5,6 +5,27 @@ La Biblia vive **dentro de la app**; las enseñanzas llegan como
 **paquetes** que el estudiante importa (todo funciona sin internet).
 El progreso se guarda **en el teléfono**; si un día hay internet, se podrá sincronizar con la nube.
 
+**Lo que trae la v1.5 (nuevo):**
+- 💬 **LemChat — Fase B**: quinta pestaña **CHAT**, aislada del lector
+  (carga solo al abrirla; si falla, el lector ni se entera).
+  Identidad sin cuentas (llaves Ed25519 creadas en el teléfono) y
+  contactos en persona por código/QR. Dos vías vivas: **cercanía Wi-Fi**
+  (Nearby Connections, módulo nativo propio en `plugins/lemchat-cercania`)
+  y **buzón por internet** (tabla `lc_mensajes` en el mismo Supabase de
+  siempre; correr `lemchat-buzon-supabase.sql` y pegar URL + anon key en
+  `src/lemchat/configSupabase.ts`). Los mensajes personales viajan
+  cifrados extremo a extremo y cada mensaje muestra su estado honesto
+  (⏳ en cola · 📤 enviado · ✓ entregado).
+- 📦 **Las enseñanzas llegan solas**: un paquete firmado por la llave
+  del maestro (`scripts/lemchat-claves-maestro.mjs` una vez;
+  `scripts/lemchat-firmar-paquete.mjs` por paquete) se archiva solo en
+  la biblioteca al llegar, con aviso. Sin firma válida del maestro,
+  jamás se instala en silencio: queda «a revisar».
+- Lo que NO trae todavía (fases no autorizadas): el cartero Bluetooth
+  (Fase C) y los grupos por academia con publicación desde LemWriter
+  (Fase D). El escaneo de QR con cámara queda pendiente; el código de
+  texto sirve igual mientras tanto.
+
 **Lo que trae la v1.4:**
 - 🚫📦 **La app se instala VACÍA, sin ninguna academia.** El estudiante
   importa las que desee o las que su maestro le asigne, y puede
