@@ -24,7 +24,7 @@ export function decodificarQr(
   }
 }
 
-/** Lee el QR de una foto dada como data URL (lo que devuelve la cámara). */
+/** Lee el QR de una foto dada como URL (data URL o ruta convertible). */
 export async function leerQrDeDataUrl(dataUrl: string): Promise<string | null> {
   const imagen = await new Promise<HTMLImageElement>((resolver, rechazar) => {
     const img = new Image()
@@ -48,13 +48,74 @@ export async function leerQrDeDataUrl(dataUrl: string): Promise<string | null> {
   return decodificarQr(pixeles.data, ancho, alto)
 }
 
+const SIN_QR =
+  'no se leyó ningún código QR en la foto: acércate más, busca buena luz y que el QR llene la pantalla'
+
+function detalleDe(e: unknown): string {
+  const d = e instanceof Error ? e.message : String(e)
+  return d.replace(/\s+/g, ' ').slice(0, 160)
+}
+
 /**
  * Abre la cámara, toma la foto y devuelve el texto del QR.
  * Lanza Error con mensaje listo para mostrar si se cancela o no se lee.
+ *
+ * v1.5.5 — diagnóstico de campo (2026-11-07): con el permiso ya declarado
+ * y concedido, el camino clásico `getPhoto` (flujo heredado del plugin,
+ * que delega en la app de cámara del sistema) rechazaba la apertura en
+ * dos teléfonos sin abrir la cámara, y el error real quedaba escondido
+ * tras un texto genérico. Ahora: (1) el permiso se pide de forma
+ * explícita primero; (2) se intenta primero el camino NUEVO del plugin
+ * v8 (`takePhoto`, cámara propia CameraX, sin delegar en otra app);
+ * (3) si también falla, se prueba el clásico; (4) si ninguno abre, el
+ * mensaje muestra el error real de cada camino, no un texto genérico.
  */
 export async function escanearCodigoConCamara(): Promise<string> {
   const { Camera, CameraResultType, CameraSource } = await import('@capacitor/camera')
-  let dataUrl: string | undefined
+
+  // (1) Permiso explícito, con su estado a la vista si queda denegado.
+  try {
+    const estado = await Camera.checkPermissions()
+    if (estado.camera !== 'granted') {
+      const pedido = await Camera.requestPermissions({ permissions: ['camera'] })
+      if (pedido.camera !== 'granted') {
+        throw new Error(
+          'el permiso de cámara quedó denegado: actívalo en Ajustes → Aplicaciones → Academia del Espíritu → Permisos → Cámara',
+        )
+      }
+    }
+  } catch (e) {
+    if (e instanceof Error && e.message.includes('permiso de cámara quedó denegado')) throw e
+    // Si la consulta de permisos no existe en esta plataforma, los
+    // caminos de captura harán su propia petición: se continúa.
+  }
+
+  const fallos: string[] = []
+
+  // (2) Camino nuevo del plugin v8: takePhoto (CameraX).
+  try {
+    const res = await Camera.takePhoto({ quality: 92, saveToGallery: false })
+    let fuente: string | null = null
+    if (res.uri) {
+      const { Capacitor } = await import('@capacitor/core')
+      fuente = Capacitor.convertFileSrc(res.uri)
+    } else if (res.thumbnail) {
+      fuente = res.thumbnail.startsWith('data:')
+        ? res.thumbnail
+        : `data:image/jpeg;base64,${res.thumbnail}`
+    }
+    if (!fuente) throw new Error('la cámara nueva no devolvió imagen')
+    const texto = await leerQrDeDataUrl(fuente)
+    if (!texto) throw new Error(SIN_QR)
+    return texto
+  } catch (e) {
+    const d = detalleDe(e)
+    if (/cancel/i.test(d)) throw new Error('__cancelado__')
+    if (d === SIN_QR) throw new Error(SIN_QR)
+    fallos.push(`cámara nueva: ${d}`)
+  }
+
+  // (3) Camino clásico: getPhoto (intención a la app de cámara).
   try {
     const foto = await Camera.getPhoto({
       quality: 92,
@@ -66,18 +127,17 @@ export async function escanearCodigoConCamara(): Promise<string> {
       promptLabelPhoto: 'Usar la cámara',
       promptLabelPicture: 'Hacer la foto',
     })
-    dataUrl = foto.dataUrl
+    if (!foto.dataUrl) throw new Error('la cámara no devolvió ninguna foto')
+    const texto = await leerQrDeDataUrl(foto.dataUrl)
+    if (!texto) throw new Error(SIN_QR)
+    return texto
   } catch (e) {
-    const detalle = e instanceof Error ? e.message : String(e)
-    if (/cancel/i.test(detalle)) throw new Error('__cancelado__')
-    throw new Error('no se pudo abrir la cámara en este teléfono')
+    const d = detalleDe(e)
+    if (/cancel/i.test(d)) throw new Error('__cancelado__')
+    if (d === SIN_QR) throw new Error(SIN_QR)
+    fallos.push(`cámara clásica: ${d}`)
   }
-  if (!dataUrl) throw new Error('la cámara no devolvió ninguna foto')
-  const texto = await leerQrDeDataUrl(dataUrl)
-  if (!texto) {
-    throw new Error(
-      'no se leyó ningún código QR en la foto: acércate más, busca buena luz y que el QR llene la pantalla',
-    )
-  }
-  return texto
+
+  // (4) Ningún camino abrió: se muestra el motivo real de cada uno.
+  throw new Error(`no se pudo abrir la cámara en este teléfono (${fallos.join(' · ')})`)
 }
