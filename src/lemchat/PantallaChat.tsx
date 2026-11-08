@@ -8,6 +8,7 @@
 // hay ni el botón.
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { version } from '../../package.json'
 import type { Academia } from '../academia/contenido'
 import { CodigoQR } from './CodigoQR'
 import { escanearCodigoConCamara } from './escaneo'
@@ -227,7 +228,7 @@ export const PantallaChat: React.FC<Props> = ({ alArchivarPaquete, alAbrirAcadem
       <button className="btn-secundario" onClick={() => setVista({ tipo: 'ajustes' })}>
         ⚙️ Ajustes de CHAT
       </button>
-      <p className="nota-version">LemChat · Fase B — internet y cercanía Wi-Fi</p>
+      <p className="nota-version">MensajeAcademia · v{version} — internet y cercanía Wi-Fi</p>
     </div>
   )
 }

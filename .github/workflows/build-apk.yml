@@ -53,6 +53,17 @@ jobs:
       - name: Sincronizar Capacitor
         run: npx cap sync android
 
+      # La versión que ve el teléfono (Ajustes de Android y el pie de
+      # CHAT) sale de package.json: sin este paso, build.gradle se
+      # quedaba para siempre en la versión del primer día.
+      - name: Estampar la versión de package.json en la APK
+        run: |
+          V=$(node -p "require('./package.json').version")
+          VC=$(node -p "const p=require('./package.json').version.split('.').map(Number); p[0]*10000+p[1]*100+p[2]")
+          sed -i "s/versionName \".*\"/versionName \"$V\"/" android/app/build.gradle
+          sed -i "s/versionCode [0-9]*/versionCode $VC/" android/app/build.gradle
+          grep -n "versionName\|versionCode" android/app/build.gradle
+
       - name: Compilar la APK (debug)
         working-directory: android
         run: ./gradlew assembleDebug
