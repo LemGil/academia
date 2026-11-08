@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@capacitor/android": "^8.5.1",
+    "@capacitor/camera": "^8.2.6",
     "@capacitor/cli": "^8.5.1",
     "@capacitor/core": "^8.5.1",
     "@capacitor/filesystem": "^8.1.5",
@@ -8,10 +9,11 @@
     "@noble/curves": "^1.9.7",
     "@noble/ed25519": "^2.3.0",
     "@noble/hashes": "^1.8.0",
+    "jsqr": "^1.4.0",
+    "lemchat-cercania": "file:./plugins/lemchat-cercania",
     "qrcode-generator": "^1.5.2",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "lemchat-cercania": "file:./plugins/lemchat-cercania"
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
@@ -32,5 +34,5 @@
     "test": "vitest run"
   },
   "type": "module",
-  "version": "1.5.0"
+  "version": "1.5.3"
 }

@@ -56,7 +56,15 @@ button { font-family: inherit; }
 .btn-primario:active { transform: scale(0.97); }
 
 /* ---------- Pestañas ---------- */
-.app { display: flex; flex-direction: column; height: 100%; }
+.app {
+  display: flex; flex-direction: column; height: 100%;
+  /* En teléfonos que dibujan a pantalla completa (Android nuevo), la
+     app no debe meterse debajo de la hora: se respeta la franja
+     superior del sistema, igual que ya se respeta la de abajo. */
+  padding-top: env(safe-area-inset-top, 0px);
+  background: var(--petroleo-osc);
+  box-sizing: border-box;
+}
 .contenido { flex: 1; overflow-y: auto; }
 .pestanas {
   display: flex;
@@ -390,6 +398,21 @@ button { font-family: inherit; }
   font-size: 14px;
   margin: 0 4px 14px;
   font-style: italic;
+}
+.chat-yo {
+  text-align: center;
+  font-size: 17px;
+  color: #f2ede0;
+  background: rgba(201, 162, 39, 0.12);
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin: 0 4px 10px;
+}
+.chat-yo strong { color: var(--dorado-claro); }
+.chat-borrar-zona {
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  text-align: center;
 }
 .chat-seccion { color: var(--dorado); font-size: 17px; margin: 20px 4px 10px; }
 .chat-fijada { border-color: var(--dorado); background: rgba(201, 162, 39, 0.10); }

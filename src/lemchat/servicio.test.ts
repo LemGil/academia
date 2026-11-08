@@ -234,3 +234,39 @@ describe('servicio: entrega de enseñanzas', () => {
     expect(recibidos[0].cuerpo).toContain('No se instaló')
   })
 })
+
+describe('servicio: identidad y contactos (arreglos v1.5.2)', () => {
+  it('cambiarMiNombre actualiza el nombre y conserva la misma clave', async () => {
+    const servidor = new BuzonFalso()
+    const { a, idA } = await parActivado(servidor)
+    await a.cambiarMiNombre('Pastor')
+    const despues = a.datos().identidad!
+    expect(despues.nombre).toBe('Pastor')
+    expect(despues.clavePublica).toBe(idA.clavePublica)
+    expect(despues.clavePrivada).toBe(idA.clavePrivada)
+    await expect(a.cambiarMiNombre('   ')).rejects.toThrow()
+  })
+
+  it('borrarContacto quita el contacto y su conversación, y no toca a los demás', async () => {
+    const servidor = new BuzonFalso()
+    const { a, b, idB } = await parActivado(servidor)
+    // Un segundo contacto con su propio mensaje, para ver que sobrevive.
+    const c = crearServicioParaPruebas({ buzon: servidor })
+    await c.activar('Luis')
+    const idC = c.datos().identidad!
+    await a.agregarContacto({ nombre: 'Luis', clavePublica: idC.clavePublica, esMaestro: false })
+    await a.enviarTexto(idB.clavePublica, 'para Gil')
+    await a.enviarTexto(idC.clavePublica, 'para Luis')
+    expect(a.datos().contactos).toHaveLength(2)
+    expect(a.mensajesDe(idB.clavePublica)).toHaveLength(1)
+
+    await a.borrarContacto(idB.clavePublica)
+
+    expect(a.datos().contactos.map((x) => x.clavePublica)).toEqual([idC.clavePublica])
+    expect(a.mensajesDe(idB.clavePublica)).toHaveLength(0)
+    expect(a.mensajesDe(idC.clavePublica)).toHaveLength(1)
+    // El otro teléfono no pierde nada: cada uno guarda lo suyo.
+    expect(b.datos().contactos).toHaveLength(1)
+    void b
+  })
+})

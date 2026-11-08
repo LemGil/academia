@@ -31,6 +31,18 @@ import java.util.concurrent.ConcurrentHashMap
  *    la capa web siempre ve mensajes completos.
  *  - Las conexiones se aceptan automáticamente: la confianza no vive en
  *    la radio — todo lo sensible va cifrado o firmado en la capa LemChat.
+ *
+ * Frenos de la v1.5.3 (la tormenta que congelaba la app con 3 teléfonos):
+ *  - Memoria por endpoint: si ya está conectado o conectando, un nuevo
+ *    «encontrado» se ignora — Nearby re-reporta al mismo teléfono sin
+ *    parar y cada reporte era otra petición de conexión.
+ *  - Desempate anti-colisión: de cada pareja solo inicia el lado con el
+ *    nombre «menor»; el otro espera la invitación y acepta. Antes los
+ *    dos iniciaban a la vez y colisionaban en cadena.
+ *  - Enfriamiento: tras un fallo o una caída, 20 s sin reintentar con
+ *    ese endpoint. El ciclo conectar→caer→reconectar ya no es continuo.
+ *  - Arranque sin duplicar: anunciar/descubrir llevan bandera de
+ *    «corriendo»; el vigilante solo relanza lo que de verdad cayó.
  */
 class CercaniaManager(
     private val context: Context,
@@ -41,6 +53,7 @@ class CercaniaManager(
         private const val TROZO = 28_000
         private const val ESPERA_MIN_MS = 5_000L
         private const val ESPERA_MAX_MS = 30_000L
+        private const val ENFRIAMIENTO_MS = 20_000L
     }
 
     private val cliente by lazy { Nearby.getConnectionsClient(context) }
@@ -57,6 +70,15 @@ class CercaniaManager(
     private var esperaReintento = ESPERA_MIN_MS
 
     private val conectados = ConcurrentHashMap.newKeySet<String>()
+    private val conectando = ConcurrentHashMap.newKeySet<String>()
+    private val enfriamientoHasta = ConcurrentHashMap<String, Long>()
+
+    @Volatile
+    private var anunciando = false
+
+    @Volatile
+    private var descubriendo = false
+
     private val troceados = ConcurrentHashMap<String, MutableMap<Int, ByteArray>>()
     private val totales = ConcurrentHashMap<String, Int>()
 
@@ -77,6 +99,10 @@ class CercaniaManager(
             // Si Nearby ya estaba caído, detener no debe tumbar la app.
         }
         conectados.clear()
+        conectando.clear()
+        enfriamientoHasta.clear()
+        anunciando = false
+        descubriendo = false
     }
 
     fun reiniciar(nombre: String) {
@@ -97,20 +123,33 @@ class CercaniaManager(
     private fun arrancar() {
         if (!activo) return
         val estrategia = Strategy.P2P_CLUSTER
-        cliente.startAdvertising(
-            nombreLocal,
-            SERVICE_ID,
-            cicloDeVida,
-            AdvertisingOptions.Builder().setStrategy(estrategia).build(),
-        ).addOnSuccessListener { esperaReintento = ESPERA_MIN_MS }
-            .addOnFailureListener { programarReintento() }
-
-        cliente.startDiscovery(
-            SERVICE_ID,
-            descubrimiento,
-            DiscoveryOptions.Builder().setStrategy(estrategia).build(),
-        ).addOnSuccessListener { esperaReintento = ESPERA_MIN_MS }
-            .addOnFailureListener { programarReintento() }
+        if (!anunciando) {
+            cliente.startAdvertising(
+                nombreLocal,
+                SERVICE_ID,
+                cicloDeVida,
+                AdvertisingOptions.Builder().setStrategy(estrategia).build(),
+            ).addOnSuccessListener {
+                anunciando = true
+                esperaReintento = ESPERA_MIN_MS
+            }.addOnFailureListener {
+                anunciando = false
+                programarReintento()
+            }
+        }
+        if (!descubriendo) {
+            cliente.startDiscovery(
+                SERVICE_ID,
+                descubrimiento,
+                DiscoveryOptions.Builder().setStrategy(estrategia).build(),
+            ).addOnSuccessListener {
+                descubriendo = true
+                esperaReintento = ESPERA_MIN_MS
+            }.addOnFailureListener {
+                descubriendo = false
+                programarReintento()
+            }
+        }
     }
 
     /** El vigilante: si la escucha se atasca o cae, vuelve sola. */
@@ -127,14 +166,46 @@ class CercaniaManager(
         override fun onEndpointFound(endpointId: String, info: DiscoveredEndpointInfo) {
             emitir("descubierto", mapOf("endpointId" to endpointId, "nombre" to info.endpointName))
             // Conexión automática: la confianza vive en la capa de LemChat
-            // (cifrado y firmas), no en emparejar radios a mano.
-            cliente.requestConnection(nombreLocal, endpointId, cicloDeVida)
-                .addOnFailureListener { /* ya conectado o fuera de alcance: se reintentará al redescubrir */ }
+            // (cifrado y firmas), no en emparejar radios a mano. Pero con
+            // memoria, desempate y enfriamiento (intentarConectar).
+            intentarConectar(endpointId, info.endpointName, forzar = false)
         }
 
         override fun onEndpointLost(endpointId: String) {
+            conectando.remove(endpointId)
             emitir("perdido", mapOf("endpointId" to endpointId))
         }
+    }
+
+    /**
+     * Pide la conexión con frenos: ignora si ya está conectado o
+     * conectando, respeta el enfriamiento tras un fallo/caída, y solo
+     * inicia el lado «menor» de la pareja (desempate anti-colisión).
+     * Con nombres iguales, `forzar` permite un intento tras la espera
+     * corta para no quedar los dos esperando para siempre.
+     */
+    private fun intentarConectar(endpointId: String, nombreRemoto: String, forzar: Boolean) {
+        if (!activo) return
+        if (conectados.contains(endpointId) || conectando.contains(endpointId)) return
+        if (System.currentTimeMillis() < (enfriamientoHasta[endpointId] ?: 0L)) return
+        if (!forzar) {
+            val comparacion = nombreLocal.compareTo(nombreRemoto)
+            if (comparacion > 0) return // el otro lado inicia; yo acepto
+            if (comparacion == 0) {
+                handler.postDelayed({ intentarConectar(endpointId, nombreRemoto, forzar = true) }, 1_500L)
+                return
+            }
+        }
+        conectando.add(endpointId)
+        cliente.requestConnection(nombreLocal, endpointId, cicloDeVida)
+            .addOnFailureListener {
+                conectando.remove(endpointId)
+                enfriar(endpointId)
+            }
+    }
+
+    private fun enfriar(endpointId: String) {
+        enfriamientoHasta[endpointId] = System.currentTimeMillis() + ENFRIAMIENTO_MS
     }
 
     private val cicloDeVida = object : ConnectionLifecycleCallback() {
@@ -143,14 +214,19 @@ class CercaniaManager(
         }
 
         override fun onConnectionResult(endpointId: String, resolucion: ConnectionResolution) {
+            conectando.remove(endpointId)
             if (resolucion.status.statusCode == ConnectionsStatusCodes.STATUS_OK) {
                 conectados.add(endpointId)
                 emitir("conectado", mapOf("endpointId" to endpointId))
+            } else {
+                enfriar(endpointId)
             }
         }
 
         override fun onDisconnected(endpointId: String) {
             conectados.remove(endpointId)
+            conectando.remove(endpointId)
+            enfriar(endpointId)
             emitir("desconectado", mapOf("endpointId" to endpointId))
         }
     }

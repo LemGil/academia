@@ -205,6 +205,39 @@ export class ServicioChat {
     return this.agregarContacto(datos)
   }
 
+  /**
+   * Cambia el nombre de identificación de ESTE teléfono. La clave no se
+   * toca: sigo siendo la misma persona para la red. Quienes ya me
+   * agregaron conservan el nombre de mi código anterior hasta que
+   * vuelvan a agregarme con el código nuevo (al hacerlo, su registro se
+   * actualiza solo, porque se busca por clave). La cercanía se
+   * re-anuncia con el nombre nuevo.
+   */
+  async cambiarMiNombre(nombre: string): Promise<void> {
+    const limpio = nombre.trim()
+    if (!limpio) throw new Error('el nombre no puede quedar vacío')
+    if (!this.datos().identidad) throw new Error('primero activa CHAT')
+    await this.repo.actualizar((e) => {
+      if (e.identidad) e.identidad.nombre = limpio
+    })
+    await this.tocar()
+    await this.reiniciarCercania()
+  }
+
+  /**
+   * Borra un contacto y toda su conversación de este teléfono. Sirve
+   * para rehacer limpio un cruce de códigos: borrar y volver a agregar
+   * con el código correcto. Lo ya entregado en el OTRO teléfono no se
+   * toca (cada teléfono guarda lo suyo).
+   */
+  async borrarContacto(clavePublica: string): Promise<void> {
+    await this.repo.actualizar((e) => {
+      e.contactos = e.contactos.filter((c) => c.clavePublica !== clavePublica)
+      e.mensajes = e.mensajes.filter((m) => m.conversacion !== clavePublica)
+    })
+    await this.tocar()
+  }
+
   // --------------------------------------------------------------- envío
 
   async enviarTexto(claveDestino: string, texto: string): Promise<Mensaje> {
@@ -510,13 +543,18 @@ export class ServicioChat {
         const id = this.datos().identidad
         if (!id) return
         this.presencia.tocar(e.endpointId, '', Date.now())
-        try {
-          await this.cercania?.enviar({
-            endpointId: e.endpointId,
-            datos: JSON.stringify({ tipo: 'hola', clave: id.clavePublica, nombre: id.nombre }),
-          })
-        } catch {
-          // El saludo se reintenta al siguiente dato.
+        // El saludo solo hace falta si aún no sé la clave de este
+        // endpoint (v1.5.3: en una reconexión ya conocida no se repite;
+        // si la presencia lo olvidó al desconectar, se vuelve a mandar).
+        if (!this.presencia.porEndpoint(e.endpointId)?.clavePublica) {
+          try {
+            await this.cercania?.enviar({
+              endpointId: e.endpointId,
+              datos: JSON.stringify({ tipo: 'hola', clave: id.clavePublica, nombre: id.nombre }),
+            })
+          } catch {
+            // El saludo se reintenta al siguiente dato.
+          }
         }
         void this.tocar()
       })

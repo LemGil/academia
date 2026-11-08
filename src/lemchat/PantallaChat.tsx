@@ -10,6 +10,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import type { Academia } from '../academia/contenido'
 import { CodigoQR } from './CodigoQR'
+import { escanearCodigoConCamara } from './escaneo'
 import { codigoDeContacto } from './identidad'
 import { obtenerServicio, type ServicioChat } from './servicio'
 import { CONVERSACION_CANAL, type Mensaje } from './tipos'
@@ -139,6 +140,9 @@ export const PantallaChat: React.FC<Props> = ({ alArchivarPaquete, alAbrirAcadem
   return (
     <div className="lista">
       <h2>💬 CHAT</h2>
+      <p className="chat-yo">
+        👤 Tú eres: <strong>{estado.identidad?.nombre}</strong>
+      </p>
       <p className="chat-estado-via">{servicio.textoEstadoVias()}</p>
 
       <button className="tarjeta chat-fijada" onClick={() => setVista({ tipo: 'canal' })}>
@@ -286,7 +290,13 @@ const Conversacion: React.FC<{
 }> = ({ servicio, clave, alVolver }) => {
   const [texto, setTexto] = useState('')
   const [, setRepintar] = useState(0)
+  const [confirmarBorrar, setConfirmarBorrar] = useState(false)
   const contacto = servicio.datos().contactos.find((c) => c.clavePublica === clave)
+
+  const borrar = async () => {
+    await servicio.borrarContacto(clave)
+    alVolver()
+  }
   const mensajes = servicio.mensajesDe(clave)
   const finRef = useRef<HTMLDivElement>(null)
 
@@ -352,6 +362,26 @@ const Conversacion: React.FC<{
           Enviar
         </button>
       </div>
+      <div className="chat-borrar-zona">
+        {!confirmarBorrar ? (
+          <button className="btn-secundario" onClick={() => setConfirmarBorrar(true)}>
+            🗑 Borrar este contacto
+          </button>
+        ) : (
+          <>
+            <p className="chat-error">
+              Se borra el contacto «{contacto?.nombre}» y toda esta conversación de este
+              teléfono. Podrás agregarlo de nuevo con su código o su QR.
+            </p>
+            <button className="btn-secundario" onClick={() => void borrar()}>
+              Sí, borrar
+            </button>{' '}
+            <button className="btn-secundario" onClick={() => setConfirmarBorrar(false)}>
+              Cancelar
+            </button>
+          </>
+        )}
+      </div>
     </div>
   )
 }
@@ -411,18 +441,36 @@ const AgregarContacto: React.FC<{ servicio: ServicioChat; alVolver: () => void }
   const [codigo, setCodigo] = useState('')
   const [mensaje, setMensaje] = useState('')
   const [esError, setEsError] = useState(false)
+  const [escaneando, setEscaneando] = useState(false)
   const yo = servicio.datos().identidad
   const miCodigo = useMemo(() => (yo ? codigoDeContacto(yo) : ''), [yo])
 
-  const agregar = async () => {
+  const agregar = async (texto?: string) => {
     try {
-      const contacto = await servicio.agregarContactoPorCodigo(codigo)
+      const contacto = await servicio.agregarContactoPorCodigo((texto ?? codigo).trim())
       setMensaje(`✅ ${contacto.nombre} agregado${contacto.esMaestro ? ' como maestro' : ''}.`)
       setEsError(false)
       setCodigo('')
     } catch (e) {
       setMensaje(e instanceof Error ? e.message : 'No se pudo agregar.')
       setEsError(true)
+    }
+  }
+
+  const escanear = async () => {
+    setEscaneando(true)
+    try {
+      const texto = await escanearCodigoConCamara()
+      setCodigo(texto)
+      await agregar(texto)
+    } catch (e) {
+      const detalle = e instanceof Error ? e.message : ''
+      if (detalle !== '__cancelado__') {
+        setMensaje(detalle || 'No se pudo escanear.')
+        setEsError(true)
+      }
+    } finally {
+      setEscaneando(false)
     }
   }
 
@@ -439,13 +487,23 @@ const AgregarContacto: React.FC<{ servicio: ServicioChat; alVolver: () => void }
       </div>
       <div className="tarjeta">
         <h3>Tu código</h3>
+        <p>
+          Este teléfono es: <strong>{yo?.nombre}</strong>
+        </p>
         <p>Muéstralo a quien te vaya a agregar: el QR o el código de texto valen igual.</p>
         <CodigoQR texto={miCodigo} />
         <textarea className="chat-entrada chat-codigo" readOnly value={miCodigo} rows={3} />
       </div>
       <div className="tarjeta">
         <h3>Agregar con el código del otro</h3>
-        <p>Pega aquí el código que te mostró (el escaneo con cámara llega en una próxima versión).</p>
+        <p>Escanea su QR con la cámara, o pega aquí el código que te mostró: valen igual.</p>
+        <button
+          className="btn-primario"
+          onClick={() => void escanear()}
+          disabled={escaneando}
+        >
+          {escaneando ? 'Abriendo la cámara…' : '📷 Escanear el QR con la cámara'}
+        </button>
         <textarea
           className="chat-entrada chat-codigo"
           value={codigo}
@@ -471,6 +529,21 @@ const Ajustes: React.FC<{ servicio: ServicioChat; alVolver: () => void }> = ({
   const vias = servicio.estadoVias()
   const yo = servicio.datos().identidad
   const [aviso, setAviso] = useState('')
+  const [nombreNuevo, setNombreNuevo] = useState(yo?.nombre ?? '')
+  const [avisoNombre, setAvisoNombre] = useState('')
+  const [errorNombre, setErrorNombre] = useState(false)
+
+  const guardarNombre = async () => {
+    try {
+      await servicio.cambiarMiNombre(nombreNuevo)
+      setAvisoNombre('✅ Nombre actualizado en este teléfono.')
+      setErrorNombre(false)
+    } catch (e) {
+      setAvisoNombre(e instanceof Error ? e.message : 'No se pudo cambiar el nombre.')
+      setErrorNombre(true)
+    }
+  }
+
   return (
     <div className="lista">
       <div className="lector-barra chat-barra">
@@ -481,6 +554,29 @@ const Ajustes: React.FC<{ servicio: ServicioChat; alVolver: () => void }> = ({
           <strong>⚙️ Ajustes de CHAT</strong>
           <span>{yo?.nombre}</span>
         </div>
+      </div>
+
+      <div className="tarjeta">
+        <h3>Mi identidad en este teléfono</h3>
+        <p>
+          Este teléfono se presenta como: <strong>{yo?.nombre}</strong>
+        </p>
+        <p>Si el nombre quedó mal puesto (pasa al probar con varios teléfonos), corrígelo aquí:</p>
+        <input
+          className="chat-entrada"
+          value={nombreNuevo}
+          onChange={(e) => setNombreNuevo(e.target.value)}
+          placeholder="Tu nombre"
+          maxLength={60}
+        />
+        {avisoNombre && <p className={errorNombre ? 'chat-error' : 'chat-ok'}>{avisoNombre}</p>}
+        <button className="btn-secundario" onClick={() => void guardarNombre()}>
+          Guardar el nombre
+        </button>
+        <p className="chat-nota">
+          Al cambiarlo, vuelve a mostrar tu código a tus contactos: cuando te agreguen otra vez,
+          tu nombre se actualiza en su lista. Tu clave no cambia: sigues siendo tú.
+        </p>
       </div>
 
       <div className="tarjeta">
