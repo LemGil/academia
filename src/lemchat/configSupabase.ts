@@ -11,8 +11,8 @@
 // local) y la vía de internet se muestra como «sin configurar» — nunca
 // como un error que tumbe la app.
 
-VITE_SUPABASE_URL="https://ykynzeykphufrkwgncyu.supabase.co"
-VITE_SUPABASE_ANON_KEY="sb_publishable_4WH7Aejf9VDMe7HnQVqDEQ_CMHOTS-n"
+export const SUPABASE_URL='https://ykynzeykphufrkwgncyu.supabase.co'
+export const SUPABASE_ANON_KEY='sb_publishable_4WH7Aejf9VDMe7HnQVqDEQ_CMHOTS-n'
 
 
 /** Llave pública del maestro fijada en la app (opcional).
