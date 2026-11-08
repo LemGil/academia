@@ -3,6 +3,12 @@
     <!-- Internet solo para la futura sincronización del progreso con la nube.
          Todo el contenido (enseñanzas y Biblia) vive dentro de la app. -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Cámara: escanear el QR de un contacto (MensajeAcademia). El plugin
+         @capacitor/camera 8.x NO declara este permiso en su manifiesto;
+         sin esta línea Android ni siquiera lo ofrece en los permisos de
+         la app y la cámara nunca puede abrirse. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
         android:allowBackup="true"
