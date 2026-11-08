@@ -41,7 +41,7 @@ const claves = {
 writeFileSync(ruta, JSON.stringify(claves, null, 2), { mode: 0o600 })
 
 const codigoContacto =
-  'lemchat1:' + b64url(Buffer.from(JSON.stringify({ nombre, clavePublica: claves.clavePublica, maestro: true }), 'utf8'))
+  'lemchat1:' + b64url(Buffer.from(JSON.stringify({ nombre, clavePublica: claves.clavePublica, esMaestro: true }), 'utf8'))
 
 console.log('✅ Llaves del maestro creadas.')
 console.log('')

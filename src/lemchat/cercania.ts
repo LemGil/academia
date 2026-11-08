@@ -10,6 +10,8 @@
 //   { tipo: 'ack',     id }                         — «lo recibí»
 //   { tipo: 'aviso',   texto, firma }               — aviso del maestro
 //   { tipo: 'paquete', sobre }                      — enseñanza firmada
+//   { tipo: 'invitacion-grupo', id, sellado }        — invitación a un grupo (Fase D)
+//   { tipo: 'grupo',   grupo, id, cifrado, firma }  — mensaje de grupo (Fase D)
 
 import { Capacitor, registerPlugin, type PluginListenerHandle } from '@capacitor/core'
 
@@ -66,6 +68,8 @@ export type CargaUtil =
   | { tipo: 'ack'; id: string }
   | { tipo: 'aviso'; texto: string; firma: string }
   | { tipo: 'paquete'; sobre: string }
+  | { tipo: 'invitacion-grupo'; id: string; sellado: string }
+  | { tipo: 'grupo'; grupo: string; id: string; cifrado: string; firma: string }
 
 export function leerCargaUtil(datos: string): CargaUtil | null {
   try {

@@ -48,3 +48,25 @@ describe('identidad Ed25519', () => {
     expect(leerCodigoDeContacto('otra-cosa')).toBeNull()
   })
 })
+
+describe('código del maestro impreso por el script (forma antigua)', () => {
+  it('acepta el campo «maestro: true» de los códigos ya repartidos', () => {
+    const maestro = crearIdentidad('LemGil Apóstol')
+    const antiguo =
+      'lemchat1:' +
+      bytesABase64Url(
+        textoABytes(
+          JSON.stringify({
+            nombre: maestro.nombre,
+            clavePublica: maestro.clavePublica,
+            maestro: true,
+          }),
+        ),
+      )
+    expect(leerCodigoDeContacto(antiguo)).toEqual({
+      nombre: 'LemGil Apóstol',
+      clavePublica: maestro.clavePublica,
+      esMaestro: true,
+    })
+  })
+})

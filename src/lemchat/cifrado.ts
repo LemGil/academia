@@ -40,3 +40,52 @@ export function abrir(clavePrivadaB64: string, clavePublicaOrigenB64: string, se
     return null
   }
 }
+
+// ---------------------------------------------------------------------------
+// Cifrado simétrico con una clave compartida (Fase D: la clave del grupo).
+// Mismo formato de siempre: base64url( nonce(24) || cifrado ). Quien no
+// tiene la clave no obtiene el texto aunque recoja el sobre del buzón.
+// ---------------------------------------------------------------------------
+
+/** Genera una clave simétrica nueva (32 bytes en base64url). */
+export function generarClaveSimetrica(): string {
+  const bytes = new Uint8Array(32)
+  crypto.getRandomValues(bytes)
+  return bytesABase64Url(bytes)
+}
+
+/** true si el texto es una clave simétrica válida (32 bytes base64url). */
+export function esClaveSimetricaValida(claveB64: string): boolean {
+  try {
+    return base64UrlABytes(claveB64).length === 32
+  } catch {
+    return false
+  }
+}
+
+/** Cifra un texto con la clave simétrica compartida. */
+export function cifrarSimetrico(claveB64: string, texto: string): string {
+  const clave = base64UrlABytes(claveB64)
+  const nonce = new Uint8Array(24)
+  crypto.getRandomValues(nonce)
+  const cifrado = xsalsa20poly1305(clave, nonce).encrypt(textoABytes(texto))
+  const junto = new Uint8Array(nonce.length + cifrado.length)
+  junto.set(nonce)
+  junto.set(cifrado, nonce.length)
+  return bytesABase64Url(junto)
+}
+
+/** Descifra con la clave simétrica. Clave ajena o sobre dañado: null. */
+export function descifrarSimetrico(claveB64: string, sellado: string): string | null {
+  try {
+    const junto = base64UrlABytes(sellado)
+    if (junto.length < 25) return null
+    const nonce = junto.subarray(0, 24)
+    const cifrado = junto.subarray(24)
+    const clave = base64UrlABytes(claveB64)
+    if (clave.length !== 32) return null
+    return bytesATexto(xsalsa20poly1305(clave, nonce).decrypt(cifrado))
+  } catch {
+    return null
+  }
+}

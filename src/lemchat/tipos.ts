@@ -49,6 +49,22 @@ export interface Mensaje {
   paqueteSinVerificar?: boolean
 }
 
+/** Grupo por academia (Fase D). Lo crea solo el maestro; en v1 es un
+ *  hilo de difusión: el maestro escribe y los miembros leen (responderle
+ *  es por la conversación personal con él). La clave del grupo es
+ *  simétrica: quien no la tiene, no puede leer los mensajes del grupo
+ *  aunque recoja las filas del buzón. */
+export interface Grupo {
+  id: string
+  nombre: string
+  /** Academia vinculada, si el maestro la indicó al crear (id libre). */
+  academiaId?: string
+  /** Clave simétrica del grupo (base64url, 32 bytes). */
+  claveGrupo: string
+  /** Claves públicas de los miembros, incluida la del maestro. */
+  miembros: string[]
+}
+
 export interface EstadoChat {
   activado: boolean
   identidad: Identidad | null
@@ -57,12 +73,34 @@ export interface EstadoChat {
   /** ids de filas del canal ya procesadas (el buzón del canal no se borra:
    *  lo leen todos; expira solo en el servidor a los 30 días). */
   canalProcesados: string[]
+  /** Grupos por academia a los que pertenece este teléfono (Fase D). */
+  grupos: Grupo[]
+  /** ids de filas de grupo ya procesadas (como las del canal, las filas
+   *  de grupo las leen todos los miembros: no se borran al leer). */
+  gruposProcesados: string[]
+  /** true si este teléfono importó la llave del maestro (Fase D): puede
+   *  publicar en el canal y crear grupos. */
+  soyMaestro: boolean
 }
 
 export const CONVERSACION_CANAL = 'canal-maestro'
 /** Dirección especial del buzón: lo que el maestro publica «para el canal». */
 export const DIRECCION_CANAL = 'canal'
 
+/** Conversación local y dirección del buzón de un grupo: «grupo:<id>». */
+export function conversacionDeGrupo(id: string): string {
+  return `grupo:${id}`
+}
+
 export function estadoChatVacio(): EstadoChat {
-  return { activado: false, identidad: null, contactos: [], mensajes: [], canalProcesados: [] }
+  return {
+    activado: false,
+    identidad: null,
+    contactos: [],
+    mensajes: [],
+    canalProcesados: [],
+    grupos: [],
+    gruposProcesados: [],
+    soyMaestro: false,
+  }
 }

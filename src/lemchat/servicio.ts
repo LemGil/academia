@@ -12,9 +12,17 @@
 import { AlmacenArchivo, AlmacenMemoria, RepositorioChat, publicarNoLeidos } from './almacen'
 import { Buzon, firmarFila, filaEsAutentica, type FilaBuzon } from './buzon'
 import { CLAVE_MAESTRO_FIJADA, SUPABASE_ANON_KEY, SUPABASE_URL } from './configSupabase'
-import { abrir, sellar } from './cifrado'
-import { decidirEntrega, leerSobre } from './entrega'
 import {
+  abrir,
+  cifrarSimetrico,
+  descifrarSimetrico,
+  esClaveSimetricaValida,
+  generarClaveSimetrica,
+  sellar,
+} from './cifrado'
+import { crearSobrePaquete, decidirEntrega, leerSobre } from './entrega'
+import {
+  clavePublicaDe,
   crearIdentidad,
   firmarTexto,
   leerCodigoDeContacto,
@@ -26,8 +34,10 @@ import { leerCargaUtil, obtenerCercania, type LemChatCercaniaPlugin } from './ce
 import {
   CONVERSACION_CANAL,
   DIRECCION_CANAL,
+  conversacionDeGrupo,
   type Contacto,
   type EstadoChat,
+  type Grupo,
   type Mensaje,
 } from './tipos'
 import { idAleatorio } from './util'
@@ -46,6 +56,44 @@ export interface EstadoVias {
   internet: 'sin-configurar' | 'ok' | 'error'
   cercania: 'no-disponible' | 'apagada' | 'buscando' | 'activa'
   paresCercanos: number
+}
+
+/** Lo que viaja sellado en una invitación de grupo (Fase D): el descriptor
+ *  del grupo SIN la clave, y la clave aparte — el formato del plan. */
+interface InvitacionGrupo {
+  grupo: Omit<Grupo, 'claveGrupo'>
+  claveGrupo: string
+}
+
+/** Lee y valida el texto de una invitación recibida. Dañada: null. */
+function leerInvitacionGrupo(texto: string): InvitacionGrupo | null {
+  try {
+    const datos = JSON.parse(texto) as Partial<InvitacionGrupo>
+    const g = datos?.grupo
+    if (!g || typeof g.id !== 'string' || !g.id) return null
+    if (typeof g.nombre !== 'string' || !g.nombre.trim()) return null
+    if (!Array.isArray(g.miembros) || g.miembros.some((m) => typeof m !== 'string')) return null
+    if (typeof datos.claveGrupo !== 'string' || !esClaveSimetricaValida(datos.claveGrupo)) {
+      return null
+    }
+    return {
+      grupo: {
+        id: g.id,
+        nombre: g.nombre.trim(),
+        academiaId: typeof g.academiaId === 'string' && g.academiaId ? g.academiaId : undefined,
+        miembros: [...g.miembros],
+      },
+      claveGrupo: datos.claveGrupo,
+    }
+  } catch {
+    return null
+  }
+}
+
+/** Lo que el maestro firma en cada mensaje de grupo (por cercanía no hay
+ *  fila del buzón que firme por él: la firma viaja en la carga misma). */
+export function textoFirmadoGrupo(grupoId: string, mensajeId: string, cifrado: string): string {
+  return `lemchat-grupo-v1|${grupoId}|${mensajeId}|${cifrado}`
 }
 
 export class ServicioChat {
@@ -145,6 +193,54 @@ export class ServicioChat {
     await this.tocar()
   }
 
+  /**
+   * Importa la llave del maestro (Fase D): el contenido del JSON que
+   * genera `scripts/lemchat-claves-maestro.mjs` ({ nombre, clavePublica,
+   * clavePrivada }). La validación es la de verdad: se deriva la pública
+   * desde la privada y deben coincidir — un JSON pegado a medias o de
+   * otra llave se rechaza con el motivo. Al importar, la identidad de
+   * este teléfono PASA a ser la del maestro (soyMaestro) y la cercanía
+   * se re-anuncia con ella.
+   */
+  async importarLlaveMaestro(json: string): Promise<void> {
+    let datos: { nombre?: unknown; clavePublica?: unknown; clavePrivada?: unknown }
+    try {
+      datos = JSON.parse(json)
+    } catch {
+      throw new Error('eso no es el JSON de claves del maestro: revísalo y pégalo entero')
+    }
+    const { nombre, clavePublica, clavePrivada } = datos ?? {}
+    if (
+      typeof nombre !== 'string' ||
+      !nombre.trim() ||
+      typeof clavePublica !== 'string' ||
+      typeof clavePrivada !== 'string'
+    ) {
+      throw new Error('al JSON le faltan campos: debe traer nombre, clavePublica y clavePrivada')
+    }
+    let derivada: string
+    try {
+      derivada = clavePublicaDe(clavePrivada)
+    } catch {
+      throw new Error('la clave privada del JSON no es una llave Ed25519 válida')
+    }
+    if (derivada !== clavePublica) {
+      throw new Error('la llave privada no corresponde a la llave pública del JSON: no se importó nada')
+    }
+    await this.repo.actualizar((e) => {
+      e.identidad = {
+        nombre: nombre.trim(),
+        clavePublica,
+        clavePrivada,
+        creadaEn: Date.now(),
+      }
+      e.soyMaestro = true
+      e.activado = true
+    })
+    await this.tocar()
+    await this.reiniciarCercania()
+  }
+
   mensajesDe(conversacion: string): Mensaje[] {
     return this.datos()
       .mensajes.filter((m) => m.conversacion === conversacion)
@@ -168,6 +264,9 @@ export class ServicioChat {
 
   claveMaestroConfiable(): string | null {
     if (CLAVE_MAESTRO_FIJADA) return CLAVE_MAESTRO_FIJADA
+    // Si ESTE teléfono es el maestro (llave importada), su propia llave
+    // es la del maestro: sus publicaciones del canal también le valen.
+    if (this.datos().soyMaestro) return this.datos().identidad?.clavePublica ?? null
     const maestro = this.datos().contactos.find((c) => c.esMaestro)
     return maestro?.clavePublica ?? null
   }
@@ -235,6 +334,380 @@ export class ServicioChat {
       e.contactos = e.contactos.filter((c) => c.clavePublica !== clavePublica)
       e.mensajes = e.mensajes.filter((m) => m.conversacion !== clavePublica)
     })
+    await this.tocar()
+  }
+
+  // ------------------------------------------- grupos y canal (Fase D)
+
+  private exigirMaestro(): NonNullable<EstadoChat['identidad']> {
+    const yo = this.datos().identidad
+    if (!yo) throw new Error('primero activa CHAT')
+    if (!this.datos().soyMaestro) {
+      throw new Error('solo el maestro: importa primero tu llave en Ajustes')
+    }
+    return yo
+  }
+
+  /**
+   * Crea un grupo por academia (solo el maestro). Genera la clave del
+   * grupo, lo guarda en local y manda a cada miembro su invitación 1:1
+   * sellada: sin invitación no hay clave, y sin clave no hay lectura.
+   */
+  async crearGrupo(
+    nombre: string,
+    academiaId: string | undefined,
+    clavesMiembros: string[],
+  ): Promise<Grupo> {
+    const yo = this.exigirMaestro()
+    const limpio = nombre.trim()
+    if (!limpio) throw new Error('el grupo necesita un nombre')
+    const miembros = [...new Set([yo.clavePublica, ...clavesMiembros])]
+    const grupo: Grupo = {
+      id: idAleatorio('g'),
+      nombre: limpio,
+      academiaId: academiaId?.trim() ? academiaId.trim() : undefined,
+      claveGrupo: generarClaveSimetrica(),
+      miembros,
+    }
+    await this.repo.actualizar((e) => {
+      e.grupos.push(grupo)
+      e.mensajes.push({
+        id: `grupo_creado_${grupo.id}`,
+        conversacion: conversacionDeGrupo(grupo.id),
+        de: yo.clavePublica,
+        para: conversacionDeGrupo(grupo.id),
+        tipo: 'texto',
+        cuerpo: `Creaste el grupo «${grupo.nombre}». Aquí solo escribes tú; los miembros leen y te responden en su conversación personal contigo.`,
+        ts: Date.now(),
+        mio: false,
+        estado: 'entregado',
+        leido: true,
+      })
+    })
+    for (const clave of miembros) {
+      if (clave !== yo.clavePublica) await this.enviarInvitacionGrupo(grupo, clave)
+    }
+    await this.tocar()
+    return grupo
+  }
+
+  /**
+   * Agrega un miembro a un grupo ya creado (o le reenvía la invitación
+   * si ya era miembro). La clave del grupo no cambia en v1: quien entra
+   * puede leer también lo publicado antes de su llegada.
+   */
+  async invitarMiembroGrupo(grupoId: string, claveMiembro: string): Promise<void> {
+    this.exigirMaestro()
+    const grupo = this.datos().grupos.find((g) => g.id === grupoId)
+    if (!grupo) throw new Error('ese grupo ya no está en este teléfono')
+    if (!grupo.miembros.includes(claveMiembro)) {
+      await this.repo.actualizar((e) => {
+        const g = e.grupos.find((x) => x.id === grupoId)
+        if (g && !g.miembros.includes(claveMiembro)) g.miembros.push(claveMiembro)
+      })
+    }
+    const actualizado = this.datos().grupos.find((g) => g.id === grupoId) ?? grupo
+    await this.enviarInvitacionGrupo(actualizado, claveMiembro)
+    await this.tocar()
+  }
+
+  /** Manda la invitación sellada a UN miembro: cercanía si está presente
+   *  (como un mensaje personal) y, si no, el buzón. Si ninguna vía lo
+   *  acepta ahora, se puede reenviar luego con invitarMiembroGrupo. */
+  private async enviarInvitacionGrupo(grupo: Grupo, claveMiembro: string): Promise<void> {
+    const yo = this.datos().identidad
+    if (!yo || claveMiembro === yo.clavePublica) return
+    const { claveGrupo: _clave, ...descriptor } = grupo
+    const invitacion: InvitacionGrupo = { grupo: descriptor, claveGrupo: grupo.claveGrupo }
+    const sellado = sellar(yo.clavePrivada, claveMiembro, JSON.stringify(invitacion))
+    const id = idAleatorio('inv')
+    // 1) Cercanía, si el miembro está presente ahora.
+    const par = this.presencia.porClave(claveMiembro, Date.now())
+    if (this.cercania && par) {
+      try {
+        await this.cercania.enviar({
+          endpointId: par.endpointId,
+          datos: JSON.stringify({ tipo: 'invitacion-grupo', id, sellado }),
+        })
+        return
+      } catch {
+        // Se cayó a mitad: se prueba el buzón.
+      }
+    }
+    // 2) Buzón por internet.
+    if (this.buzon.configurado()) {
+      try {
+        const fila = firmarFila(yo.clavePrivada, {
+          de: yo.clavePublica,
+          para: claveMiembro,
+          tipo: 'invitacion-grupo',
+          cuerpo: JSON.stringify({ id, sellado }),
+        })
+        await this.buzon.enviar(fila)
+        this.internet = 'ok'
+      } catch {
+        this.internet = 'error'
+      }
+    }
+  }
+
+  /**
+   * Recibe una invitación YA abierta (el texto sellado descifrado): solo
+   * se acepta si el remitente es MI maestro de confianza; cualquier otro
+   * remitente se descarta en silencio. Al aceptar, el grupo queda
+   * guardado (por id: una re-invitación actualiza el descriptor) y el
+   * hilo recibe su mensaje de sistema, una sola vez.
+   */
+  private async aceptarInvitacionGrupo(deClave: string, textoInvitacion: string): Promise<void> {
+    const yo = this.datos().identidad
+    if (!yo) return
+    if (deClave !== this.claveMaestroConfiable()) return
+    const invitacion = leerInvitacionGrupo(textoInvitacion)
+    if (!invitacion) return
+    const grupo: Grupo = { ...invitacion.grupo, claveGrupo: invitacion.claveGrupo }
+    // El grupo es de quien me invita: su clave siempre está entre los miembros.
+    if (!grupo.miembros.includes(deClave)) grupo.miembros.push(deClave)
+    const yaEstaba = this.datos().grupos.some((g) => g.id === grupo.id)
+    await this.repo.actualizar((e) => {
+      const i = e.grupos.findIndex((g) => g.id === grupo.id)
+      if (i >= 0) e.grupos[i] = grupo
+      else e.grupos.push(grupo)
+      const idSistema = `grupo_inv_${grupo.id}`
+      if (!yaEstaba && !e.mensajes.some((m) => m.id === idSistema)) {
+        e.mensajes.push({
+          id: idSistema,
+          conversacion: conversacionDeGrupo(grupo.id),
+          de: deClave,
+          para: yo.clavePublica,
+          tipo: 'texto',
+          cuerpo: `Te agregaron al grupo «${grupo.nombre}». Aquí escribe el maestro; para responderle, usa tu conversación personal con él.`,
+          ts: Date.now(),
+          mio: false,
+          estado: 'entregado',
+          leido: false,
+        })
+      }
+    })
+    await this.tocar()
+  }
+
+  /**
+   * Publica un mensaje en un grupo (solo el maestro, difusión v1). El
+   * cuerpo viaja cifrado con la clave del grupo y firmado por el
+   * maestro; en local se guarda en claro, como los demás mensajes.
+   */
+  async publicarEnGrupo(grupoId: string, texto: string): Promise<Mensaje> {
+    const yo = this.exigirMaestro()
+    const limpio = texto.trim()
+    if (!limpio) throw new Error('el mensaje está vacío')
+    if (!this.datos().grupos.some((g) => g.id === grupoId)) {
+      throw new Error('ese grupo ya no está en este teléfono')
+    }
+    const mensaje: Mensaje = {
+      id: idAleatorio('m'),
+      conversacion: conversacionDeGrupo(grupoId),
+      de: yo.clavePublica,
+      para: conversacionDeGrupo(grupoId),
+      tipo: 'texto',
+      cuerpo: limpio,
+      ts: Date.now(),
+      mio: true,
+      estado: 'cola',
+      leido: true,
+    }
+    await this.repo.actualizar((e) => {
+      e.mensajes.push(mensaje)
+    })
+    await this.intentarPublicarGrupo(mensaje)
+    await this.tocar()
+    return mensaje
+  }
+
+  /** Saca un mensaje de grupo en cola: cercanía a los miembros presentes
+   *  y buzón para los demás. Si alguna vía lo acepta: «enviado». */
+  private async intentarPublicarGrupo(mensaje: Mensaje): Promise<void> {
+    const yo = this.datos().identidad
+    if (!yo || mensaje.estado !== 'cola') return
+    const grupo = this.datos().grupos.find((g) => conversacionDeGrupo(g.id) === mensaje.conversacion)
+    if (!grupo) return
+    const cifrado = cifrarSimetrico(grupo.claveGrupo, mensaje.cuerpo)
+    let salio = false
+    // 1) Cercanía: a cada miembro presente.
+    if (this.cercania) {
+      const firma = firmarTexto(yo.clavePrivada, textoFirmadoGrupo(grupo.id, mensaje.id, cifrado))
+      for (const par of this.presencia.presentes(Date.now())) {
+        if (!par.clavePublica || !grupo.miembros.includes(par.clavePublica)) continue
+        if (par.clavePublica === yo.clavePublica) continue
+        try {
+          await this.cercania.enviar({
+            endpointId: par.endpointId,
+            datos: JSON.stringify({
+              tipo: 'grupo',
+              grupo: grupo.id,
+              id: mensaje.id,
+              cifrado,
+              firma,
+            }),
+          })
+          salio = true
+        } catch {
+          // Ese par se cayó a mitad: los demás siguen.
+        }
+      }
+    }
+    // 2) Buzón: la fila queda para que cada miembro la recoja (no se
+    // borra al leer, como las del canal: la leen todos los miembros).
+    if (this.buzon.configurado()) {
+      try {
+        const fila = firmarFila(yo.clavePrivada, {
+          de: yo.clavePublica,
+          para: conversacionDeGrupo(grupo.id),
+          tipo: 'grupo',
+          cuerpo: JSON.stringify({ id: mensaje.id, cifrado }),
+        })
+        await this.buzon.enviar(fila)
+        this.internet = 'ok'
+        salio = true
+      } catch {
+        this.internet = 'error'
+      }
+    }
+    if (salio) await this.marcarEstado(mensaje.id, 'enviado')
+  }
+
+  /** Guarda un mensaje de grupo recibido (buzón o cercanía), una vez. */
+  private async guardarMensajeGrupoRecibido(
+    grupo: Grupo,
+    deClave: string,
+    id: string,
+    cifrado: string,
+  ): Promise<void> {
+    const yo = this.datos().identidad
+    if (!yo) return
+    if (this.datos().mensajes.some((m) => m.id === id)) return
+    const texto = descifrarSimetrico(grupo.claveGrupo, cifrado)
+    if (texto === null) return
+    const mensaje: Mensaje = {
+      id,
+      conversacion: conversacionDeGrupo(grupo.id),
+      de: deClave,
+      para: conversacionDeGrupo(grupo.id),
+      tipo: 'texto',
+      cuerpo: texto,
+      ts: Date.now(),
+      mio: deClave === yo.clavePublica,
+      estado: 'entregado',
+      leido: deClave === yo.clavePublica,
+    }
+    await this.repo.actualizar((e) => {
+      e.mensajes.push(mensaje)
+    })
+  }
+
+  /**
+   * Publica un aviso en el canal TEMAS APOSTÓLICOS (solo el maestro).
+   * Sale firmado por el buzón (tipo 'aviso', para = canal) y se anuncia
+   * por cercanía con la carga que la recepción ya entiende; en local se
+   * guarda como mensaje mío del canal, para que el maestro también vea
+   * lo suyo.
+   */
+  async publicarAvisoCanal(texto: string): Promise<void> {
+    const yo = this.exigirMaestro()
+    const limpio = texto.trim()
+    if (!limpio) throw new Error('el aviso está vacío')
+    const mensaje: Mensaje = {
+      id: idAleatorio('aviso'),
+      conversacion: CONVERSACION_CANAL,
+      de: yo.clavePublica,
+      para: DIRECCION_CANAL,
+      tipo: 'aviso',
+      cuerpo: limpio,
+      ts: Date.now(),
+      mio: true,
+      estado: 'entregado',
+      leido: true,
+    }
+    await this.repo.actualizar((e) => {
+      e.mensajes.push(mensaje)
+    })
+    if (this.buzon.configurado()) {
+      try {
+        await this.buzon.enviar(
+          firmarFila(yo.clavePrivada, {
+            de: yo.clavePublica,
+            para: DIRECCION_CANAL,
+            tipo: 'aviso',
+            cuerpo: limpio,
+          }),
+        )
+        this.internet = 'ok'
+      } catch {
+        this.internet = 'error'
+      }
+    }
+    await this.difundirAvisoCercania(limpio)
+    await this.tocar()
+  }
+
+  /**
+   * Publica una enseñanza en el canal (solo el maestro): construye el
+   * sobre firmado con crearSobrePaquete — el mismo que decide entregar
+   * (`decidirEntrega`) en los teléfonos de los estudiantes — y lo manda
+   * por el buzón (tipo 'paquete') y por cercanía (tipo 'paquete').
+   */
+  async publicarEnsenanzaCanal(academiaId: string, paqueteTexto: string): Promise<void> {
+    const yo = this.exigirMaestro()
+    const id = academiaId.trim()
+    if (!id) throw new Error('la enseñanza necesita el id de su paquete (ej. lemgil-14)')
+    if (!paqueteTexto.trim()) throw new Error('pega el texto del paquete de la enseñanza')
+    const sobre = crearSobrePaquete(paqueteTexto, id, yo.clavePublica, yo.clavePrivada)
+    const textoSobre = JSON.stringify(sobre)
+    // Copia local con el MISMO id que genera procesarSobreRecibido: si
+    // la fila del canal vuelve a este teléfono, no se duplica.
+    const mensaje: Mensaje = {
+      id: `pkg_${sobre.academiaId}_${sobre.emitido}`,
+      conversacion: CONVERSACION_CANAL,
+      de: yo.clavePublica,
+      para: DIRECCION_CANAL,
+      tipo: 'paquete',
+      cuerpo: `Enseñanza publicada en el canal: ${id}.`,
+      ts: Date.now(),
+      mio: true,
+      estado: 'entregado',
+      leido: true,
+      paqueteId: id,
+    }
+    await this.repo.actualizar((e) => {
+      e.mensajes.push(mensaje)
+    })
+    if (this.buzon.configurado()) {
+      try {
+        await this.buzon.enviar(
+          firmarFila(yo.clavePrivada, {
+            de: yo.clavePublica,
+            para: DIRECCION_CANAL,
+            tipo: 'paquete',
+            cuerpo: textoSobre,
+          }),
+        )
+        this.internet = 'ok'
+      } catch {
+        this.internet = 'error'
+      }
+    }
+    // Por cercanía: la carga 'paquete' que la recepción ya procesa.
+    if (this.cercania) {
+      for (const par of this.presencia.presentes(Date.now())) {
+        try {
+          await this.cercania.enviar({
+            endpointId: par.endpointId,
+            datos: JSON.stringify({ tipo: 'paquete', sobre: textoSobre }),
+          })
+        } catch {
+          // Ese par se cayó a mitad: los demás siguen.
+        }
+      }
+    }
     await this.tocar()
   }
 
@@ -317,11 +790,14 @@ export class ServicioChat {
     const estado = await this.cargar()
     if (!estado.activado || !estado.identidad) return
     for (const m of estado.mensajes.filter((x) => x.mio && x.estado === 'cola')) {
-      await this.intentarEnviar(m)
+      if (m.conversacion.startsWith('grupo:')) await this.intentarPublicarGrupo(m)
+      else await this.intentarEnviar(m)
     }
     if (this.buzon.configurado()) {
       try {
-        const filas = await this.buzon.recibir(estado.identidad.clavePublica)
+        // Además de lo mío y el canal: las direcciones de MIS grupos.
+        const extras = estado.grupos.map((g) => conversacionDeGrupo(g.id))
+        const filas = await this.buzon.recibir(estado.identidad.clavePublica, extras)
         this.internet = 'ok'
         for (const fila of filas) {
           await this.procesarFila(fila)
@@ -353,6 +829,10 @@ export class ServicioChat {
         e.canalProcesados = [...e.canalProcesados.slice(-400), fila.id as string]
       })
       await this.procesarDelCanal(fila)
+      return
+    }
+    if (fila.para.startsWith('grupo:')) {
+      await this.procesarFilaGrupo(fila)
       return
     }
     if (fila.para !== yo.clavePublica) return
@@ -387,14 +867,60 @@ export class ServicioChat {
       await this.procesarSobreRecibido(fila.cuerpo)
       await this.enviarRecibo(fila.de, fila)
       await this.borrarFilaSeguro(fila.id)
+    } else if (fila.tipo === 'invitacion-grupo') {
+      // Invitación a un grupo: se abre el sello y la aceptación decide
+      // (solo si el remitente es mi maestro de confianza). La fila se
+      // borra siempre: aceptada o no, ya se procesó.
+      try {
+        const datos = JSON.parse(fila.cuerpo) as { sellado?: string }
+        if (typeof datos.sellado === 'string') {
+          const texto = abrir(yo.clavePrivada, fila.de, datos.sellado)
+          if (texto !== null) await this.aceptarInvitacionGrupo(fila.de, texto)
+        }
+      } catch {
+        // Invitación dañada: se descarta en silencio, como manda el plan.
+      }
+      await this.borrarFilaSeguro(fila.id)
+    }
+  }
+
+  /**
+   * Una fila dirigida a «grupo:<id>». Las filas de grupo, como las del
+   * canal, las leen todos los miembros: NO se borran al leer (expiran
+   * solas en el servidor) y se anota cuáles ya se procesaron. Solo entra
+   * lo firmado por el maestro y solo si tengo la clave de ese grupo.
+   */
+  private async procesarFilaGrupo(fila: FilaBuzon): Promise<void> {
+    const yo = this.datos().identidad
+    if (!yo || !fila.id) return
+    if (fila.tipo !== 'grupo') return
+    const grupoId = fila.para.slice('grupo:'.length)
+    const grupo = this.datos().grupos.find((g) => g.id === grupoId)
+    if (!grupo) return // no es mi grupo: no tengo su clave, nada que hacer
+    if (this.datos().gruposProcesados.includes(fila.id)) return
+    await this.repo.actualizar((e) => {
+      e.gruposProcesados = [...e.gruposProcesados.slice(-400), fila.id as string]
+    })
+    const maestro = this.claveMaestroConfiable()
+    if (!maestro || fila.de !== maestro) return // en el grupo solo publica el maestro
+    try {
+      const datos = JSON.parse(fila.cuerpo) as { id?: string; cifrado?: string }
+      if (typeof datos.id === 'string' && typeof datos.cifrado === 'string') {
+        await this.guardarMensajeGrupoRecibido(grupo, fila.de, datos.id, datos.cifrado)
+      }
+    } catch {
+      // Cuerpo dañado: ya quedó anotada como procesada; no envenena.
     }
   }
 
   private async procesarDelCanal(fila: FilaBuzon): Promise<void> {
     if (fila.de !== this.claveMaestroConfiable()) return // solo el maestro publica
+    // Lo publicado por ESTE teléfono ya se guardó en local al publicar
+    // (publicarAvisoCanal / publicarEnsenanzaCanal): no se duplica.
+    if (fila.de === this.datos().identidad?.clavePublica) return
     if (fila.tipo === 'paquete') {
       await this.procesarSobreRecibido(fila.cuerpo)
-    } else if (fila.tipo === 'texto') {
+    } else if (fila.tipo === 'aviso' || fila.tipo === 'texto') {
       const id = `aviso_${fila.id}`
       if (this.datos().mensajes.some((m) => m.id === id)) return
       const mensaje: Mensaje = {
@@ -599,6 +1125,33 @@ export class ServicioChat {
       // Al saber quién es, se intenta sacar la cola hacia él.
       for (const m of this.datos().mensajes.filter((x) => x.mio && x.estado === 'cola')) {
         if (m.para === carga.clave) await this.intentarEnviar(m)
+        else if (m.conversacion.startsWith('grupo:')) {
+          // Cola de grupo: si el que saludó es miembro, puede salir ya.
+          const g = this.datos().grupos.find(
+            (x) => conversacionDeGrupo(x.id) === m.conversacion,
+          )
+          if (g?.miembros.includes(carga.clave)) await this.intentarPublicarGrupo(m)
+        }
+      }
+    } else if (carga.tipo === 'invitacion-grupo') {
+      // Solo vale si el par que la trae ES mi maestro de confianza (la
+      // aceptación vuelve a comprobarlo sobre el remitente del sello).
+      const par = this.presencia.porEndpoint(endpointId)
+      if (par?.clavePublica && par.clavePublica === this.claveMaestroConfiable()) {
+        const texto = abrir(yo.clavePrivada, par.clavePublica, carga.sellado)
+        if (texto !== null) await this.aceptarInvitacionGrupo(par.clavePublica, texto)
+      }
+    } else if (carga.tipo === 'grupo') {
+      // Mensaje de grupo por cercanía: descifrar con la clave de MI
+      // grupo y verificar la firma del maestro (la carga la trae).
+      const grupo = this.datos().grupos.find((g) => g.id === carga.grupo)
+      const maestro = this.claveMaestroConfiable()
+      if (
+        grupo &&
+        maestro &&
+        verificarTexto(maestro, carga.firma, textoFirmadoGrupo(carga.grupo, carga.id, carga.cifrado))
+      ) {
+        await this.guardarMensajeGrupoRecibido(grupo, maestro, carga.id, carga.cifrado)
       }
     } else if (carga.tipo === 'mensaje') {
       const par = this.presencia.porEndpoint(endpointId)

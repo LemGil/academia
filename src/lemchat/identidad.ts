@@ -93,7 +93,12 @@ export function leerCodigoDeContacto(texto: string): DatosContacto | null {
     return {
       nombre: datos.nombre.trim(),
       clavePublica: datos.clavePublica,
-      esMaestro: datos.esMaestro === true,
+      // El script de llaves del maestro imprimió al principio códigos con
+      // el campo «maestro» en vez de «esMaestro»: se aceptan las dos
+      // formas para que esos códigos ya repartidos marquen al maestro.
+      esMaestro:
+        datos.esMaestro === true ||
+        (datos as Record<string, unknown>).maestro === true,
     }
   } catch {
     return null

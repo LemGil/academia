@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { Buzon, type FilaBuzon } from './buzon'
-import { DIRECCION_CANAL } from './tipos'
+import { CONVERSACION_CANAL, DIRECCION_CANAL, conversacionDeGrupo } from './tipos'
 import { crearSobrePaquete } from './entrega'
 import { firmarFila } from './buzon'
+import { crearIdentidad } from './identidad'
+import { descifrarSimetrico, generarClaveSimetrica, sellar } from './cifrado'
 import { crearServicioParaPruebas, type ServicioChat } from './servicio'
 
 /** Buzón falso compartido: dos servicios hablando por el «mismo servidor». */
@@ -22,8 +24,10 @@ class BuzonFalso extends Buzon {
     this.filas.push({ ...fila, id: `fila_${this.siguienteId++}` })
   }
 
-  override async recibir(miClave: string): Promise<FilaBuzon[]> {
-    return this.filas.filter((f) => f.para === miClave || f.para === DIRECCION_CANAL)
+  override async recibir(miClave: string, extras: string[] = []): Promise<FilaBuzon[]> {
+    return this.filas.filter(
+      (f) => f.para === miClave || f.para === DIRECCION_CANAL || extras.includes(f.para),
+    )
   }
 
   override async borrar(id: string): Promise<void> {
@@ -268,5 +272,187 @@ describe('servicio: identidad y contactos (arreglos v1.5.2)', () => {
     // El otro teléfono no pierde nada: cada uno guarda lo suyo.
     expect(b.datos().contactos).toHaveLength(1)
     void b
+  })
+})
+
+describe('servicio: Fase D — maestro, canal y grupos', () => {
+  /** Escenario Fase D: un teléfono que importa la llave del maestro y
+   *  dos estudiantes que ya lo tienen agregado como maestro. */
+  async function escenarioMaestro(servidor: BuzonFalso) {
+    const llaves = crearIdentidad('LemGil Apóstol')
+    const jsonMaestro = JSON.stringify({
+      nombre: llaves.nombre,
+      clavePublica: llaves.clavePublica,
+      clavePrivada: llaves.clavePrivada,
+      creada: '2026-11-08T00:00:00.000Z',
+    })
+    const maestroSvc = crearServicioParaPruebas({ buzon: servidor })
+    await maestroSvc.activar('Teléfono del maestro')
+    await maestroSvc.importarLlaveMaestro(jsonMaestro)
+    const est1 = crearServicioParaPruebas({ buzon: servidor })
+    const est2 = crearServicioParaPruebas({ buzon: servidor })
+    await est1.activar('Gil')
+    await est2.activar('Luis')
+    const idMaestro = maestroSvc.datos().identidad!
+    const id1 = est1.datos().identidad!
+    const id2 = est2.datos().identidad!
+    await est1.agregarContacto({
+      nombre: 'LemGil Apóstol',
+      clavePublica: idMaestro.clavePublica,
+      esMaestro: true,
+    })
+    await est2.agregarContacto({
+      nombre: 'LemGil Apóstol',
+      clavePublica: idMaestro.clavePublica,
+      esMaestro: true,
+    })
+    await maestroSvc.agregarContacto({
+      nombre: 'Gil',
+      clavePublica: id1.clavePublica,
+      esMaestro: false,
+    })
+    await maestroSvc.agregarContacto({
+      nombre: 'Luis',
+      clavePublica: id2.clavePublica,
+      esMaestro: false,
+    })
+    return { maestroSvc, est1, est2, idMaestro, id1, id2 }
+  }
+
+  it('importarLlaveMaestro rechaza una privada que no corresponde a la pública', async () => {
+    const servidor = new BuzonFalso()
+    const s = crearServicioParaPruebas({ buzon: servidor })
+    await s.activar('Teléfono')
+    const llaves = crearIdentidad('LemGil Apóstol')
+    const otra = crearIdentidad('Otra persona')
+    // La privada es de OTRA identidad: no corresponde a la pública.
+    await expect(
+      s.importarLlaveMaestro(
+        JSON.stringify({
+          nombre: llaves.nombre,
+          clavePublica: llaves.clavePublica,
+          clavePrivada: otra.clavePrivada,
+        }),
+      ),
+    ).rejects.toThrow()
+    await expect(s.importarLlaveMaestro('{no es json')).rejects.toThrow()
+    expect(s.datos().soyMaestro).toBe(false)
+    // Con el par correcto sí: la identidad pasa a ser la del maestro.
+    await s.importarLlaveMaestro(
+      JSON.stringify({
+        nombre: llaves.nombre,
+        clavePublica: llaves.clavePublica,
+        clavePrivada: llaves.clavePrivada,
+      }),
+    )
+    expect(s.datos().soyMaestro).toBe(true)
+    expect(s.datos().identidad?.clavePublica).toBe(llaves.clavePublica)
+    expect(s.datos().identidad?.nombre).toBe('LemGil Apóstol')
+  })
+
+  it('un estudiante no puede crear grupos ni publicar en el canal', async () => {
+    const servidor = new BuzonFalso()
+    const { est1, id2 } = await escenarioMaestro(servidor)
+    await expect(est1.crearGrupo('Grupo', undefined, [id2.clavePublica])).rejects.toThrow()
+    await expect(est1.publicarAvisoCanal('aviso falso')).rejects.toThrow()
+    expect(servidor.filas).toHaveLength(0)
+  })
+
+  it('la invitación de quien NO es el maestro se descarta en silencio', async () => {
+    const servidor = new BuzonFalso()
+    const { est1, id1, id2 } = await escenarioMaestro(servidor)
+    // Luis (un estudiante más) fabrica una invitación con su propia llave.
+    const invitacionFalsa = JSON.stringify({
+      grupo: {
+        id: 'g_falso',
+        nombre: 'Grupo falso',
+        miembros: [id2.clavePublica, id1.clavePublica],
+      },
+      claveGrupo: generarClaveSimetrica(),
+    })
+    const sellado = sellar(id2.clavePrivada, id1.clavePublica, invitacionFalsa)
+    await servidor.enviar(
+      firmarFila(id2.clavePrivada, {
+        de: id2.clavePublica,
+        para: id1.clavePublica,
+        tipo: 'invitacion-grupo',
+        cuerpo: JSON.stringify({ id: 'inv_falsa', sellado }),
+      }),
+    )
+    await est1.sincronizar()
+    expect(est1.datos().grupos).toHaveLength(0)
+    expect(est1.mensajesDe('grupo:g_falso')).toHaveLength(0)
+  })
+
+  it('la invitación del maestro instala el grupo y deja el mensaje de sistema', async () => {
+    const servidor = new BuzonFalso()
+    const { maestroSvc, est1, id1 } = await escenarioMaestro(servidor)
+    const grupo = await maestroSvc.crearGrupo('Estudiantes Nº 14', 'lemgil-14', [id1.clavePublica])
+    expect(maestroSvc.datos().grupos).toHaveLength(1)
+
+    await est1.sincronizar()
+    const grupos = est1.datos().grupos
+    expect(grupos).toHaveLength(1)
+    expect(grupos[0].id).toBe(grupo.id)
+    expect(grupos[0].nombre).toBe('Estudiantes Nº 14')
+    expect(grupos[0].academiaId).toBe('lemgil-14')
+    expect(grupos[0].claveGrupo).toBe(grupo.claveGrupo)
+    expect(grupos[0].miembros).toContain(id1.clavePublica)
+    const hilo = est1.mensajesDe(conversacionDeGrupo(grupo.id))
+    expect(hilo.some((m) => m.cuerpo.includes('Te agregaron al grupo'))).toBe(true)
+    // La fila de la invitación se consumió: no queda rondando en el buzón.
+    expect(servidor.filas.filter((f) => f.tipo === 'invitacion-grupo')).toHaveLength(0)
+  })
+
+  it('mensaje de grupo: el miembro lo descifra y lo ve; el no-miembro no obtiene el texto', async () => {
+    const servidor = new BuzonFalso()
+    const { maestroSvc, est1, est2, id1 } = await escenarioMaestro(servidor)
+    const grupo = await maestroSvc.crearGrupo('Grupo de prueba', undefined, [id1.clavePublica])
+    await est1.sincronizar()
+
+    await maestroSvc.publicarEnGrupo(grupo.id, 'Bienvenidos: mañana el Código 3')
+    await est1.sincronizar()
+    const hilo = est1
+      .mensajesDe(conversacionDeGrupo(grupo.id))
+      .filter((m) => m.cuerpo.includes('Código 3'))
+    expect(hilo).toHaveLength(1)
+
+    // Luis no es miembro: no recoge la fila ni ve el hilo.
+    await est2.sincronizar()
+    expect(est2.datos().grupos).toHaveLength(0)
+    expect(est2.mensajesDe(conversacionDeGrupo(grupo.id))).toHaveLength(0)
+
+    // Y con la fila en la mano, sin la clave del grupo no hay texto:
+    // el cuerpo viaja cifrado y una clave ajena no lo abre.
+    const filaGrupo = servidor.filas.find((f) => f.tipo === 'grupo')!
+    expect(filaGrupo.cuerpo).not.toContain('Código 3')
+    const datos = JSON.parse(filaGrupo.cuerpo) as { cifrado: string }
+    expect(descifrarSimetrico(generarClaveSimetrica(), datos.cifrado)).toBeNull()
+    expect(descifrarSimetrico(grupo.claveGrupo, datos.cifrado)).toContain('Código 3')
+  })
+
+  it('aviso del canal desde la identidad importada: el estudiante lo recibe válido', async () => {
+    const servidor = new BuzonFalso()
+    const { maestroSvc, est1 } = await escenarioMaestro(servidor)
+    await maestroSvc.publicarAvisoCanal('Mañana estudiamos el Código 3')
+
+    await est1.sincronizar()
+    const avisosEst = est1
+      .datos()
+      .mensajes.filter((m) => m.conversacion === CONVERSACION_CANAL && m.tipo === 'aviso')
+    expect(avisosEst).toHaveLength(1)
+    expect(avisosEst[0].cuerpo).toBe('Mañana estudiamos el Código 3')
+
+    // El maestro también ve lo suyo en su canal (guardado al publicar)…
+    await maestroSvc.sincronizar()
+    const avisosMaestro = maestroSvc
+      .datos()
+      .mensajes.filter((m) => m.conversacion === CONVERSACION_CANAL && m.tipo === 'aviso')
+    expect(avisosMaestro).toHaveLength(1)
+    // …y nadie duplica al sincronizar de nuevo.
+    await est1.sincronizar()
+    expect(
+      est1.datos().mensajes.filter((m) => m.conversacion === CONVERSACION_CANAL && m.tipo === 'aviso'),
+    ).toHaveLength(1)
   })
 })

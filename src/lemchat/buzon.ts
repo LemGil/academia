@@ -18,7 +18,7 @@ import { firmarTexto, verificarTexto } from './identidad'
 import { bytesAHex, textoABytes } from './util'
 import { DIRECCION_CANAL } from './tipos'
 
-export type TipoFilaBuzon = 'texto' | 'paquete' | 'recibo'
+export type TipoFilaBuzon = 'texto' | 'paquete' | 'recibo' | 'aviso' | 'invitacion-grupo' | 'grupo'
 
 export interface FilaBuzon {
   id?: string
@@ -92,11 +92,15 @@ export class Buzon {
     if (!res.ok) throw new Error(`el buzón rechazó el envío (${res.status})`)
   }
 
-  /** Recoge lo dirigido a mí y lo publicado en el canal. */
-  async recibir(miClave: string): Promise<FilaBuzon[]> {
+  /** Recoge lo dirigido a mí, lo publicado en el canal y lo dirigido a
+   *  las direcciones extra que me tocan (Fase D: «grupo:<id>» de cada
+   *  grupo al que pertenezco). */
+  async recibir(miClave: string, extras: string[] = []): Promise<FilaBuzon[]> {
+    const direcciones = [miClave, DIRECCION_CANAL, ...extras]
+    const o = direcciones.map((d) => `para.eq.${encodeURIComponent(d)}`).join(',')
     const consulta =
       `?select=id,de,para,tipo,cuerpo,firma,creado_en` +
-      `&or=(para.eq.${encodeURIComponent(miClave)},para.eq.${DIRECCION_CANAL})` +
+      `&or=(${o})` +
       `&order=creado_en.asc&limit=200`
     const res = await this.fetchFn(this.base() + consulta, { headers: this.cabeceras() })
     if (!res.ok) throw new Error(`el buzón no respondió (${res.status})`)
