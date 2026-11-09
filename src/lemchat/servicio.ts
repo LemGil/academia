@@ -789,6 +789,16 @@ export class ServicioChat {
   async sincronizar(): Promise<void> {
     const estado = await this.cargar()
     if (!estado.activado || !estado.identidad) return
+    if (!estado.canalReintentoV161) {
+      // v1.6.1: la v1.6.0 marcaba las filas del canal como procesadas aun
+      // cuando eran del propio maestro y no se mostraban en su teléfono
+      // (lo publicado desde LemWriter). Se reintentan una sola vez;
+      // reprocesar es seguro: avisos y paquetes se deduplican por id.
+      await this.repo.actualizar((e) => {
+        e.canalProcesados = []
+        e.canalReintentoV161 = true
+      })
+    }
     for (const m of estado.mensajes.filter((x) => x.mio && x.estado === 'cola')) {
       if (m.conversacion.startsWith('grupo:')) await this.intentarPublicarGrupo(m)
       else await this.intentarEnviar(m)
@@ -915,14 +925,31 @@ export class ServicioChat {
 
   private async procesarDelCanal(fila: FilaBuzon): Promise<void> {
     if (fila.de !== this.claveMaestroConfiable()) return // solo el maestro publica
-    // Lo publicado por ESTE teléfono ya se guardó en local al publicar
-    // (publicarAvisoCanal / publicarEnsenanzaCanal): no se duplica.
-    if (fila.de === this.datos().identidad?.clavePublica) return
+    // Lo firmado por el maestro vale también en SU teléfono, aunque se haya
+    // publicado desde fuera (LemWriter): antes la v1.6.0 lo descartaba
+    // entero suponiendo que ya estaba guardado al publicar, y eso solo es
+    // cierto de lo compuesto en el propio teléfono. La deduplicación de lo
+    // compuesto aquí ya la hacen los ids de mensaje (pkg_<id>_<emitido> en
+    // procesarSobreRecibido, y el contenido en los avisos, abajo).
     if (fila.tipo === 'paquete') {
       await this.procesarSobreRecibido(fila.cuerpo)
     } else if (fila.tipo === 'aviso' || fila.tipo === 'texto') {
       const id = `aviso_${fila.id}`
       if (this.datos().mensajes.some((m) => m.id === id)) return
+      const esMio = fila.de === this.datos().identidad?.clavePublica
+      // Aviso compuesto en ESTE teléfono: al publicar ya quedó guardado
+      // como mío (con id aleatorio); no se duplica al volver por el buzón.
+      if (
+        esMio &&
+        this.datos().mensajes.some(
+          (m) =>
+            m.mio &&
+            m.conversacion === CONVERSACION_CANAL &&
+            m.tipo === 'aviso' &&
+            m.cuerpo === fila.cuerpo,
+        )
+      )
+        return
       const mensaje: Mensaje = {
         id,
         conversacion: CONVERSACION_CANAL,
@@ -931,7 +958,7 @@ export class ServicioChat {
         tipo: 'aviso',
         cuerpo: fila.cuerpo,
         ts: Date.now(),
-        mio: false,
+        mio: esMio,
         estado: 'entregado',
         leido: false,
       }

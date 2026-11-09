@@ -455,4 +455,53 @@ describe('servicio: Fase D — maestro, canal y grupos', () => {
       est1.datos().mensajes.filter((m) => m.conversacion === CONVERSACION_CANAL && m.tipo === 'aviso'),
     ).toHaveLength(1)
   })
+
+  it('lo publicado por el maestro DESDE FUERA (LemWriter) también llega a su propio teléfono', async () => {
+    const servidor = new BuzonFalso()
+    const { maestroSvc, idMaestro } = await escenarioMaestro(servidor)
+    // Como hace LemWriter: aviso + paquete firmados con la llave del
+    // maestro, directos al buzón del canal, sin pasar por este teléfono.
+    const PAQUETE = JSON.stringify({
+      tipo: 'paquete-academia',
+      formato: 1,
+      academia: {
+        id: 'lemgil-14',
+        numero: 'Nº 14',
+        titulo: 'Descodificando la Prueba',
+        autor: 'LemGil Apóstol',
+        codigos: [{ id: 'lemgil-14-c1', titulo: 'Código 1', subtitulo: '', cuerpo: 'Texto.' }],
+        cierre: '',
+      },
+    })
+    await servidor.enviar(
+      firmarFila(idMaestro.clavePrivada, {
+        de: idMaestro.clavePublica,
+        para: DIRECCION_CANAL,
+        tipo: 'aviso',
+        cuerpo: 'Nueva enseñanza: Descodificando la Prueba',
+      }),
+    )
+    const sobre = crearSobrePaquete(PAQUETE, 'lemgil-14', idMaestro.clavePublica, idMaestro.clavePrivada)
+    await servidor.enviar(
+      firmarFila(idMaestro.clavePrivada, {
+        de: idMaestro.clavePublica,
+        para: DIRECCION_CANAL,
+        tipo: 'paquete',
+        cuerpo: JSON.stringify(sobre),
+      }),
+    )
+
+    await maestroSvc.sincronizar()
+    const canal = maestroSvc.datos().mensajes.filter((m) => m.conversacion === CONVERSACION_CANAL)
+    expect(canal.filter((m) => m.tipo === 'aviso')).toHaveLength(1)
+    const anuncios = canal.filter((m) => m.tipo === 'paquete')
+    expect(anuncios).toHaveLength(1)
+    expect(anuncios[0].paqueteId).toBe('lemgil-14')
+
+    // Y al sincronizar de nuevo no se duplica nada.
+    await maestroSvc.sincronizar()
+    const canal2 = maestroSvc.datos().mensajes.filter((m) => m.conversacion === CONVERSACION_CANAL)
+    expect(canal2.filter((m) => m.tipo === 'aviso')).toHaveLength(1)
+    expect(canal2.filter((m) => m.tipo === 'paquete')).toHaveLength(1)
+  })
 })

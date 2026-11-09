@@ -81,6 +81,10 @@ export interface EstadoChat {
   /** true si este teléfono importó la llave del maestro (Fase D): puede
    *  publicar en el canal y crear grupos. */
   soyMaestro: boolean
+  /** v1.6.1: ya se hizo el reintento único del canal (la v1.6.0 marcaba
+   *  como procesadas las publicaciones del propio maestro hechas desde
+   *  LemWriter sin mostrarlas en su teléfono). */
+  canalReintentoV161?: boolean
 }
 
 export const CONVERSACION_CANAL = 'canal-maestro'
