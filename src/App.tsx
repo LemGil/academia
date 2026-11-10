@@ -5,6 +5,7 @@ import { PantallaPlan } from './planes/PantallaPlan'
 import { Biblia } from './lectura/Biblia'
 import { Academia, ACADEMIAS_INCLUIDAS } from './academia/contenido'
 import { cargarCatalogo, importarPaquete } from './academia/paquetes'
+import { sincronizarDesbloqueos } from './academia/progreso'
 import { leerNoLeidosPublicados } from './lemchat/almacen'
 
 // LemChat (Fase B): carga perezosa — el código del chat solo se descarga
@@ -66,6 +67,19 @@ const App: React.FC = () => {
     refrescarCatalogo()
   }, [refrescarCatalogo])
 
+  // Niveles (v1.7): cuando el catálogo cambia, se guardan los niveles
+  // que se acaban de desbloquear (el avance no se quita).
+  useEffect(() => {
+    sincronizarDesbloqueos(academias)
+  }, [academias])
+
+  /** Verifica el sello del encuentro presencial (v1.7): carga LemChat de
+   *  forma perezosa, solo cuando el alumno va a sellar una conclusión. */
+  const verificarSello = useCallback(async (texto: string) => {
+    const { obtenerServicio } = await import('./lemchat/servicio')
+    return obtenerServicio().verificarSelloEncuentro(texto)
+  }, [])
+
   const irACapitulo = (codigo: string, cap: number) => {
     setDestino({ codigo, cap, n: Date.now() })
     setTab('biblia')
@@ -108,6 +122,7 @@ const App: React.FC = () => {
             importadas={importadas}
             alRefrescarCatalogo={refrescarCatalogo}
             destino={destinoAcademia}
+            verificarSello={verificarSello}
           />
         )}
         {tab === 'biblia' && <Biblia destino={destino} />}
@@ -121,7 +136,11 @@ const App: React.FC = () => {
                 </div>
               }
             >
-              <PantallaChat alArchivarPaquete={archivarPaqueteLemChat} alAbrirAcademia={irAAcademia} />
+              <PantallaChat
+                alArchivarPaquete={archivarPaqueteLemChat}
+                alAbrirAcademia={irAAcademia}
+                academias={academias}
+              />
             </Suspense>
           </FronteraChat>
         )}

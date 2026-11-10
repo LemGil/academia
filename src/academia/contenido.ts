@@ -23,6 +23,11 @@ export interface Academia {
    *  generados por LemWriter lo traen — permite que en un mismo teléfono
    *  convivan academias de distintos pastores sin chocar). */
   autor?: string
+  /** Nivel de la Academia al que pertenece (ej. «NIVEL I: FUNDAMENTOS»),
+   *  con su orden. Lo trae el paquete desde LemWriter (v1.7); los paquetes
+   *  viejos no lo traen y se agrupan en «Sin nivel asignado». */
+  nivel?: string
+  nivelOrden?: number
   codigos: Codigo[]
   cierre: string
 }

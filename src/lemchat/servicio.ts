@@ -21,6 +21,7 @@ import {
   sellar,
 } from './cifrado'
 import { crearSobrePaquete, decidirEntrega, leerSobre } from './entrega'
+import { crearSelloTexto, leerSello, selloEsValido } from './sello'
 import {
   clavePublicaDe,
   crearIdentidad,
@@ -781,6 +782,31 @@ export class ServicioChat {
       const m = e.mensajes.find((x) => x.id === id)
       if (m) m.estado = estado
     })
+  }
+
+  // ------------------------------------------ sello del encuentro (v1.7)
+
+  /** El maestro genera el código (QR/texto) con el que, en el encuentro
+   *  presencial, sus alumnos dan por concluida una academia. Uno fresco
+   *  por encuentro: la marca cambia en cada generación. */
+  generarSelloEncuentro(academiaId: string): string {
+    const yo = this.exigirMaestro()
+    const id = academiaId.trim()
+    if (!id) throw new Error('elige la academia del encuentro')
+    return crearSelloTexto(id, yo)
+  }
+
+  /** Verifica un código de sello escaneado o pegado por el alumno:
+   *  devuelve de qué academia y encuentro es, o null si no es válido
+   *  (no es un sello, o no lo firmó su maestro de confianza). */
+  async verificarSelloEncuentro(
+    texto: string,
+  ): Promise<{ academiaId: string; encuentro: string } | null> {
+    await this.cargar()
+    const sello = leerSello(texto)
+    if (!sello) return null
+    if (!selloEsValido(sello, this.claveMaestroConfiable())) return null
+    return { academiaId: sello.academiaId, encuentro: sello.encuentro }
   }
 
   // --------------------------------------------------------- sincronizar

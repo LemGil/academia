@@ -10,6 +10,10 @@ interface Props {
   children: React.ReactNode
   leido: boolean
   onAlternarLeido: () => void
+  /** Formación por niveles (v1.7): la marca de «practicado», junto a la
+   *  de leído. Opcional: la Biblia no la usa. */
+  practicado?: boolean
+  onAlternarPracticado?: () => void
   onAnterior?: () => void
   onSiguiente?: () => void
   etiquetaAnterior?: string
@@ -19,7 +23,7 @@ interface Props {
 // Chrome de lectura compartido: temas, tamaño de letra, navegación y "marcar leído".
 export const Lector: React.FC<Props> = ({
   titulo, subtitulo, onAtras, children,
-  leido, onAlternarLeido, onAnterior, onSiguiente,
+  leido, onAlternarLeido, practicado, onAlternarPracticado, onAnterior, onSiguiente,
   etiquetaAnterior, etiquetaSiguiente,
 }) => {
   const [tema, setTema] = useState<TemaLectura>(() =>
@@ -87,6 +91,11 @@ export const Lector: React.FC<Props> = ({
         <button className={`btn-leido ${leido ? 'si' : ''}`} onClick={onAlternarLeido}>
           {leido ? '✓ Leído' : 'Marcar como leído'}
         </button>
+        {onAlternarPracticado && (
+          <button className={`btn-leido ${practicado ? 'si' : ''}`} onClick={onAlternarPracticado}>
+            {practicado ? '✓ Practicado' : 'Marcar como practicado'}
+          </button>
+        )}
       </footer>
     </div>
   )

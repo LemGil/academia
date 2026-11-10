@@ -101,6 +101,11 @@ export function validarPaquete(texto: string): Academia {
     numero: cruda.numero,
     titulo: cruda.titulo,
     autor: esTexto(cruda.autor) ? cruda.autor : undefined,
+    nivel: esTexto(cruda.nivel) ? cruda.nivel : undefined,
+    nivelOrden:
+      typeof cruda.nivelOrden === 'number' && Number.isFinite(cruda.nivelOrden)
+        ? Math.trunc(cruda.nivelOrden)
+        : undefined,
     codigos,
     cierre: typeof cruda.cierre === 'string' ? cruda.cierre : '',
   }

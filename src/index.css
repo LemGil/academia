@@ -476,3 +476,31 @@ button { font-family: inherit; }
 }
 .chat-escribir .chat-entrada { margin-bottom: 0; flex: 1; }
 .chat-enviar { padding: 10px 18px; font-size: 15px; }
+
+/* --- Formación por niveles y sello del encuentro (v1.7) --- */
+.nivel-cabecera {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; margin: 20px 0 8px;
+}
+.nivel-cabecera h3 { margin: 0; font-size: 17px; color: #fff8e6; }
+.tarjeta.bloqueada { opacity: 0.55; filter: grayscale(0.7); cursor: default; }
+.chip-estado {
+  display: inline-block; font-size: 12px; padding: 3px 10px; border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25); color: #f0e8d2; white-space: nowrap;
+}
+.chip-estado.estado-concluida, .chip-estado.nivel-concluido { border-color: #9fd48a; color: #9fd48a; }
+.chip-estado.estado-lista-encuentro, .chip-estado.nivel-espera-encuentro { border-color: var(--dorado); color: var(--dorado); }
+.chip-estado.estado-bloqueada, .chip-estado.nivel-bloqueado { color: #b8ab8d; }
+.fila-codigo { flex-direction: column; align-items: stretch; gap: 8px; }
+.fila-codigo-ir {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  background: none; border: none; padding: 0; cursor: pointer;
+  color: inherit; font-family: inherit; text-align: left;
+}
+.fila-codigo-marcas { display: flex; gap: 8px; }
+.chip-marca {
+  flex: 1; padding: 7px 10px; border-radius: 999px; font-size: 13px; cursor: pointer;
+  background: rgba(255, 255, 255, 0.06); color: #cfc4a8;
+  border: 1px solid rgba(255, 255, 255, 0.2); font-family: inherit;
+}
+.chip-marca.activo { background: var(--dorado); color: #1a1405; border-color: var(--dorado); font-weight: 600; }

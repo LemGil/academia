@@ -23,6 +23,8 @@ interface Props {
   alArchivarPaquete: (textoPaquete: string) => Promise<Academia>
   /** Salta a una academia ya archivada (patrón de Progreso). */
   alAbrirAcademia: (id: string) => void
+  /** Catálogo actual (para elegir la academia del sello del encuentro). */
+  academias?: Academia[]
 }
 
 type Vista =
@@ -40,7 +42,7 @@ const ICONO_ESTADO: Record<Mensaje['estado'], string> = {
   entregado: '✓ entregado',
 }
 
-export const PantallaChat: React.FC<Props> = ({ alArchivarPaquete, alAbrirAcademia }) => {
+export const PantallaChat: React.FC<Props> = ({ alArchivarPaquete, alAbrirAcademia, academias }) => {
   const servicioRef = useRef<ServicioChat | null>(null)
   if (!servicioRef.current) {
     servicioRef.current = obtenerServicio({
@@ -128,6 +130,7 @@ export const PantallaChat: React.FC<Props> = ({ alArchivarPaquete, alAbrirAcadem
         servicio={servicio}
         alVolver={() => setVista({ tipo: 'lista' })}
         alAbrirAcademia={alAbrirAcademia}
+        academias={academias ?? []}
       />
     )
   }
@@ -449,7 +452,8 @@ const Canal: React.FC<{
   servicio: ServicioChat
   alVolver: () => void
   alAbrirAcademia: (id: string) => void
-}> = ({ servicio, alVolver, alAbrirAcademia }) => {
+  academias: Academia[]
+}> = ({ servicio, alVolver, alAbrirAcademia, academias }) => {
   const mensajes = servicio.mensajesDe(CONVERSACION_CANAL)
   const soyMaestro = servicio.datos().soyMaestro
   const [avisoTexto, setAvisoTexto] = useState('')
@@ -457,6 +461,19 @@ const Canal: React.FC<{
   const [paqueteTexto, setPaqueteTexto] = useState('')
   const [resultado, setResultado] = useState('')
   const [esError, setEsError] = useState(false)
+  const [selloAcademiaId, setSelloAcademiaId] = useState('')
+  const [selloTexto, setSelloTexto] = useState('')
+  const [selloError, setSelloError] = useState('')
+
+  const generarSello = () => {
+    try {
+      setSelloTexto(servicio.generarSelloEncuentro(selloAcademiaId))
+      setSelloError('')
+    } catch (e) {
+      setSelloTexto('')
+      setSelloError(e instanceof Error ? e.message : 'No se pudo generar el sello.')
+    }
+  }
   useEffect(() => {
     void servicio.marcarLeida(CONVERSACION_CANAL)
   }, [servicio, mensajes.length])
@@ -559,6 +576,46 @@ const Canal: React.FC<{
             <button className="btn-primario" onClick={() => void publicarEnsenanza()}>
               Publicar enseñanza
             </button>
+          </div>
+          <div className="tarjeta">
+            <h3>🎓 Sello del encuentro</h3>
+            <p>
+              En el encuentro presencial, genera este código para la academia que van a
+              concluir: cada alumno presente lo escanea desde su academia y queda
+              concluida en su teléfono. Genera uno nuevo en cada encuentro.
+            </p>
+            <label className="chat-etiqueta">Academia del encuentro</label>
+            <select
+              className="chat-entrada"
+              value={selloAcademiaId}
+              onChange={(e) => setSelloAcademiaId(e.target.value)}
+            >
+              <option value="">— Elige la academia —</option>
+              {academias.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.numero} · {a.titulo}
+                </option>
+              ))}
+            </select>
+            {academias.length === 0 && (
+              <p className="chat-nota">
+                Este teléfono aún no tiene academias en su biblioteca: archiva primero el
+                paquete de la academia.
+              </p>
+            )}
+            <button className="btn-primario" onClick={generarSello} disabled={!selloAcademiaId}>
+              Generar el sello de este encuentro
+            </button>
+            {selloError && <p className="chat-error">{selloError}</p>}
+            {selloTexto && (
+              <>
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '12px 0' }}>
+                  <CodigoQR texto={selloTexto} tamano={230} />
+                </div>
+                <label className="chat-etiqueta">O dicta / pasa este código de texto</label>
+                <textarea className="chat-entrada chat-codigo" value={selloTexto} readOnly rows={4} />
+              </>
+            )}
           </div>
         </>
       )}
