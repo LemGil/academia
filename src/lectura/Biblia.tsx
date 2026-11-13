@@ -15,6 +15,21 @@ type VistaBiblia =
   | { tipo: 'caps'; codigo: string }
   | { tipo: 'lectura'; codigo: string; cap: number }
 
+/** Las píldoras de versión, iguales en las tres vistas (v1.7.1): se
+ *  puede cambiar de versión sin salir de donde se está leyendo. */
+const SelectorVersion: React.FC<{
+  actual: VersionBiblia
+  alCambiar: (v: VersionBiblia) => void
+}> = ({ actual, alCambiar }) => (
+  <div className="selector-version">
+    {VERSIONES_BIBLIA.map((v) => (
+      <button key={v.id} className={actual === v.id ? 'activo' : ''} onClick={() => alCambiar(v.id)}>
+        {v.corta}
+      </button>
+    ))}
+  </div>
+)
+
 export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }) => {
   const [version, setVersion] = useState<VersionBiblia>(() =>
     (localStorage.getItem('academia_biblia_version') as VersionBiblia) || 'rv1909')
@@ -47,10 +62,12 @@ export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }
     irAlInicio()
   }, [vista])
 
+  // Cambiar de versión NO saca de donde estás (v1.7.1): si estás leyendo
+  // un capítulo, el efecto de arriba lo recarga en la versión nueva; si
+  // estás en capítulos o en libros, la pantalla se queda donde está.
   const cambiarVersion = (v: VersionBiblia) => {
     setVersion(v)
     localStorage.setItem('academia_biblia_version', v)
-    setVista({ tipo: 'libros' })
   }
 
   const irReferencia = () => {
@@ -64,7 +81,7 @@ export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }
   // ---- Lectura de capítulo ----
   if (vista.tipo === 'lectura') {
     const total = totalCapitulos(version, vista.codigo)
-    const clave = claveCapitulo(version, vista.codigo, vista.cap)
+    const clave = claveCapitulo(vista.codigo, vista.cap)
     const esLeido = leidos.has(clave)
     const nombre = nombreLibro(version, vista.codigo)
     const ant = vista.cap > 1 ? vista.cap - 1 : null
@@ -81,6 +98,7 @@ export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }
         etiquetaAnterior={`Cap. ${ant}`}
         etiquetaSiguiente={`Cap. ${sig}`}
       >
+        <SelectorVersion actual={version} alCambiar={cambiarVersion} />
         {versiculos === null && <p>Cargando…</p>}
         {versiculos !== null && versiculos.map((v, i) => (
           <p key={i} className="versiculo">
@@ -98,9 +116,10 @@ export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }
       <div className="lista">
         <button className="btn-nav" onClick={() => setVista({ tipo: 'libros' })}>‹ Libros</button>
         <h2 style={{ marginTop: 12 }}>{nombreLibro(version, vista.codigo)}</h2>
+        <SelectorVersion actual={version} alCambiar={cambiarVersion} />
         <div className="rejilla-caps">
           {Array.from({ length: total }, (_, i) => i + 1).map((c) => {
-            const leido = leidos.has(claveCapitulo(version, vista.codigo, c))
+            const leido = leidos.has(claveCapitulo(vista.codigo, c))
             return (
               <button
                 key={c}
@@ -123,7 +142,7 @@ export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }
     <>
       <div className="separador-testamento">{titulo}</div>
       {arr.map((l) => {
-        const n = conteoPorLibro(leidos, version, l.codigo)
+        const n = conteoPorLibro(leidos, l.codigo)
         const pct = Math.round((n / l.capitulos) * 100)
         return (
           <button key={l.codigo} onClick={() => setVista({ tipo: 'caps', codigo: l.codigo })}>
@@ -137,13 +156,7 @@ export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }
 
   return (
     <div>
-      <div className="selector-version">
-        {VERSIONES_BIBLIA.map((v) => (
-          <button key={v.id} className={version === v.id ? 'activo' : ''} onClick={() => cambiarVersion(v.id)}>
-            {v.corta}
-          </button>
-        ))}
-      </div>
+      <SelectorVersion actual={version} alCambiar={cambiarVersion} />
       <div className="buscador">
         <input
           value={busqueda}

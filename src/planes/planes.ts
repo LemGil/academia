@@ -81,13 +81,10 @@ export function reiniciarPlan(plan: Plan) {
   localStorage.removeItem(claveInicio(plan.id))
 }
 
-// ¿Se leyó este capítulo en alguna versión? (las claves son version:codigo:cap)
+// ¿Se leyó este capítulo? (desde la v1.7.1 las claves son «codigo:cap»,
+// sin versión: leerlo en una versión es haberlo leído en todas)
 export function capituloLeido(leidos: Set<string>, codigo: string, cap: number): boolean {
-  for (const c of leidos) {
-    const partes = c.split(':')
-    if (partes.length === 3 && partes[1] === codigo && partes[2] === String(cap)) return true
-  }
-  return false
+  return leidos.has(`${codigo}:${cap}`)
 }
 
 export function diaCompletado(dia: DiaPlan, leidos: Set<string>): boolean {
