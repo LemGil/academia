@@ -28,6 +28,16 @@ export const PantallaProgreso: React.FC<{ academias: Academia[]; alAbrirAcademia
 
   const catalogo = useMemo(() => agruparPorNiveles(academias, datos), [academias, datos])
 
+  /** Conteo general por estado (v1.7.2): el resumen de la formación
+   *  entera, con los mismos colores del catálogo. */
+  const conteoEstados = useMemo(() => {
+    const c = { concluida: 0, 'lista-encuentro': 0, 'en-curso': 0, bloqueada: 0 }
+    for (const g of catalogo.grupos) {
+      for (const a of g.academias) c[estadoAcademia(a, datos, g.desbloqueado)]++
+    }
+    return c
+  }, [catalogo, datos])
+
   const reiniciarTodo = () => {
     if (window.confirm('¿Borrar todo el progreso guardado en este teléfono?')) {
       reiniciarProgresoTemas()
@@ -57,6 +67,18 @@ export const PantallaProgreso: React.FC<{ academias: Academia[]; alAbrirAcademia
         </div>
       </div>
 
+      {academias.length > 0 && (
+        <p className="resumen-estados">
+          <span className="estado-texto estado-concluida">✅ {conteoEstados.concluida} concluidas</span>
+          {' · '}
+          <span className="estado-texto estado-lista-encuentro">🤝 {conteoEstados['lista-encuentro']} listas para el encuentro</span>
+          {' · '}
+          <span className="estado-texto estado-en-curso">📖 {conteoEstados['en-curso']} en curso</span>
+          {' · '}
+          <span className="estado-texto estado-bloqueada">🔒 {conteoEstados.bloqueada} bloqueadas</span>
+        </p>
+      )}
+
       {academias.length === 0 ? (
         <p style={{ color: '#8f8468', fontSize: 13, marginTop: 0 }}>
           Aún no tienes academias importadas. Cuando importes una en la
@@ -83,6 +105,14 @@ export const PantallaProgreso: React.FC<{ academias: Academia[]; alAbrirAcademia
                       ? '🤝 Espera encuentros'
                       : '📖 En curso'}
               </span>
+            </div>
+            <div className="termometro">
+              {grupo.academias.map((a) => (
+                <i
+                  key={a.id}
+                  className={`seg-${estadoAcademia(a, datos, grupo.desbloqueado)}`}
+                />
+              ))}
             </div>
             <p style={{ color: '#cfc4a8', fontSize: 13, margin: '2px 0 10px' }}>
               {resumen.nConcluidas}/{resumen.totalAcademias} academias concluidas · Leído{' '}
@@ -111,10 +141,16 @@ export const PantallaProgreso: React.FC<{ academias: Academia[]; alAbrirAcademia
                       <span style={{ color: '#c9a227', fontSize: 18, marginLeft: 6 }}>›</span>
                     </span>
                   </div>
-                  <div style={{ fontSize: 12, color: '#cfc4a8', margin: '2px 0 4px' }}>
+                  <div
+                    className={`estado-texto estado-${est}`}
+                    style={{ fontSize: 12, margin: '2px 0 4px' }}
+                  >
                     {TEXTO_ESTADO_ACADEMIA[est]} · {p.nLeidos}/{p.total} leídos · {p.nPracticados}/{p.total} practicados
                   </div>
-                  <div className="barra-progreso"><i style={{ width: `${pct}%` }} /></div>
+                  <div className="barra-progreso lectura"><i style={{ width: `${pct}%` }} /></div>
+                  <div className="barra-progreso practica">
+                    <i style={{ width: `${p.total ? Math.round((p.nPracticados / p.total) * 100) : 0}%` }} />
+                  </div>
                 </button>
               )
             })}

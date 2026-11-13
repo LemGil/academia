@@ -222,6 +222,19 @@ export const PantallaAcademias: React.FC<Props> = ({ academias, importadas, alRe
         <p>
           <span className={`chip-estado estado-${estado}`}>{TEXTO_ESTADO_ACADEMIA[estado]}</span>
         </p>
+        <div style={{ maxWidth: 420 }}>
+          <div className="barra-progreso lectura">
+            <i style={{ width: `${prog.total ? Math.round((prog.nLeidos / prog.total) * 100) : 0}%` }} />
+          </div>
+          <div className="barra-progreso practica">
+            <i style={{ width: `${prog.total ? Math.round((prog.nPracticados / prog.total) * 100) : 0}%` }} />
+          </div>
+          <p style={{ fontSize: 11, color: '#8f8468', margin: '4px 0 10px' }}>
+            <span style={{ color: '#7fb3d5' }}>— leído</span>
+            {'   '}
+            <span style={{ color: '#c9a227' }}>— practicado</span>
+          </p>
+        </div>
         {estado === 'concluida' && conclusion && (
           <p style={{ color: '#cfc4a8', fontSize: 14 }}>
             Sellada en el encuentro presencial del {conclusion.fecha}.
@@ -366,10 +379,22 @@ export const PantallaAcademias: React.FC<Props> = ({ academias, importadas, alRe
                         : `${resumen.nConcluidas}/${resumen.totalAcademias} concluidas`}
               </span>
             </div>
+            {/* Termómetro del nivel (v1.7.2): un segmento por academia,
+                pintado con el color de su estado. */}
+            <div className="termometro">
+              {grupo.academias.map((a) => (
+                <i
+                  key={a.id}
+                  className={`seg-${estadoAcademia(a, datosProgreso, grupo.desbloqueado)}`}
+                />
+              ))}
+            </div>
             {grupo.academias.map((a) => {
               const p = progresoAcademia(a, datosProgreso)
               const est = estadoAcademia(a, datosProgreso, grupo.desbloqueado)
-              const pct = p.total ? Math.round((p.nLeidos / p.total) * 100) : 0
+              const pctL = p.total ? Math.round((p.nLeidos / p.total) * 100) : 0
+              const pctP = p.total ? Math.round((p.nPracticados / p.total) * 100) : 0
+              const conclusion = concluidas.get(a.id)
               if (est === 'bloqueada') {
                 return (
                   <div key={a.id} className="tarjeta bloqueada">
@@ -380,7 +405,12 @@ export const PantallaAcademias: React.FC<Props> = ({ academias, importadas, alRe
                 )
               }
               return (
-                <button key={a.id} className="tarjeta" onClick={() => setVista({ tipo: 'academia', id: a.id })}>
+                <button
+                  key={a.id}
+                  className={`tarjeta estado-${est}`}
+                  onClick={() => setVista({ tipo: 'academia', id: a.id })}
+                >
+                  {est === 'concluida' && <span className="sello-medallon">🎓</span>}
                   <span className="num">{a.numero}</span>
                   <h3>{a.titulo}</h3>
                   <p>
@@ -389,8 +419,14 @@ export const PantallaAcademias: React.FC<Props> = ({ academias, importadas, alRe
                   </p>
                   <p style={{ marginTop: 6 }}>
                     <span className={`chip-estado estado-${est}`}>{TEXTO_ESTADO_ACADEMIA[est]}</span>
+                    {est === 'concluida' && conclusion && (
+                      <span style={{ marginLeft: 8, fontSize: 12, color: '#9fd48a' }}>
+                        Encuentro: {conclusion.fecha}
+                      </span>
+                    )}
                   </p>
-                  <div className="barra-progreso"><i style={{ width: `${pct}%` }} /></div>
+                  <div className="barra-progreso lectura"><i style={{ width: `${pctL}%` }} /></div>
+                  <div className="barra-progreso practica"><i style={{ width: `${pctP}%` }} /></div>
                 </button>
               )
             })}

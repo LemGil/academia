@@ -31,7 +31,12 @@ import {
   type DatosContacto,
 } from './identidad'
 import { RegistroPresencia } from './presencia'
-import { leerCargaUtil, obtenerCercania, type LemChatCercaniaPlugin } from './cercania'
+import {
+  decidirCercania,
+  leerCargaUtil,
+  obtenerCercania,
+  type LemChatCercaniaPlugin,
+} from './cercania'
 import {
   CONVERSACION_CANAL,
   DIRECCION_CANAL,
@@ -40,6 +45,7 @@ import {
   type EstadoChat,
   type Grupo,
   type Mensaje,
+  type ModoCercania,
 } from './tipos'
 import { idAleatorio } from './util'
 import type { Academia } from '../academia/contenido'
@@ -55,7 +61,8 @@ export interface AvisosServicio {
 
 export interface EstadoVias {
   internet: 'sin-configurar' | 'ok' | 'error'
-  cercania: 'no-disponible' | 'apagada' | 'buscando' | 'activa'
+  /** 'en-pausa' (v1.7.2): apagada a propósito porque internet responde. */
+  cercania: 'no-disponible' | 'apagada' | 'buscando' | 'activa' | 'en-pausa'
   paresCercanos: number
 }
 
@@ -105,6 +112,10 @@ export class ServicioChat {
   private internet: EstadoVias['internet']
   private cercaniaActiva = false
   private escuchando = false
+  /** v1.7.2: los oyentes del plugin se registran una sola vez en la
+   *  vida del servicio; apagar/encender la cercanía (la política de
+   *  vías lo hace seguido) no debe duplicarlos. */
+  private oyentesCercania = false
 
   constructor(
     private avisos: AvisosServicio = {},
@@ -135,16 +146,24 @@ export class ServicioChat {
     this.avisos.alCambiar?.()
   }
 
+  /** El modo de cercanía elegido (v1.7.2); sin elegir, 'auto'. */
+  modoCercania(): ModoCercania {
+    return this.datos().cercaniaModo ?? 'auto'
+  }
+
   estadoVias(): EstadoVias {
+    const modo = this.modoCercania()
     return {
       internet: this.internet,
       cercania: !this.cercania
         ? 'no-disponible'
-        : !this.datos().activado
+        : !this.datos().activado || modo === 'nunca'
           ? 'apagada'
           : this.cercaniaActiva
             ? 'activa'
-            : 'buscando',
+            : modo === 'auto' && this.internet === 'ok'
+              ? 'en-pausa'
+              : 'buscando',
       paresCercanos: this.presencia.presentes(Date.now()).length,
     }
   }
@@ -167,7 +186,7 @@ export class ServicioChat {
       e.identidad = identidad
       e.activado = true
     })
-    await this.iniciarCercania()
+    await this.gestionarCercania()
     await this.tocar()
     return estado
   }
@@ -176,12 +195,7 @@ export class ServicioChat {
     await this.repo.actualizar((e) => {
       e.activado = false
     })
-    try {
-      await this.cercania?.detener()
-    } catch {
-      // Si el nativo no responde, el interruptor local manda igual.
-    }
-    this.cercaniaActiva = false
+    await this.detenerCercania()
     publicarNoLeidos(0)
     await this.tocar()
   }
@@ -190,7 +204,7 @@ export class ServicioChat {
     await this.repo.actualizar((e) => {
       e.activado = true
     })
-    await this.iniciarCercania()
+    await this.gestionarCercania()
     await this.tocar()
   }
 
@@ -239,7 +253,10 @@ export class ServicioChat {
       e.activado = true
     })
     await this.tocar()
-    await this.reiniciarCercania()
+    // La identidad cambió (nombre/clave con que la cercanía se anuncia):
+    // si la cercanía está encendida, se reinicia con lo nuevo; si la
+    // política la tiene apagada, se queda apagada (v1.7.2).
+    if (this.cercaniaActiva) await this.reiniciarCercania()
   }
 
   mensajesDe(conversacion: string): Mensaje[] {
@@ -321,7 +338,10 @@ export class ServicioChat {
       if (e.identidad) e.identidad.nombre = limpio
     })
     await this.tocar()
-    await this.reiniciarCercania()
+    // La identidad cambió (nombre/clave con que la cercanía se anuncia):
+    // si la cercanía está encendida, se reinicia con lo nuevo; si la
+    // política la tiene apagada, se queda apagada (v1.7.2).
+    if (this.cercaniaActiva) await this.reiniciarCercania()
   }
 
   /**
@@ -842,6 +862,9 @@ export class ServicioChat {
         this.internet = 'error'
       }
     }
+    // v1.7.2: con el estado de internet fresco, la política de vías
+    // decide si la cercanía debe estar encendida o apagada.
+    await this.gestionarCercania()
     await this.tocar()
   }
 
@@ -1110,7 +1133,61 @@ export class ServicioChat {
     if (!yo || !this.datos().activado || !this.cercania || this.escuchando) return
     this.escuchando = true
     try {
-      await this.cercania.addListener('descubierto', (e) => {
+      if (!this.oyentesCercania) {
+        await this.registrarOyentesCercania()
+        this.oyentesCercania = true
+      }
+      const res = await this.cercania.iniciar({ nombre: yo.nombre })
+      this.cercaniaActiva = res.activo
+      if (!res.activo) this.escuchando = false
+    } catch {
+      this.cercaniaActiva = false
+      this.escuchando = false
+    }
+    await this.tocar()
+  }
+
+  /** Apaga la cercanía de verdad (v1.7.2): plugin detenido, presencia
+   *  limpia. La política de vías y la salida del CHAT la usan. */
+  async detenerCercania(): Promise<void> {
+    if (!this.cercania) return
+    try {
+      await this.cercania.detener()
+    } catch {
+      // Si el nativo no responde, el estado local manda igual.
+    }
+    this.cercaniaActiva = false
+    this.escuchando = false
+    this.presencia.limpiar()
+    await this.tocar()
+  }
+
+  /**
+   * Aplica la política de vías (v1.7.2): según el modo elegido y el
+   * estado de internet, enciende o apaga la cercanía. Se llama tras
+   * cada sincronización (el buzón dice si hay internet) y al cambiar
+   * el modo en Ajustes.
+   */
+  async gestionarCercania(): Promise<void> {
+    if (!this.cercania || !this.datos().activado || !this.datos().identidad) return
+    const decision = decidirCercania(this.modoCercania(), this.internet, this.cercaniaActiva)
+    if (decision === 'iniciar') await this.iniciarCercania()
+    else if (decision === 'detener') await this.detenerCercania()
+  }
+
+  /** El alumno/maestro elige el modo en Ajustes; se aplica al momento. */
+  async fijarModoCercania(modo: ModoCercania): Promise<void> {
+    await this.repo.actualizar((e) => {
+      e.cercaniaModo = modo
+    })
+    await this.gestionarCercania()
+    await this.tocar()
+  }
+
+  /** Los oyentes del plugin, registrados una única vez (v1.7.2). */
+  private async registrarOyentesCercania(): Promise<void> {
+    if (!this.cercania) return
+    await this.cercania.addListener('descubierto', (e) => {
         this.presencia.tocar(e.endpointId, e.nombre, Date.now())
         void this.tocar()
       })
@@ -1144,13 +1221,6 @@ export class ServicioChat {
       await this.cercania.addListener('datos', (e) => {
         void this.procesarDatosCercania(e.endpointId, e.datos)
       })
-      const res = await this.cercania.iniciar({ nombre: yo.nombre })
-      this.cercaniaActiva = res.activo
-    } catch {
-      this.cercaniaActiva = false
-      this.escuchando = false
-    }
-    await this.tocar()
   }
 
   /** El botón visible de la lección de la Fase A: reinicia la escucha. */

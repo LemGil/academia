@@ -37,6 +37,13 @@ export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }
   const [leidos, setLeidos] = useState<Set<string>>(() => cargarLeidos())
   const [versiculos, setVersiculos] = useState<string[] | null>(null)
   const [busqueda, setBusqueda] = useState('')
+  // Pestaña de testamento (v1.7.2): se recuerda la última usada.
+  const [testamento, setTestamento] = useState<'AT' | 'NT'>(() =>
+    localStorage.getItem('academia_biblia_testamento') === 'NT' ? 'NT' : 'AT')
+  const cambiarTestamento = (t: 'AT' | 'NT') => {
+    setTestamento(t)
+    localStorage.setItem('academia_biblia_testamento', t)
+  }
 
   const libros = useMemo(() => librosDe(version), [version])
 
@@ -97,8 +104,8 @@ export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }
         onSiguiente={sig ? () => setVista({ tipo: 'lectura', codigo: vista.codigo, cap: sig }) : undefined}
         etiquetaAnterior={`Cap. ${ant}`}
         etiquetaSiguiente={`Cap. ${sig}`}
+        extraControles={<SelectorVersion actual={version} alCambiar={cambiarVersion} />}
       >
-        <SelectorVersion actual={version} alCambiar={cambiarVersion} />
         {versiculos === null && <p>Cargando…</p>}
         {versiculos !== null && versiculos.map((v, i) => (
           <p key={i} className="versiculo">
@@ -135,25 +142,10 @@ export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }
     )
   }
 
-  // ---- Libros ----
+  // ---- Libros (v1.7.2: pestañas AT | NT, una al lado de la otra) ----
   const at = libros.filter((l) => l.testamento === 'AT')
   const nt = libros.filter((l) => l.testamento === 'NT')
-  const grupo = (titulo: string, arr: typeof libros) => (
-    <>
-      <div className="separador-testamento">{titulo}</div>
-      {arr.map((l) => {
-        const n = conteoPorLibro(leidos, l.codigo)
-        const pct = Math.round((n / l.capitulos) * 100)
-        return (
-          <button key={l.codigo} onClick={() => setVista({ tipo: 'caps', codigo: l.codigo })}>
-            {l.nombre}
-            <span className="pct">{n}/{l.capitulos}{pct === 100 ? ' ✓' : ''}</span>
-          </button>
-        )
-      })}
-    </>
-  )
-
+  const visibles = testamento === 'AT' ? at : nt
   return (
     <div>
       <SelectorVersion actual={version} alCambiar={cambiarVersion} />
@@ -168,9 +160,43 @@ export const Biblia: React.FC<{ destino?: DestinoBiblia | null }> = ({ destino }
       </div>
       <div className="lista" style={{ paddingTop: 4 }}>
         <h2>📖 Biblia</h2>
+        <div className="pestanas-testamento" role="tablist">
+          <button
+            role="tab"
+            aria-selected={testamento === 'AT'}
+            className={testamento === 'AT' ? 'activo' : ''}
+            onClick={() => cambiarTestamento('AT')}
+          >
+            <span className="largo">Antiguo Testamento</span>
+            <span className="corto">AT</span>
+          </button>
+          <button
+            role="tab"
+            aria-selected={testamento === 'NT'}
+            className={testamento === 'NT' ? 'activo' : ''}
+            onClick={() => cambiarTestamento('NT')}
+          >
+            <span className="largo">Nuevo Testamento</span>
+            <span className="corto">NT</span>
+          </button>
+        </div>
         <div className="rejilla-libros" style={{ padding: 0 }}>
-          {grupo('Antiguo Testamento', at)}
-          {grupo('Nuevo Testamento', nt)}
+          {visibles.map((l) => {
+            const n = conteoPorLibro(leidos, l.codigo)
+            const pct = Math.round((n / l.capitulos) * 100)
+            // v1.7.2: el color dice el estado — dorado leyéndose, verde terminado.
+            const claseLibro = n === 0 ? '' : pct === 100 ? 'terminado' : 'en-curso'
+            return (
+              <button
+                key={l.codigo}
+                className={claseLibro}
+                onClick={() => setVista({ tipo: 'caps', codigo: l.codigo })}
+              >
+                {l.nombre}
+                <span className="pct">{n}/{l.capitulos}{pct === 100 ? ' ✓' : ''}</span>
+              </button>
+            )
+          })}
         </div>
         <p className="nota-version">
           {VERSIONES_BIBLIA.find((v) => v.id === version)?.nombre} · incluida en la app, sin internet

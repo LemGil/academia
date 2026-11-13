@@ -14,6 +14,28 @@
 //   { tipo: 'grupo',   grupo, id, cifrado, firma }  — mensaje de grupo (Fase D)
 
 import { Capacitor, registerPlugin, type PluginListenerHandle } from '@capacitor/core'
+import type { ModoCercania } from './tipos'
+
+/**
+ * La política de vías (v1.7.2, decisión de LemGil): internet manda.
+ * Con internet respondiendo, la cercanía (Wi-Fi/Bluetooth escaneando
+ * sin parar) es gasto y ruido — se queda apagada; solo se enciende
+ * cuando internet no responde, que es su caso verdadero. Función pura:
+ * dados el modo elegido, el estado de internet y si la cercanía está
+ * activa, dice qué hacer.
+ */
+export function decidirCercania(
+  modo: ModoCercania,
+  internet: 'sin-configurar' | 'ok' | 'error',
+  activa: boolean,
+): 'iniciar' | 'detener' | 'nada' {
+  if (modo === 'nunca') return activa ? 'detener' : 'nada'
+  if (modo === 'siempre') return activa ? 'nada' : 'iniciar'
+  // auto: 'ok' apaga; 'error' o sin buzón configurado (no hay internet
+  // posible) enciende — la cercanía es la única vía.
+  if (internet === 'ok') return activa ? 'detener' : 'nada'
+  return activa ? 'nada' : 'iniciar'
+}
 
 export interface EventoDescubierto {
   endpointId: string

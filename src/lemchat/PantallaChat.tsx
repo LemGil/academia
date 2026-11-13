@@ -62,7 +62,8 @@ export const PantallaChat: React.FC<Props> = ({ alArchivarPaquete, alAbrirAcadem
       try {
         const estado = await servicio.cargar()
         if (estado.activado && estado.identidad) {
-          await servicio.iniciarCercania()
+          // v1.7.2: sincronizar aplica la política de vías (la cercanía
+          // solo se enciende si internet no responde).
           await servicio.sincronizar()
         }
       } catch {
@@ -77,6 +78,9 @@ export const PantallaChat: React.FC<Props> = ({ alArchivarPaquete, alAbrirAcadem
     return () => {
       vivo = false
       clearInterval(t)
+      // v1.7.2: al salir del CHAT, la cercanía se apaga de verdad —
+      // ningún radio queda girando por detrás.
+      void servicio.detenerCercania()
     }
     // Solo al montar la pantalla.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -255,12 +259,19 @@ export const PantallaChat: React.FC<Props> = ({ alArchivarPaquete, alAbrirAcadem
           disponible. El buzón por internet sigue funcionando.
         </p>
       )}
-      {vias.cercania !== 'no-disponible' && servicio.presencia.todos().length === 0 && (
+      {vias.cercania === 'en-pausa' && (
         <p className="chat-nota">
-          Nadie cerca por ahora. La cercanía busca sola; si tarda, en Ajustes tienes el botón
-          «Reiniciar cercanía».
+          La cercanía está en pausa porque hay internet: los mensajes viajan por el buzón. Se
+          enciende sola si internet deja de responder (en Ajustes puedes cambiarlo).
         </p>
       )}
+      {(vias.cercania === 'buscando' || vias.cercania === 'activa') &&
+        servicio.presencia.todos().length === 0 && (
+          <p className="chat-nota">
+            Nadie cerca por ahora. La cercanía busca sola; si tarda, en Ajustes tienes el botón
+            «Reiniciar cercanía».
+          </p>
+        )}
       {servicio.presencia.todos().map((par) => {
         const presente = ahora - par.vistoEn <= 90_000
         const esContacto = par.clavePublica
@@ -474,9 +485,13 @@ const Canal: React.FC<{
       setSelloError(e instanceof Error ? e.message : 'No se pudo generar el sello.')
     }
   }
+  // v1.7.2: el canal NO se marca leído al entrar, sino al salir — así
+  // los mensajes nuevos se ven resaltados mientras se está dentro.
   useEffect(() => {
-    void servicio.marcarLeida(CONVERSACION_CANAL)
-  }, [servicio, mensajes.length])
+    return () => {
+      void servicio.marcarLeida(CONVERSACION_CANAL)
+    }
+  }, [servicio])
 
   const publicarAviso = async () => {
     try {
@@ -521,18 +536,25 @@ const Canal: React.FC<{
           Academias.
         </p>
       )}
-      {mensajes.map((m) => (
-        <div key={m.id} className="tarjeta">
-          <div className="num">{m.tipo === 'paquete' ? '📦 Enseñanza' : '📣 Aviso'}</div>
-          <p className={m.paqueteSinVerificar ? 'chat-aviso-error' : undefined}>{m.cuerpo}</p>
-          {m.tipo === 'paquete' && m.paqueteId && !m.paqueteSinVerificar && (
-            <button className="btn-secundario" onClick={() => alAbrirAcademia(m.paqueteId!)}>
-              Abrir en Academias ›
-            </button>
-          )}
-          <p className="chat-meta">{new Date(m.ts).toLocaleString()}</p>
-        </div>
-      ))}
+      {/* v1.7.2: lo más nuevo primero, y lo no leído resaltado. */}
+      {[...mensajes].reverse().map((m) => {
+        const esNuevo = !m.mio && !m.leido
+        return (
+          <div key={m.id} className={`tarjeta${esNuevo ? ' mensaje-nuevo' : ''}`}>
+            <div className="num">
+              {m.tipo === 'paquete' ? '📦 Enseñanza' : '📣 Aviso'}
+              {esNuevo && <span className="chip-nuevo">● Nuevo</span>}
+            </div>
+            <p className={m.paqueteSinVerificar ? 'chat-aviso-error' : undefined}>{m.cuerpo}</p>
+            {m.tipo === 'paquete' && m.paqueteId && !m.paqueteSinVerificar && (
+              <button className="btn-secundario" onClick={() => alAbrirAcademia(m.paqueteId!)}>
+                Abrir en Academias ›
+              </button>
+            )}
+            <p className="chat-meta">{new Date(m.ts).toLocaleString()}</p>
+          </div>
+        )
+      })}
       {soyMaestro && (
         <>
           <div className="tarjeta">
@@ -1074,10 +1096,39 @@ const Ajustes: React.FC<{ servicio: ServicioChat; alVolver: () => void }> = ({
             ? `activa (${vias.paresCercanos} cerca)`
             : vias.cercania === 'buscando'
               ? 'buscando…'
-              : vias.cercania === 'apagada'
-                ? 'apagada'
-                : 'no disponible en este dispositivo'}
+              : vias.cercania === 'en-pausa'
+                ? 'en pausa (hay internet; se enciende sola si internet falla)'
+                : vias.cercania === 'apagada'
+                  ? 'apagada'
+                  : 'no disponible en este dispositivo'}
         </p>
+        <h3 style={{ marginTop: 14 }}>Modo de la cercanía</h3>
+        <p>
+          La cercanía gasta batería y recursos porque busca teléfonos por Wi-Fi y Bluetooth sin
+          parar. En <strong>automática</strong> solo se enciende cuando internet no responde —
+          es la recomendada.
+        </p>
+        <div className="selector-modo-cercania">
+          {(
+            [
+              ['auto', 'Automática · solo sin internet'],
+              ['siempre', 'Siempre activa'],
+              ['nunca', 'Apagada'],
+            ] as const
+          ).map(([modo, etiqueta]) => (
+            <button
+              key={modo}
+              className={servicio.modoCercania() === modo ? 'activo' : ''}
+              onClick={() => {
+                void servicio.fijarModoCercania(modo).then(() =>
+                  setAviso('Modo de cercanía actualizado.'),
+                )
+              }}
+            >
+              {etiqueta}
+            </button>
+          ))}
+        </div>
         {aviso && <p className="chat-ok">{aviso}</p>}
         <button
           className="btn-secundario"

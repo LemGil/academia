@@ -85,7 +85,15 @@ export interface EstadoChat {
    *  como procesadas las publicaciones del propio maestro hechas desde
    *  LemWriter sin mostrarlas en su teléfono). */
   canalReintentoV161?: boolean
+  /** v1.7.2: cómo se comporta la cercanía Wi-Fi/Bluetooth. 'auto' (la
+   *  de siempre desde esta versión): solo se enciende cuando internet
+   *  no responde — las vías tienen prioridad y los radios no giran en
+   *  vano. 'siempre': como antes de la v1.7.2. 'nunca': apagada. */
+  cercaniaModo?: ModoCercania
 }
+
+/** Modo de la cercanía (v1.7.2): ver `cercaniaModo` en EstadoChat. */
+export type ModoCercania = 'auto' | 'siempre' | 'nunca'
 
 export const CONVERSACION_CANAL = 'canal-maestro'
 /** Dirección especial del buzón: lo que el maestro publica «para el canal». */

@@ -14,6 +14,10 @@ interface Props {
    *  de leído. Opcional: la Biblia no la usa. */
   practicado?: boolean
   onAlternarPracticado?: () => void
+  /** Controles extra en la MISMA línea de los temas (v1.7.2): la Biblia
+   *  pone aquí su selector de versión, para no gastar otra línea en
+   *  pantallas pequeñas. Las academias no lo usan. */
+  extraControles?: React.ReactNode
   onAnterior?: () => void
   onSiguiente?: () => void
   etiquetaAnterior?: string
@@ -23,7 +27,7 @@ interface Props {
 // Chrome de lectura compartido: temas, tamaño de letra, navegación y "marcar leído".
 export const Lector: React.FC<Props> = ({
   titulo, subtitulo, onAtras, children,
-  leido, onAlternarLeido, practicado, onAlternarPracticado, onAnterior, onSiguiente,
+  leido, onAlternarLeido, practicado, onAlternarPracticado, extraControles, onAnterior, onSiguiente,
   etiquetaAnterior, etiquetaSiguiente,
 }) => {
   const [tema, setTema] = useState<TemaLectura>(() =>
@@ -73,29 +77,32 @@ export const Lector: React.FC<Props> = ({
             {t === 'nocturno' ? 'Noche' : t === 'diurno' ? 'Día' : 'Sepia'}
           </button>
         ))}
+        {extraControles}
       </div>
 
       <article className="lector-cuerpo" style={{ fontSize: tamano }}>
         {children}
       </article>
 
-      <footer className="lector-pie">
-        <div className="lector-nav">
-          {onAnterior ? (
-            <button className="btn-nav" onClick={onAnterior}>‹ {etiquetaAnterior || 'Anterior'}</button>
-          ) : <span />}
-          {onSiguiente ? (
-            <button className="btn-nav" onClick={onSiguiente}>{etiquetaSiguiente || 'Siguiente'} ›</button>
-          ) : <span />}
-        </div>
-        <button className={`btn-leido ${leido ? 'si' : ''}`} onClick={onAlternarLeido}>
-          {leido ? '✓ Leído' : 'Marcar como leído'}
-        </button>
-        {onAlternarPracticado && (
-          <button className={`btn-leido ${practicado ? 'si' : ''}`} onClick={onAlternarPracticado}>
-            {practicado ? '✓ Practicado' : 'Marcar como practicado'}
+      {/* v1.7.2: una sola línea — capítulo anterior, las marcas y el
+          siguiente capítulo comparten el pie (pantallas pequeñas). */}
+      <footer className="lector-pie una-linea">
+        {onAnterior ? (
+          <button className="btn-nav" onClick={onAnterior}>‹ {etiquetaAnterior || 'Anterior'}</button>
+        ) : <span className="hueco" />}
+        <div className="lector-marcas">
+          <button className={`btn-leido ${leido ? 'si' : ''}`} onClick={onAlternarLeido}>
+            {leido ? '✓ Leído' : 'Marcar leído'}
           </button>
-        )}
+          {onAlternarPracticado && (
+            <button className={`btn-leido ${practicado ? 'si' : ''}`} onClick={onAlternarPracticado}>
+              {practicado ? '✓ Practicado' : 'Marcar practicado'}
+            </button>
+          )}
+        </div>
+        {onSiguiente ? (
+          <button className="btn-nav" onClick={onSiguiente}>{etiquetaSiguiente || 'Siguiente'} ›</button>
+        ) : <span className="hueco" />}
       </footer>
     </div>
   )
